@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-weighting',
-  templateUrl: './weighting.component.html',
-  styleUrls: ['./weighting.component.scss']
+	selector: 'app-weighting',
+	templateUrl: './weighting.component.html',
+	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
+	constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+	ngOnInit(): void {}
 }
