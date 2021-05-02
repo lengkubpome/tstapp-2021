@@ -17,11 +17,11 @@ const routes: Routes = [
 			// 	path: 'iot-dashboard',
 			// 	component: DashboardComponent
 			// },
-			// {
-			// 	path: 'layout',
-			// 	loadChildren: () =>
-			// 		import('./layout/layout.module').then((m) => m.LayoutModule)
-			// },
+			{
+				path: 'weighting',
+				loadChildren: () =>
+					import('./weighting/weighting.module').then((m) => m.WeightingModule)
+			},
 			// {
 			// 	path: 'forms',
 			// 	loadChildren: () =>
