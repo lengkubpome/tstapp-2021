@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
 	{
 		title: 'ชั่งน้ำหนัก',
 		icon: 'home-outline',
-		link: '/pages/dashboard',
+		link: '/pages/weighting',
 		home: true
 	},
 	// {

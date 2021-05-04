@@ -77,7 +77,7 @@ const routes: Routes = [
 			},
 			{
 				path: '',
-				redirectTo: 'dashboard',
+				redirectTo: 'weighting',
 				pathMatch: 'full'
 			},
 			{
