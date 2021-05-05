@@ -1,17 +1,16 @@
-<nb-layout>
-  <nb-layout-header>Awesome Company</nb-layout-header>
-  <nb-layout-column class="colored-column-warning">
-    <nb-card status="success">
-      <nb-card-header>Nebula</nb-card-header>
-      <nb-card-body>
-        A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases.
-        Originally, nebula was a name for any diffuse astronomical object,
-        including galaxies beyond the Milky Way.
-      </nb-card-body>
-      <nb-card-footer>By Wikipedia</nb-card-footer>
-    </nb-card>
-  </nb-layout-column>
-  <nb-layout-column class="colored-column-danger">Right column</nb-layout-column>
+<nb-card size="medium">
+  <nb-card-header>
+    <h3>Weighting</h3>
+    <div class="subtitle">การชั่งน้ำหนักสินค้า</div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="chart-container">
+      <div class="chart-header">
+        ngx-legend-chart [legendItems]="chartLegend"
+      </div>
+      ngx-visitors-analytics-chart [chartData]="visitorsAnalyticsData"
+    </div>
+  </nb-card-body>
 
-
-</nb-layout>
+  <ngx-slide-out [showVisitorsStatistics]="true">content</ngx-slide-out>
+</nb-card>

@@ -1,10 +1,13 @@
+import { SlideOutComponent } from './slide-out/slide-out.component';
+import { WeightingInComponent } from './weighting-in/weighting-in.component';
 import { RouterModule, Routes } from '@angular/router';
 import { WeightingComponent } from './weighting.component';
 import {
 	NbCardModule,
 	NbButtonModule,
 	NbSidebarModule,
-	NbLayoutModule
+	NbLayoutModule,
+	NbIconModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
@@ -17,7 +20,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-	declarations: [ WeightingComponent ],
+	declarations: [ WeightingComponent, WeightingInComponent, SlideOutComponent ],
 	imports: [
 		RouterModule.forChild(routes),
 		NbSidebarModule,
@@ -25,7 +28,9 @@ const routes: Routes = [
 		NbCardModule,
 		NbButtonModule,
 		NbLayoutModule,
-		NbCardModule
+		NbCardModule,
+		NbButtonModule,
+		NbIconModule
 	],
 	exports: [],
 	providers: []
