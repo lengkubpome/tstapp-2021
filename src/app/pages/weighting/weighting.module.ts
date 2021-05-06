@@ -7,7 +7,8 @@ import {
 	NbButtonModule,
 	NbSidebarModule,
 	NbLayoutModule,
-	NbIconModule
+	NbIconModule,
+	NbInputModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
@@ -30,7 +31,8 @@ const routes: Routes = [
 		NbLayoutModule,
 		NbCardModule,
 		NbButtonModule,
-		NbIconModule
+		NbIconModule,
+		NbInputModule
 	],
 	exports: [],
 	providers: []
