@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	styleUrls: [ './weighting-in.component.scss' ]
 })
 export class WeightingInComponent implements OnInit {
-	@Input() showVisitorsStatistics: boolean = false;
+	@Input() showVisitorsStatistics = false;
 
 	constructor() {}
 

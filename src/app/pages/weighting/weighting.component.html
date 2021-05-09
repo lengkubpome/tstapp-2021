@@ -58,14 +58,21 @@
 
 <nb-card>
   <nb-card-header>
-    <div class="row">
-      <div class="col-md-6">
-        <h4>น้ำหนักเครื่องชั่ง</h4>
-
+    <div class="d-flex flex-column flex-md-row justify-content-between">
+      <div class="pb-lg-0 pb-2 d-flex flex-md-column">
+        <h4>Weight Live</h4>
+        <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
+          น้ำหนักเครื่องชั่ง
+        </div>
       </div>
-      <div class="col-md-6">
-        <div class="control-status-example">
-          <input type="text" nbInput fullWidth status="danger" placeholder="Control">
+      <div class="d-flex align-items-cente ">
+        <nb-form-field>
+          <!-- <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon> -->
+          <nb-icon nbPrefix icon="loader-outline" pack="eva"></nb-icon>
+          <input type="text" nbInput class="input-weight-live" value="12345678" fullWidth readonly>
+        </nb-form-field>
+        <div class="ml-2">
+          KG.
         </div>
       </div>
     </div>
@@ -74,10 +81,12 @@
 
 </nb-card>
 
-<nb-card size="medium">
+<nb-card size="small">
   <nb-card-header>
-    <h4>Weighting</h4>
-    <div class="subtitle">การชั่งน้ำหนักสินค้า</div>
+    <h4>Infomation</h4>
+    <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
+      ข้อมูลการชั่งน้ำหนัก
+    </div>
   </nb-card-header>
   <nb-card-body>
     <div class="chart-container">
@@ -88,5 +97,20 @@
     </div>
   </nb-card-body>
 
-  <ngx-slide-out [showVisitorsStatistics]="true">content</ngx-slide-out>
+  <app-weighting-in [showVisitorsStatistics]="true">content</app-weighting-in>
+</nb-card>
+
+
+<nb-card size="medium">
+  <nb-card-header>
+    <h4>Waiting Out</h4>
+    <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
+      รายการรอชั่งน้ำหนักออก
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+
+  </nb-card-body>
+
+  <app-weighting-in [showVisitorsStatistics]="true">content</app-weighting-in>
 </nb-card>
