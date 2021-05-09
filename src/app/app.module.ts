@@ -23,7 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
-		NbThemeModule.forRoot({ name: 'default' }),
+		NbThemeModule.forRoot(),
 		NbLayoutModule,
 		NbEvaIconsModule,
 		AppRoutingModule,

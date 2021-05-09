@@ -15,8 +15,6 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 		ThemeModule,
 		NbMenuModule,
 		MiscellaneousModule
-		// DashboardModule,
-		// ECommerceModule,
 	],
 	declarations: [ PagesComponent ]
 })
