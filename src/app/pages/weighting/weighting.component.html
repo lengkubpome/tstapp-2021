@@ -1,61 +1,3 @@
-<div class="row">
-  <div class="col-md-6">
-    <nb-card>
-      <nb-card-header>Using the Grid</nb-card-header>
-      <nb-card-body>
-        <form>
-          <div class="form-group row">
-            <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
-            <div class="col-sm-9">
-              <input type="email" nbInput fullWidth id="inputEmail1" placeholder="Email">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="inputPassword2" class="label col-sm-3 col-form-label">Password</label>
-            <div class="col-sm-9">
-              <input type="password" nbInput fullWidth id="inputPassword2" placeholder="Password">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-sm-3 label">Radios</label>
-            <div class="col-sm-9">
-
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="offset-sm-3 col-sm-9">
-              <button type="submit" nbButton status="primary">Sign in</button>
-            </div>
-          </div>
-        </form>
-      </nb-card-body>
-    </nb-card>
-  </div>
-
-  <div class="col-md-6">
-    <nb-card>
-      <nb-card-header>Basic form</nb-card-header>
-      <nb-card-body>
-        <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1" class="label">Email address</label>
-            <input type="email" nbInput fullWidth id="exampleInputEmail1" placeholder="Email">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1" class="label">Password</label>
-            <input type="password" nbInput fullWidth id="exampleInputPassword1"
-              placeholder="Password">
-          </div>
-          <div class="form-group">
-          </div>
-          <button type="submit" nbButton status="danger">Submit</button>
-        </form>
-      </nb-card-body>
-    </nb-card>
-
-  </div>
-</div>
-
 <nb-card>
   <nb-card-header>
     <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -81,7 +23,7 @@
 
 </nb-card>
 
-<nb-card size="small">
+<nb-card>
   <nb-card-header>
     <h4>Infomation</h4>
     <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
@@ -89,11 +31,61 @@
     </div>
   </nb-card-header>
   <nb-card-body>
-    <div class="chart-container">
-      <div class="chart-header">
-        ngx-legend-chart [legendItems]="chartLegend"
+    <div class="contain-info">
+      <div class="form-group row">
+        <label for="" class="label col-sm-2 col-form-label">ประเภท</label>
+        <div class="col-sm-10">
+          <nb-radio-group class="d-flex">
+            <nb-radio *ngFor="let option of options" [value]="option.value"
+              [checked]="option.checked">
+              {{ option.label }}
+            </nb-radio>
+          </nb-radio-group>
+        </div>
       </div>
-      ngx-visitors-analytics-chart [chartData]="visitorsAnalyticsData"
+      <div class="form-group row">
+        <label for="" class="label col-sm-2 col-form-label">ทะเบียนรถ</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput list="datalistOptions" id="" placeholder="ทะเบียนรถ">
+          <datalist id="datalistOptions">
+            <option value="9555">
+            <option value="4519">
+            <option value="1818">
+            <option value="84-4922">
+          </datalist>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="" class="label col-sm-2 col-form-label">ผู้ขาย</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="" placeholder="ผู้ขาย" [ngbTypeahead]="search"
+            [resultFormatter]="formatter">
+
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="" class="label col-sm-2 col-form-label">สินค้า</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput list="datalistProduct" id="" placeholder="สินค้า">
+          <datalist id="datalistProduct">
+            <option value="1 - กล่อง">
+            <option value="2 - กระดาษสี">
+            <option value="3 - เหล็กรวม">
+            <option value="4 - เหล็กหนา">
+            <option value="5 - กระป๋อง">
+            <option value="6 - สังกะสี">
+          </datalist>
+        </div>
+      </div>
+
+
+
+      <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+          <button type="submit" class="mr-2" nbButton status="primary">บันทึก</button>
+          <button type="button" nbButton status="danger">รีเซ็ต</button>
+        </div>
+      </div>
     </div>
   </nb-card-body>
 

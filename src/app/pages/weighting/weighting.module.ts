@@ -9,10 +9,13 @@ import {
 	NbLayoutModule,
 	NbIconModule,
 	NbInputModule,
-	NbFormFieldModule
+	NbFormFieldModule,
+	NbButtonGroupModule,
+	NbRadioModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
+import { NgbTypeahead, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
 	{
@@ -34,7 +37,11 @@ const routes: Routes = [
 		NbButtonModule,
 		NbIconModule,
 		NbInputModule,
-		NbFormFieldModule
+		NbFormFieldModule,
+		NbButtonGroupModule,
+		NbRadioModule,
+		NgbModule
+		// NgbTypeahead
 	],
 	exports: [],
 	providers: []
