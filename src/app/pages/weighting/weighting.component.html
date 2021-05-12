@@ -46,20 +46,29 @@
       <div class="form-group row">
         <label for="" class="label col-sm-2 col-form-label">ทะเบียนรถ</label>
         <div class="col-sm-10">
-          <input type="text" nbInput list="datalistOptions" id="" placeholder="ทะเบียนรถ">
-          <datalist id="datalistOptions">
-            <option value="9555">
-            <option value="4519">
-            <option value="1818">
-            <option value="84-4922">
-          </datalist>
+          <input type="text" nbInput id="" placeholder="ทะเบียนรถ" [formControl]="control"
+            [matAutocomplete]="car">
+          <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
+            <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
+              {{street}}
+            </mat-option>
+          </mat-autocomplete>
+
         </div>
       </div>
+
       <div class="form-group row">
         <label for="" class="label col-sm-2 col-form-label">ผู้ขาย</label>
         <div class="col-sm-10">
-          <input type="text" nbInput id="" placeholder="ผู้ขาย" [ngbTypeahead]="search"
-            [resultFormatter]="formatter">
+          <input type="text" nbInput id="" placeholder="ผู้ขาย" [matAutocomplete]="vendor"
+            [formControl]="stateCtrl">
+          <mat-autocomplete #vendor="matAutocomplete">
+            <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+              <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
+              <span>{{state.name}}</span> |
+              <small>Population: {{state.population}}</small>
+            </mat-option>
+          </mat-autocomplete>
 
         </div>
       </div>

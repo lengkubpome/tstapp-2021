@@ -1,15 +1,18 @@
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import {
+	debounceTime,
+	distinctUntilChanged,
+	map,
+	startWith
+} from 'rxjs/operators';
 import { OperatorFunction, Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
-const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+export interface State {
+	flag: string;
+	name: string;
+	population: string;
+}
 
 @Component({
 	selector: 'app-weighting',
@@ -17,25 +20,85 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
 	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
+	control = new FormControl();
+	streets: string[] = [
+		'Champs-Élysées',
+		'Lombard Street',
+		'Abbey Road',
+		'Fifth Avenue'
+	];
+	filteredStreets: Observable<string[]>;
+
+	stateCtrl = new FormControl();
+	filteredStates: Observable<State[]>;
+
+	states: State[] = [
+		{
+			name: 'Arkansas',
+			population: '2.978M',
+			// https://commons.wikimedia.org/wiki/File:Flag_of_Arkansas.svg
+			flag:
+				'https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg'
+		},
+		{
+			name: 'California',
+			population: '39.14M',
+			// https://commons.wikimedia.org/wiki/File:Flag_of_California.svg
+			flag:
+				'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg'
+		},
+		{
+			name: 'Florida',
+			population: '20.27M',
+			// https://commons.wikimedia.org/wiki/File:Flag_of_Florida.svg
+			flag:
+				'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg'
+		},
+		{
+			name: 'Texas',
+			population: '27.47M',
+			// https://commons.wikimedia.org/wiki/File:Flag_of_Texas.svg
+			flag:
+				'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg'
+		}
+	];
+
 	options = [
 		{ value: 'ซื้อของ', label: 'ซื้อของ', checked: true },
 		{ value: 'ขายของ', label: 'ขายของ' },
 		{ value: 'อื่นๆ', label: 'อื่นๆ' }
 	];
 
-  public model: any;
+	constructor() {
+		this.filteredStates = this.stateCtrl.valueChanges.pipe(
+			startWith(''),
+			map((state) => (state ? this._filterStates(state) : this.states.slice()))
+		);
+	}
 
-  formatter = (result: string) => result.toUpperCase();
+	ngOnInit(): void {
+		this.filteredStreets = this.control.valueChanges.pipe(
+			startWith(''),
+			map((value) => this._filter(value))
+		);
+	}
 
-  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term => term === '' ? []
-        : states.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    )
+	private _filter(value: string): string[] {
+		const filterValue = this._normalizeValue(value);
+		return this.streets.filter((street) =>
+			this._normalizeValue(street).includes(filterValue)
+		);
+	}
 
-	constructor() {}
+	private _normalizeValue(value: string): string {
+		return value.toLowerCase().replace(/\s/g, '');
+	}
 
-	ngOnInit(): void {}
+	private _filterStates(value: string): State[] {
+		const filterValue = value.toLowerCase();
+
+		return this.states.filter(
+			(state) => state.name.toLowerCase().indexOf(filterValue) === 0
+		);
+	}
 }

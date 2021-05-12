@@ -1,3 +1,6 @@
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SlideOutComponent } from './slide-out/slide-out.component';
 import { WeightingInComponent } from './weighting-in/weighting-in.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -15,7 +18,6 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
-import { NgbTypeahead, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
 	{
@@ -27,6 +29,8 @@ const routes: Routes = [
 @NgModule({
 	declarations: [ WeightingComponent, WeightingInComponent, SlideOutComponent ],
 	imports: [
+		FormsModule,
+		ReactiveFormsModule,
 		RouterModule.forChild(routes),
 		NbSidebarModule,
 		ThemeModule,
@@ -40,8 +44,8 @@ const routes: Routes = [
 		NbFormFieldModule,
 		NbButtonGroupModule,
 		NbRadioModule,
-		NgbModule
-		// NgbTypeahead
+		MatAutocompleteModule,
+		MatFormFieldModule
 	],
 	exports: [],
 	providers: []
