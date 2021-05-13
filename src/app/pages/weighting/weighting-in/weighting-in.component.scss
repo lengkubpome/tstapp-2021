@@ -53,8 +53,8 @@
 	}
 
 	.slide-out-container.collapsed {
-		@include nb-ltr(left, calc(100% - 6rem));
-		@include nb-rtl(right, calc(100% - 6rem));
+		@include nb-ltr(left, calc(100% - 4rem));
+		@include nb-rtl(right, calc(100% - 4rem));
 	}
 
 	.slide-out-container.expanded {

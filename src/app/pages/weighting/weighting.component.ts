@@ -14,12 +14,23 @@ export interface State {
 	population: string;
 }
 
+export interface Product {
+	id: number;
+	name: string;
+}
+
 @Component({
 	selector: 'app-weighting',
 	templateUrl: './weighting.component.html',
 	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
+	options = [
+		{ value: 'ซื้อของ', label: 'ซื้อของ', checked: true },
+		{ value: 'ขายของ', label: 'ขายของ' },
+		{ value: 'อื่นๆ', label: 'อื่นๆ' }
+	];
+
 	control = new FormControl();
 	streets: string[] = [
 		'Champs-Élysées',
@@ -63,24 +74,54 @@ export class WeightingComponent implements OnInit {
 		}
 	];
 
-	options = [
-		{ value: 'ซื้อของ', label: 'ซื้อของ', checked: true },
-		{ value: 'ขายของ', label: 'ขายของ' },
-		{ value: 'อื่นๆ', label: 'อื่นๆ' }
+	productCtrl = new FormControl();
+	products: Product[] = [
+		{ id: 1, name: 'กล่อง' },
+		{ id: 2, name: 'กระดาษสี' },
+		{ id: 3, name: 'เศษเหล็ก' },
+		{ id: 4, name: 'เหล็กหนา' },
+		{ id: 5, name: 'กระป๋อง' },
+		{ id: 6, name: 'สังกะสี' }
 	];
+	filteredProducts: Observable<Product[]>;
 
-	constructor() {
-		this.filteredStates = this.stateCtrl.valueChanges.pipe(
-			startWith(''),
-			map((state) => (state ? this._filterStates(state) : this.states.slice()))
-		);
-	}
+	constructor() {}
 
 	ngOnInit(): void {
 		this.filteredStreets = this.control.valueChanges.pipe(
 			startWith(''),
 			map((value) => this._filter(value))
 		);
+
+		this.filteredStates = this.stateCtrl.valueChanges.pipe(
+			startWith(''),
+			map((state) => (state ? this._filterStates(state) : this.states.slice()))
+		);
+
+		this.filteredProducts = this.productCtrl.valueChanges.pipe(
+			startWith(''),
+			map(
+				(product) =>
+					product ? this._filterProducts(product) : this.products.slice()
+			)
+		);
+	}
+
+	private _filterProducts(value: string): Product[] {
+		const filterValue = value.toLowerCase();
+		let res: Product[] = [];
+		if (!isNaN(Number(filterValue))) {
+			res = [
+				...this.products.filter((product) => product.id === Number(filterValue))
+			];
+		}
+		res = [
+			...res,
+			...this.products.filter(
+				(product) => product.name.toLowerCase().indexOf(filterValue) === 0
+			)
+		];
+		return res;
 	}
 
 	private _filter(value: string): string[] {

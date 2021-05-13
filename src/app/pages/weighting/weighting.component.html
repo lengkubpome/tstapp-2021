@@ -46,7 +46,7 @@
       <div class="form-group row">
         <label for="" class="label col-sm-2 col-form-label">ทะเบียนรถ</label>
         <div class="col-sm-10">
-          <input type="text" nbInput id="" placeholder="ทะเบียนรถ" [formControl]="control"
+          <input type="text" nbInput id="carId" placeholder="ทะเบียนรถ" [formControl]="control"
             [matAutocomplete]="car">
           <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
             <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
@@ -56,13 +56,12 @@
 
         </div>
       </div>
-
       <div class="form-group row">
         <label for="" class="label col-sm-2 col-form-label">ผู้ขาย</label>
         <div class="col-sm-10">
-          <input type="text" nbInput id="" placeholder="ผู้ขาย" [matAutocomplete]="vendor"
+          <input type="text" nbInput id="vendor" placeholder="ผู้ขาย" [matAutocomplete]="vendor"
             [formControl]="stateCtrl">
-          <mat-autocomplete #vendor="matAutocomplete">
+          <mat-autocomplete autoActiveFirstOption #vendor="matAutocomplete">
             <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
               <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
               <span>{{state.name}}</span> |
@@ -75,18 +74,65 @@
       <div class="form-group row">
         <label for="" class="label col-sm-2 col-form-label">สินค้า</label>
         <div class="col-sm-10">
-          <input type="text" nbInput list="datalistProduct" id="" placeholder="สินค้า">
-          <datalist id="datalistProduct">
-            <option value="1 - กล่อง">
-            <option value="2 - กระดาษสี">
-            <option value="3 - เหล็กรวม">
-            <option value="4 - เหล็กหนา">
-            <option value="5 - กระป๋อง">
-            <option value="6 - สังกะสี">
-          </datalist>
+          <input type="text" nbInput id="product" placeholder="สินค้า" [matAutocomplete]="product"
+            [formControl]="productCtrl">
+          <mat-autocomplete autoActiveFirstOption #product="matAutocomplete">
+            <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
+              <small>{{product.id}}</small> -
+              <span>{{product.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
         </div>
       </div>
 
+      <div class="form-group row">
+        <label for="weight-in" class="label col-sm-2 col-form-label">น้ำหนักชั่งเข้า</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="weight-in">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="weight-out" class="label col-sm-2 col-form-label">น้ำหนักชั่งออก</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="weight-out">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="weight-product" class="label col-sm-2 col-form-label">น้ำหนักสินค้า</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="weight-product">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="weight-cut" class="label col-sm-2 col-form-label">ตัดน้ำหนัก</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="weight-cut">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="weight-net" class="label col-sm-2 col-form-label">น้ำหนักสุทธิ</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="weight-net">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="price" class="label col-sm-2 col-form-label">ราคา</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="price">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="amount" class="label col-sm-2 col-form-label">ยอดสุทธิ</label>
+        <div class="col-sm-10">
+          <input type="text" nbInput id="amount">
+        </div>
+      </div>
 
 
       <div class="form-group row">
@@ -98,7 +144,13 @@
     </div>
   </nb-card-body>
 
-  <app-weighting-in [showVisitorsStatistics]="true">content</app-weighting-in>
+  <app-weighting-in [showVisitorsStatistics]="false">
+    <nb-tabset>
+      <nb-tab tabTitle="ข้อมูลผู้ขาย">
+        <p>List of <strong>ข้อมูลผู้ขาย</strong>.</p>
+      </nb-tab>
+    </nb-tabset>
+  </app-weighting-in>
 </nb-card>
 
 
@@ -113,5 +165,5 @@
 
   </nb-card-body>
 
-  <app-weighting-in [showVisitorsStatistics]="true">content</app-weighting-in>
+  <app-weighting-in [showVisitorsStatistics]="false">content</app-weighting-in>
 </nb-card>
