@@ -1,3 +1,4 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,10 +16,12 @@ import {
 	NbFormFieldModule,
 	NbButtonGroupModule,
 	NbRadioModule,
-	NbTabsetModule
+	NbTabsetModule,
+	NbSelectModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
+// import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 const routes: Routes = [
 	{
@@ -46,8 +49,10 @@ const routes: Routes = [
 		NbButtonGroupModule,
 		NbRadioModule,
 		NbTabsetModule,
+		NbSelectModule,
 		MatAutocompleteModule,
-		MatFormFieldModule
+		MatFormFieldModule,
+		NgbModule
 	],
 	exports: [],
 	providers: []
