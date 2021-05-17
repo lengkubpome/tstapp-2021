@@ -17,7 +17,8 @@ import {
 	NbButtonGroupModule,
 	NbRadioModule,
 	NbTabsetModule,
-	NbSelectModule
+	NbSelectModule,
+	NbContextMenuModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
@@ -50,6 +51,7 @@ const routes: Routes = [
 		NbRadioModule,
 		NbTabsetModule,
 		NbSelectModule,
+		NbContextMenuModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		NgbModule

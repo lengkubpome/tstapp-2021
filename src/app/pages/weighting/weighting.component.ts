@@ -25,6 +25,7 @@ export interface Product {
 	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
+	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
 	options = [
 		{ value: 'ซื้อของ', label: 'ซื้อของ', checked: true },
 		{ value: 'ขายของ', label: 'ขายของ' },
