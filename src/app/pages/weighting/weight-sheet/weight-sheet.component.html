@@ -1,0 +1,241 @@
+<nb-card>
+  <nb-card-header>
+    <div class="d-flex flex-column flex-md-row justify-content-between">
+      <div class="pb-lg-0 pb-2 d-flex flex-md-column">
+        <h4>ใบบันทึกน้ำหนัก</h4>
+        <!-- <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
+      บันทึกน้ำหนักสินค้า
+    </div> -->
+      </div>
+      <div>
+        <button nbButton [nbContextMenu]="menuItems" size="small" status="success">
+          Show Menu
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="contain-info-left col-sm-6 ">
+
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">เลขที่ชั่งน้ำหนัก
+          </label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <strong>2564051500x</strong>
+            <nb-icon nbPrefix icon="info" pack="eva" status="info" class="ml-2">
+            </nb-icon>
+          </div>
+        </div>
+
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">ประเภท</label>
+          <div class="col-sm-9">
+            <nb-radio-group class="d-flex" name="type">
+              <nb-radio *ngFor="let option of options" [value]="option.value"
+                [checked]="option.checked">
+                {{ option.label }}
+              </nb-radio>
+            </nb-radio-group>
+          </div>
+        </div>
+        <div class="form-group row align-items-baseline ">
+          <label for="" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <input type="text" nbInput class="mr-2" id="carId" placeholder="ทะเบียนรถ"
+              [formControl]="control" [matAutocomplete]="car">
+            <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
+              <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
+                {{street}}
+              </mat-option>
+            </mat-autocomplete>
+            <button nbButton ghost status="info">
+              <nb-icon icon="person-add-outline"></nb-icon>
+            </button>
+          </div>
+        </div>
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">ผู้ขาย</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <input type="text" nbInput class="mr-2" id="vendor" placeholder="ผู้ขาย"
+              [matAutocomplete]="vendor" [formControl]="stateCtrl">
+            <mat-autocomplete autoActiveFirstOption #vendor="matAutocomplete">
+              <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+                <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
+                <span>{{state.name}}</span> |
+                <small>Population: {{state.population}}</small>
+              </mat-option>
+            </mat-autocomplete>
+            <button nbButton ghost status="info">
+              <nb-icon icon="person-add-outline"></nb-icon>
+            </button>
+          </div>
+
+        </div>
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">สินค้า</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <input type="text" nbInput class="mr-2" id="product" placeholder="สินค้า"
+              [matAutocomplete]="product" [formControl]="productCtrl">
+            <mat-autocomplete autoActiveFirstOption #product="matAutocomplete">
+              <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
+                <small>{{product.id}}</small> -
+                <span>{{product.name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+            <button nbButton ghost status="info">
+              <nb-icon icon="person-add-outline"></nb-icon>
+            </button>
+
+          </div>
+        </div>
+
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">ราคา</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <input type="text" nbInput id="product" placeholder="ราคา">
+          </div>
+        </div>
+
+        <div class="form-group row align-items-baseline">
+          <label for="" class="label col-sm-3 col-form-label">ตัดน้ำหนัก</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <input type="text" nbInput class="mr-2" id="product" placeholder="หักน้ำหนัก">
+
+            <nb-select placeholder="Select Showcase" selected="0">
+              <nb-option value="0">หน่วย</nb-option>
+              <nb-option value="1">%</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+
+        <div class="form-group row ">
+          <label for="" class="label col-sm-3 col-form-label">หมายเหตุ</label>
+          <div class="col-sm-9 d-inline-flex justify-content-start">
+            <textarea nbInput placeholder="Textarea"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- End contain-info-left -->
+
+      <div class="contain-info-right col-sm-6 ">
+
+        <div class="form-group row align-items-center ">
+          <label for="" class="label col-sm-4 col-form-label ">น้ำหนักเครื่องชั่ง</label>
+          <div class="col-sm-8">
+            <nb-form-field>
+              <!-- <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon> -->
+              <nb-icon nbPrefix icon="loader-outline" pack="eva"></nb-icon>
+              <input type="text" nbInput class="input-weight-live" value="12345678" fullWidth
+                readonly>
+              <p nbSuffix>KG.</p>
+            </nb-form-field>
+          </div>
+        </div>
+
+
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">วันที่บันทึก</th>
+                <th scope="col">น้ำหนัก</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <th scope="row">เข้า</th>
+                <td>14/05/2021 22:34:32</td>
+                <td>23,400</td>
+              </tr>
+              <tr>
+                <th scope="row">ออก</th>
+                <td>14/05/2021 22:34:32</td>
+                <td>15,400</td>
+              </tr>
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="2">
+                  น้ำหนักสินค้า
+                </th>
+                <td>8,000</td>
+              </tr>
+              <tr>
+                <th colspan="2">
+                  <span>ตัดน้ำหนัก</span>
+                </th>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th colspan="2">
+                  น้ำหนักสุทธิ
+                </th>
+                <td>8,000</td>
+              </tr>
+              <tr>
+                <th colspan="2">
+                  ราคา
+                </th>
+                <td>x 10.00</td>
+              </tr>
+              <tr>
+                <th colspan="2">
+                  ยอดสุทธิ
+                </th>
+                <td>80,000.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-body class="payment">
+    <div class="d-flex flex-column flex-md-row align-items-baseline">
+      <div>ชำระเงิน (หากยังไม่ชำระ หรือชำระไม่ครบจะตั้งเป็นเจ้าหนี้การค้าไว้)</div>
+      <div class="form-group">
+        <label for="" class="label col-form-label m-3">วันที่ชำระ</label>
+        <div class="d-inline-flex justify-content-start">
+          <input type="text" nbInput id="product" placeholder="วันที่">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="" class="label col-sm-2 col-form-label">การชำระเงิน</label>
+      <div class="col-sm-10">
+        <nb-radio-group class="d-flex" name="payment">
+          <nb-radio value="cash" checked>
+            เงินสด
+          </nb-radio>
+          <nb-radio value="e-transfer">
+            โอนเงิน
+          </nb-radio>
+        </nb-radio-group>
+        <input type="text" nbInput id="product" placeholder="หักน้ำหนัก">
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="mr-2" nbButton status="primary">บันทึก</button>
+      <button type="button" nbButton status="danger">รีเซ็ต</button>
+    </div>
+  </nb-card-footer>
+
+  <!-- <app-weighting-in [showVisitorsStatistics]="false">
+<nb-tabset>
+  <nb-tab tabTitle="ข้อมูลผู้ขาย">
+    <p>List of <strong>ข้อมูลผู้ขาย</strong>.</p>
+  </nb-tab>
+</nb-tabset>
+</app-weighting-in> -->
+</nb-card>

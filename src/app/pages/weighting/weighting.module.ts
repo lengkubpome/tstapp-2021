@@ -2,7 +2,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlideOutComponent } from './slide-out/slide-out.component';
 import { WeightingInComponent } from './weighting-in/weighting-in.component';
 import { RouterModule, Routes } from '@angular/router';
 import { WeightingComponent } from './weighting.component';
@@ -22,7 +21,7 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
-// import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
 
 const routes: Routes = [
 	{
@@ -32,7 +31,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-	declarations: [ WeightingComponent, WeightingInComponent, SlideOutComponent ],
+	declarations: [
+		WeightingComponent,
+		WeightingInComponent,
+		WeightSheetComponent
+	],
 	imports: [
 		FormsModule,
 		ReactiveFormsModule,
