@@ -1,6 +1,6 @@
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 export interface State {
@@ -16,7 +16,8 @@ export interface Product {
 @Component({
 	selector: 'app-weight-sheet',
 	templateUrl: './weight-sheet.component.html',
-	styleUrls: [ './weight-sheet.component.scss' ]
+	styleUrls: [ './weight-sheet.component.scss' ],
+	encapsulation: ViewEncapsulation.None
 })
 export class WeightSheetComponent implements OnInit {
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];

@@ -1,50 +1,50 @@
-<!-- <nb-card>
-  <nb-card-header>
-    <div class="d-flex flex-column flex-md-row justify-content-between">
-      <div class="pb-lg-0 pb-2 d-flex flex-md-column">
-        <h4>Weight Live</h4>
-        <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
-          น้ำหนักเครื่องชั่ง
-        </div>
-      </div>
-      <div class="d-flex align-items-cente ">
-        <nb-form-field>
-          <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon>
-          <nb-icon nbPrefix icon="loader-outline" pack="eva"></nb-icon>
-          <input type="text" nbInput class="input-weight-live" value="12345678" fullWidth readonly>
-        </nb-form-field>
-        <div class="ml-2">
-          KG.
-        </div>
-      </div>
-    </div>
-
-  </nb-card-header>
-
-</nb-card> -->
 <div class="row">
   <div class="col-md-9">
     <app-weight-sheet></app-weight-sheet>
   </div>
   <div class="col-md-3">
-    <nb-card size="medium" class="">
-      <!-- <nb-card-header>
-        <h4>Waiting Out</h4>
-        <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
-          รายการรอชั่งน้ำหนักออก
-        </div>
-      </nb-card-header> -->
-      <nb-card-body>
-        <nb-tabset>
-          <nb-tab tabIcon="person-outline" badgeText="3" badgeStatus="danger">
-            <p>List of <strong>users</strong>.</p>
-          </nb-tab>
-          <nb-tab tabIcon="person-outline" badgeText="2" badgeStatus="warning">
-            <p>List of <strong>orders</strong>.</p>
-          </nb-tab>
 
-        </nb-tabset>
-      </nb-card-body>
+    <nb-card size="large" class="">
+      <nb-card-header>
+        <div class="d-flex flex-column flex-md-row justify-content-between">
+          <div class="pb-lg-0 pb-2 d-flex flex-md-column">
+            <h4>รายการชั่งประจำวัน</h4>
+            <!-- <div class="subtitle pl-lg-0 pl-2 align-self-md-baseline align-self-end">
+          บันทึกน้ำหนักสินค้า
+        </div> -->
+          </div>
+          <div>
+            <button nbButton size="small" status="success">
+              Show Menu
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+
+      <nb-tabset fullWidth>
+        <nb-tab tabTitle="ข้อมูลชั่งเข้า" badgeText="3" badgeStatus="danger">
+
+          <div class="chart-container">
+            <div class="summary-container">
+              <div>
+                <div>Marketplace</div>
+                <div class="h6">3566</div>
+              </div>
+              <div>
+                <div>Marketplace</div>
+                <div class="h6">3566</div>
+              </div>
+            </div>
+          </div>
+
+
+          <p>List of <strong>users</strong>.</p>
+        </nb-tab>
+        <nb-tab tabTitle="ข้อมูลย้อนหลัง" badgeText="2" badgeStatus="warning">
+          <p>List of <strong>orders</strong>.</p>
+        </nb-tab>
+
+      </nb-tabset>
 
       <!-- <app-weighting-in [showVisitorsStatistics]="false">content</app-weighting-in> -->
     </nb-card>
