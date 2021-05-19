@@ -1,0 +1,61 @@
+<nb-card>
+  <nb-card-header>
+    <div class="d-flex flex-row justify-content-between">
+      <h5>รายการประจำวัน</h5>
+      <button nbButton size="small" ghost>
+        <nb-icon icon="more-vertical"></nb-icon>
+      </button>
+    </div>
+
+  </nb-card-header>
+
+  <nb-tabset fullWidth>
+    <nb-tab tabTitle="ข้อมูลชั่งเข้า" badgeText="3" badgeStatus="danger">
+
+      <nb-card size="large">
+        <table class="table table-hover" matSort (matSortChange)="sortData($event)">
+          <thead>
+            <tr>
+              <th mat-sort-header="carId">ทะเบียน</th>
+              <th mat-sort-header="type">ประเภท</th>
+              <th mat-sort-header="dateIn">เวลา</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let weightIn of sortWeightInData">
+              <td>{{weightIn.carId}}</td>
+              <td>{{weightIn.type}}</td>
+              <td>{{weightIn.dateIn | date:'short'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </nb-card>
+
+    </nb-tab>
+    <nb-tab tabTitle="ข้อมูลชั่งออก" badgeText="2" badgeStatus="warning">
+      <nb-card size="large">
+        <table class="table table-hover" matSort (matSortChange)="sortData($event)">
+          <thead>
+            <tr>
+              <th mat-sort-header="carId">ทะเบียน</th>
+              <th mat-sort-header="type">ประเภท</th>
+              <th mat-sort-header="dateIn">เวลา</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let weightIn of sortWeightInData">
+              <td>{{weightIn.carId}}</td>
+              <td>{{weightIn.type}}</td>
+              <td>{{weightIn.dateIn | date:'short'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </nb-card>
+    </nb-tab>
+
+  </nb-tabset>
+
+  <!-- <app-weighting-in [showVisitorsStatistics]="false">content</app-weighting-in> -->
+</nb-card>

@@ -1,5 +1,6 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WeightingInComponent } from './weighting-in/weighting-in.component';
@@ -17,11 +18,13 @@ import {
 	NbRadioModule,
 	NbTabsetModule,
 	NbSelectModule,
-	NbContextMenuModule
+	NbContextMenuModule,
+	NbListModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
+import { WeightStorageComponent } from './weight-storage/weight-storage.component';
 
 const routes: Routes = [
 	{
@@ -34,7 +37,8 @@ const routes: Routes = [
 	declarations: [
 		WeightingComponent,
 		WeightingInComponent,
-		WeightSheetComponent
+		WeightSheetComponent,
+  WeightStorageComponent
 	],
 	imports: [
 		FormsModule,
@@ -55,8 +59,10 @@ const routes: Routes = [
 		NbTabsetModule,
 		NbSelectModule,
 		NbContextMenuModule,
+		NbListModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
+		MatSortModule,
 		NgbModule
 	],
 	exports: [],

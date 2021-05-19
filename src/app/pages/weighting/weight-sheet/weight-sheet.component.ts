@@ -16,8 +16,8 @@ export interface Product {
 @Component({
 	selector: 'app-weight-sheet',
 	templateUrl: './weight-sheet.component.html',
-	styleUrls: [ './weight-sheet.component.scss' ],
-	encapsulation: ViewEncapsulation.None
+	styleUrls: [ './weight-sheet.component.scss' ]
+	// encapsulation: ViewEncapsulation.None
 })
 export class WeightSheetComponent implements OnInit {
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
