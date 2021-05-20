@@ -13,6 +13,7 @@ export interface Product {
 	id: number;
 	name: string;
 }
+
 @Component({
 	selector: 'app-weight-sheet',
 	templateUrl: './weight-sheet.component.html',

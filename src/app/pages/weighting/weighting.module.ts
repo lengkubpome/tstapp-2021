@@ -3,7 +3,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WeightingInComponent } from './weighting-in/weighting-in.component';
 import { RouterModule, Routes } from '@angular/router';
 import { WeightingComponent } from './weighting.component';
 import {
@@ -36,9 +35,8 @@ const routes: Routes = [
 @NgModule({
 	declarations: [
 		WeightingComponent,
-		WeightingInComponent,
 		WeightSheetComponent,
-  WeightStorageComponent
+		WeightStorageComponent
 	],
 	imports: [
 		FormsModule,

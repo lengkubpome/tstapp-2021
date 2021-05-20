@@ -26,13 +26,25 @@
 
 	nb-tab {
 		flex: 1;
-		padding: 0 0 1.25rem;
+		padding: 0 0;
 	}
 
 	nb-select ::ng-deep {
 		.select-button {
 			min-width: 0;
 			// width: 6rem;
+		}
+	}
+
+	table {
+		margin-bottom: 0;
+		thead > tr > th {
+			border: none;
+		}
+		tbody {
+			tr > td:not(:first-child) {
+				// text-align: center;
+			}
 		}
 	}
 
