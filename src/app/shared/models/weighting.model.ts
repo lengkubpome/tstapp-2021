@@ -4,6 +4,7 @@ export interface Weighting {
 	type: string;
 	carId: string;
 	contactId?: string; // Contact;
+	destination?: string;
 	productId: string; // Product;
 	price: number;
 	wIn: {
@@ -17,11 +18,11 @@ export interface Weighting {
 	weight: number;
 	weightCut?: {
 		amount: number;
-		unit: 'kg' | '%';
+		type: 'unit' | '%';
 	};
 	weightNet?: number;
 	amountNet?: number;
-	comment?: string;
+	notes?: string;
 	payment?: Payment[];
 }
 

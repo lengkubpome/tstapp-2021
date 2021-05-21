@@ -1,7 +1,8 @@
-import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Weighting } from './../../../shared/models/weighting.model';
+import { map, startWith, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 export interface State {
 	flag: string;
@@ -20,13 +21,23 @@ export interface Product {
 	styleUrls: [ './weight-sheet.component.scss' ]
 	// encapsulation: ViewEncapsulation.None
 })
-export class WeightSheetComponent implements OnInit {
-	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
-	options = [
-		{ value: 'ซื้อของ', label: 'ซื้อของ', checked: true },
-		{ value: 'ขายของ', label: 'ขายของ' },
-		{ value: 'อื่นๆ', label: 'อื่นๆ' }
+export class WeightSheetComponent implements OnInit, OnDestroy {
+	weightSheet: Weighting;
+
+	weightingForm: FormGroup;
+
+	weightStatus = null;
+	weightTypes = [
+		{ value: 'buy', label: 'ซื้อของ' },
+		{ value: 'sell', label: 'ขายของ' },
+		{ value: 'etc', label: 'อื่นๆ' }
 	];
+
+	// Private
+	private unsubscribeAll: Subject<any>;
+
+	// Make up
+	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
 
 	control = new FormControl();
 	streets: string[] = [
@@ -82,20 +93,46 @@ export class WeightSheetComponent implements OnInit {
 	];
 	filteredProducts: Observable<Product[]>;
 
-	constructor() {}
+	constructor(private formBuilder: FormBuilder) {
+		this.weightingForm = formBuilder.group({
+			id: [ '' ],
+			type: [ 'buy' ],
+			car: [ 'test' ],
+			contact: [ 'เล้ง' ],
+			product: [ '' ],
+			price: [ 190 ],
+			weightCut: formBuilder.group({
+				amount: [ 80 ],
+				type: [ 'unit' ]
+			}),
+			notes: []
+		});
+
+		// Set the private defaults
+		this.unsubscribeAll = new Subject();
+	}
 
 	ngOnInit(): void {
-		this.filteredStreets = this.control.valueChanges.pipe(
-			startWith(''),
-			map((value) => this._filter(value))
-		);
+		this.filteredStreets = this.weightingForm
+			.get('car')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				map((value) => this._filter(value))
+			);
 
-		this.filteredStates = this.stateCtrl.valueChanges.pipe(
-			startWith(''),
-			map((state) => (state ? this._filterStates(state) : this.states.slice()))
-		);
+		this.filteredStates = this.weightingForm
+			.get('contact')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				map(
+					(state) => (state ? this._filterStates(state) : this.states.slice())
+				)
+			);
 
 		this.filteredProducts = this.productCtrl.valueChanges.pipe(
+			takeUntil(this.unsubscribeAll),
 			startWith(''),
 			map(
 				(product) =>
@@ -103,6 +140,33 @@ export class WeightSheetComponent implements OnInit {
 			)
 		);
 	}
+
+	ngOnDestroy(): void {
+		// Unsubscribe from all subscriptions
+		this.unsubscribeAll.next();
+		this.unsubscribeAll.complete();
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Private methods
+	// -----------------------------------------------------------------------------------------------------
+	setWeightSheet(value?: Weighting): FormGroup {
+		return this.formBuilder.group({
+			id: [ value.id ],
+			status: [ value.status ],
+			type: [ value.type ],
+			car: [ value.carId ],
+			contact: [ value.contactId ],
+			product: [ value.productId ],
+			price: [ value.price ],
+			weightIn: [ value.wIn ],
+			weightOut: [ value.wOut ]
+		});
+		// return this.weightingForm;
+	}
+	// -----------------------------------------------------------------------------------------------------
+	// @ Private Func Filter methods
+	// -----------------------------------------------------------------------------------------------------
 
 	private _filterProducts(value: string): Product[] {
 		const filterValue = value.toLowerCase();
