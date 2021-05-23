@@ -1,4 +1,4 @@
-<form [formGroup]="weightingForm" id="weightingForm">
+<form [formGroup]="weightingForm" id="weightingForm" (ngSubmit)="onSubmitWeightSheet()">
 
   <nb-card>
     <nb-card-header>
@@ -48,8 +48,8 @@
                 formControlName="car" [matAutocomplete]="car">
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
-                <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
-                  {{street}}
+                <mat-option *ngFor="let car of filteredCars | async" [value]="street">
+                  {{car.plateLCN}}
                 </mat-option>
               </mat-autocomplete>
 
@@ -157,7 +157,7 @@
 
                 <tr>
                   <th scope="row">เข้า</th>
-                  <td>14/05/2021 22:34:32</td>
+                  <td>{{clock | date:'d/MM/yyyy, h:mm:ss'}}</td>
                   <td>23,400</td>
                 </tr>
                 <tr *ngIf="weightStatus !== null">
@@ -236,7 +236,8 @@
     <nb-card-footer>
       <div class="d-flex justify-content-end">
         <button type="submit" class="mr-2" nbButton status="primary">บันทึก</button>
-        <button type="button" nbButton status="danger">รีเซ็ต</button>
+        <button type="button" nbButton status="danger"
+          (click)="onResetWeightSheet()">รีเซ็ต</button>
       </div>
     </nb-card-footer>
 
