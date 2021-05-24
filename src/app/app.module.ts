@@ -17,7 +17,9 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { AppRoutingModule } from './app-routing.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 @NgModule({
 	declarations: [ AppComponent ],
@@ -36,7 +38,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		NbWindowModule.forRoot(),
 		NbToastrModule.forRoot(),
 		CoreModule.forRoot(),
-		ThemeModule.forRoot()
+		ThemeModule.forRoot(),
+		// NGXS
+		NgxsModule.forRoot([]),
+		NgxsLoggerPluginModule.forRoot(),
+		NgxsReduxDevtoolsPluginModule.forRoot()
 	],
 	providers: [],
 	bootstrap: [ AppComponent ]

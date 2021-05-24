@@ -14,8 +14,6 @@ export class ProductService extends ProductData {
 		{ id: '6', name: 'สังกะสี', currentPrice: 8.2 }
 	];
 
-	private $products: BehaviorSubject<Car[]>;
-
 	constructor() {
 		super();
 	}
