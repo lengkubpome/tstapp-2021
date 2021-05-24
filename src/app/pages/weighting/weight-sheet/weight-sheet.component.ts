@@ -1,8 +1,21 @@
 import { Car } from './../../../shared/models/car.model';
 import { CarService } from './../../../shared/services/car.service';
 import { Weighting } from './../../../shared/models/weighting.model';
-import { map, startWith, takeUntil } from 'rxjs/operators';
-import { Observable, Subject, Subscription, timer } from 'rxjs';
+import {
+	map,
+	startWith,
+	takeUntil,
+	filter,
+	switchMap,
+	debounceTime
+} from 'rxjs/operators';
+import {
+	Observable,
+	Subject,
+	Subscription,
+	timer,
+	BehaviorSubject
+} from 'rxjs';
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
@@ -24,8 +37,14 @@ export interface Product {
 	// encapsulation: ViewEncapsulation.None
 })
 export class WeightSheetComponent implements OnInit, OnDestroy {
+	// Private
+	clock = new Date();
+	private refreshCars$ = new BehaviorSubject(true);
+	private unsubscribeAll: Subject<any>;
+
 	weightSheet: Weighting;
-	listCar: Car[];
+	cars: Car[];
+	cars$: Observable<Car[]>;
 
 	weightingForm: FormGroup;
 
@@ -35,11 +54,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		{ value: 'sell', label: 'ขายของ' },
 		{ value: 'etc', label: 'อื่นๆ' }
 	];
-
-	// Private
-	clock = new Date();
-	private subscription: Subscription;
-	private unsubscribeAll: Subject<any>;
 
 	// Make up
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
@@ -51,7 +65,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		'Abbey Road',
 		'Fifth Avenue'
 	];
-	filteredCars: Observable<string[]>;
+	filteredCars: Observable<Car[]>;
 
 	stateCtrl = new FormControl();
 	filteredStates: Observable<State[]>;
@@ -87,7 +101,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		}
 	];
 
-	productCtrl = new FormControl();
 	products: Product[] = [
 		{ id: 1, name: 'กล่อง' },
 		{ id: 2, name: 'กระดาษสี' },
@@ -102,6 +115,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private formBuilder: FormBuilder,
 		private carService: CarService
 	) {
+		// Set the private defaults
+		this.unsubscribeAll = new Subject();
+
 		this.weightingForm = formBuilder.group({
 			id: [ '' ],
 			type: [ 'buy' ],
@@ -115,9 +131,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			}),
 			notes: []
 		});
-
-		// Set the private defaults
-		this.unsubscribeAll = new Subject();
 	}
 
 	ngOnInit(): void {
@@ -128,39 +141,18 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				this.clock = time;
 			});
 
+		this.cars$ = this.refreshCars$.pipe(
+			switchMap(() => this.carService.getCars())
+		);
+
 		this.carService
-			.getListCar()
+			.getCars()
 			.pipe(takeUntil(this.unsubscribeAll))
 			.subscribe((cars) => {
-				this.listCar = cars;
+				this.cars = cars;
 			});
 
-		this.filteredCars = this.weightingForm
-			.get('car')
-			.valueChanges.pipe(
-				takeUntil(this.unsubscribeAll),
-				startWith(''),
-				map((value) => this._filterCar(value))
-			);
-
-		this.filteredStates = this.weightingForm
-			.get('contact')
-			.valueChanges.pipe(
-				takeUntil(this.unsubscribeAll),
-				startWith(''),
-				map(
-					(state) => (state ? this._filterStates(state) : this.states.slice())
-				)
-			);
-
-		this.filteredProducts = this.productCtrl.valueChanges.pipe(
-			takeUntil(this.unsubscribeAll),
-			startWith(''),
-			map(
-				(product) =>
-					product ? this._filterProducts(product) : this.products.slice()
-			)
-		);
+		this.filterControls();
 	}
 
 	ngOnDestroy(): void {
@@ -202,10 +194,11 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		});
 
 		this.carService.addCar();
+		this.refreshCars$.next(true);
 	}
 
 	onSubmitWeightSheet(): void {
-		console.log(this.listCar);
+		console.log(this.cars);
 		console.log(this.weightingForm.value);
 	}
 
@@ -217,32 +210,56 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// @ Private Func Filter methods
 	// -----------------------------------------------------------------------------------------------------
 
-	private _filterProducts(value: string): Product[] {
-		const filterValue = value.toLowerCase();
-		let res: Product[] = [];
-		if (!isNaN(Number(filterValue))) {
-			res = [
-				...this.products.filter((product) => product.id === Number(filterValue))
-			];
-		}
-		res = [
-			...res,
-			...this.products.filter(
-				(product) => product.name.toLowerCase().indexOf(filterValue) === 0
-			)
-		];
-		return res;
+	private filterControls(): void {
+		this.filteredCars = this.refreshCars$.pipe(
+			switchMap(() => {
+				return this.weightingForm
+					.get('car')
+					.valueChanges.pipe(
+						takeUntil(this.unsubscribeAll),
+						startWith(''),
+						debounceTime(500),
+						map((car) => (car ? this._filterCar(car) : this.cars.slice()))
+					);
+			})
+		);
+
+		this.filteredStates = this.weightingForm
+			.get('contact')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				map(
+					(state) => (state ? this._filterStates(state) : this.states.slice())
+				)
+			);
+
+		this.filteredProducts = this.weightingForm
+			.get('product')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				map(
+					(product) =>
+						product ? this._filterProducts(product) : this.products.slice()
+				)
+			);
 	}
 
-	private _filterCar(value: string): string[] {
+	private _filterProducts(value: string): Product[] {
 		const filterValue = this._normalizeValue(value);
-		return this.streets.filter((street) =>
-			this._normalizeValue(street).includes(filterValue)
+		return this.products.filter((product) =>
+			this._normalizeValue(product.id + ' ' + product.name).includes(
+				filterValue
+			)
 		);
 	}
 
-	private _normalizeValue(value: string): string {
-		return value.toLowerCase().replace(/\s/g, '');
+	private _filterCar(value: string): Car[] {
+		const filterValue = this._normalizeValue(value);
+		return this.cars.filter((car) =>
+			this._normalizeValue(car.id).includes(filterValue)
+		);
 	}
 
 	private _filterStates(value: string): State[] {
@@ -251,5 +268,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		return this.states.filter(
 			(state) => state.name.toLowerCase().indexOf(filterValue) === 0
 		);
+	}
+
+	private _normalizeValue(value: string): string {
+		return value.toLowerCase().replace(/\s/g, '');
 	}
 }

@@ -1,5 +1,7 @@
 <form [formGroup]="weightingForm" id="weightingForm" (ngSubmit)="onSubmitWeightSheet()">
-
+  <ul>
+    <li *ngFor="let item of cars$ | async">{{item.id}}</li>
+  </ul>
   <nb-card>
     <nb-card-header>
       <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -48,7 +50,7 @@
                 formControlName="car" [matAutocomplete]="car">
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
-                <mat-option *ngFor="let car of filteredCars | async" [value]="street">
+                <mat-option *ngFor="let car of filteredCars | async" [value]="car.plateLCN">
                   {{car.plateLCN}}
                 </mat-option>
               </mat-autocomplete>
@@ -83,6 +85,7 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <input type="text" nbInput class="mr-2" id="product" placeholder="สินค้า"
                 [matAutocomplete]="product" formControlName="product">
+
               <mat-autocomplete autoActiveFirstOption #product="matAutocomplete">
                 <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
                   <small>{{product.id}}</small> -

@@ -7,5 +7,5 @@ export interface Car {
 }
 
 export abstract class CarData {
-	abstract getListCar(): Observable<Car[]>;
+	abstract getCars(): Observable<Car[]>;
 }

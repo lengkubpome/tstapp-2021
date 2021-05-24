@@ -1,6 +1,7 @@
 import { Car, CarData } from './../models/car.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,19 +13,19 @@ export class CarService extends CarData {
 		{ id: 'ขง2367ขก', plateLCN: 'ขง-2367', plateLCP: 'ขอนแก่น' }
 	];
 
-	private $listCar: BehaviorSubject<Car[]>;
-
 	constructor() {
 		super();
-		this.$listCar = new BehaviorSubject<Car[]>(this.cars);
 	}
 
-	getListCar = (): Observable<Car[]> => this.$listCar;
-	// getListCar(): Observable<Car[]> {
-	// 	return this.$listCar;
-	// }
+	// getCars = (): Observable<Car[]> => this.$cars;
+	getCars(): Observable<Car[]> {
+		return of(this.cars);
+	}
 
 	addCar(): void {
-		this.cars.push({ id: '1234', plateLCN: 'กอ-1234', plateLCP: 'ขอนแก่น' });
+		this.cars = [
+			...this.cars,
+			{ id: '1234', plateLCN: 'กอ-1234', plateLCP: 'ขอนแก่น' }
+		];
 	}
 }
