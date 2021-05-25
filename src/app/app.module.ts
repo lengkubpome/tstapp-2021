@@ -1,3 +1,5 @@
+import { environment } from './../environments/environment.prod';
+import { stateList } from './shared/state';
 import { ThemeModule } from './@theme/theme.module';
 import { CoreModule } from './@core/core.module';
 import { NgModule } from '@angular/core';
@@ -40,7 +42,9 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 		CoreModule.forRoot(),
 		ThemeModule.forRoot(),
 		// NGXS
-		NgxsModule.forRoot([]),
+		NgxsModule.forRoot([ ...stateList ], {
+			developmentMode: !environment.production
+		}),
 		NgxsLoggerPluginModule.forRoot(),
 		NgxsReduxDevtoolsPluginModule.forRoot()
 	],

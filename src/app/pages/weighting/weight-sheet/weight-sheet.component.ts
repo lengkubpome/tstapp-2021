@@ -1,3 +1,4 @@
+import { CarState, CarStateModel } from './../../../shared/state/car/car.state';
 import { Car } from './../../../shared/models/car.model';
 import { CarService } from './../../../shared/services/car.service';
 import { Weighting } from './../../../shared/models/weighting.model';
@@ -18,6 +19,8 @@ import {
 } from 'rxjs';
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Select, Store } from '@ngxs/store';
+import { CarAction } from 'src/app/shared/state/car/car.action';
 
 export interface State {
 	flag: string;
@@ -39,12 +42,12 @@ export interface Product {
 export class WeightSheetComponent implements OnInit, OnDestroy {
 	// Private
 	clock = new Date();
-	private refreshCars$ = new BehaviorSubject(true);
 	private unsubscribeAll: Subject<any>;
 
 	weightSheet: Weighting;
+
 	cars: Car[];
-	cars$: Observable<Car[]>;
+	@Select(CarState) cars$: Observable<CarStateModel>;
 
 	weightingForm: FormGroup;
 
@@ -111,26 +114,23 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	];
 	filteredProducts: Observable<Product[]>;
 
-	constructor(
-		private formBuilder: FormBuilder,
-		private carService: CarService
-	) {
-		// Set the private defaults
-		this.unsubscribeAll = new Subject();
-
+	constructor(private store: Store, private formBuilder: FormBuilder) {
 		this.weightingForm = formBuilder.group({
 			id: [ '' ],
 			type: [ 'buy' ],
-			car: [ 'test' ],
-			contact: [ 'เล้ง' ],
+			car: [ '' ],
+			contact: [ '' ],
 			product: [ '' ],
-			price: [ 190 ],
+			price: [],
 			weightCut: formBuilder.group({
-				amount: [ 80 ],
+				amount: [],
 				type: [ 'unit' ]
 			}),
 			notes: []
 		});
+
+		// Set the private defaults
+		this.unsubscribeAll = new Subject();
 	}
 
 	ngOnInit(): void {
@@ -141,16 +141,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				this.clock = time;
 			});
 
-		this.cars$ = this.refreshCars$.pipe(
-			switchMap(() => this.carService.getCars())
-		);
-
-		this.carService
-			.getCars()
+		this.cars$
 			.pipe(takeUntil(this.unsubscribeAll))
-			.subscribe((cars) => {
-				this.cars = cars;
-			});
+			.subscribe((data) => (this.cars = data.cars));
 
 		this.filterControls();
 	}
@@ -179,22 +172,16 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onResetWeightSheet(): void {
-		this.weightingForm = this.formBuilder.group({
-			id: [ '' ],
-			type: [ 'buy' ],
-			car: [ '' ],
-			contact: [ '' ],
-			product: [ '' ],
-			price: [],
-			weightCut: this.formBuilder.group({
-				amount: [],
-				type: [ 'unit' ]
-			}),
-			notes: []
-		});
+		this.weightingForm.reset();
+		this.weightingForm.get('type').setValue('buy');
 
-		this.carService.addCar();
-		this.refreshCars$.next(true);
+		this.store.dispatch(
+			new CarAction.Add({
+				id: 'ขง236733ขก',
+				plateLCN: 'ขง-236733',
+				plateLCP: 'ขอนแก่น'
+			})
+		);
 	}
 
 	onSubmitWeightSheet(): void {
@@ -211,18 +198,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// -----------------------------------------------------------------------------------------------------
 
 	private filterControls(): void {
-		this.filteredCars = this.refreshCars$.pipe(
-			switchMap(() => {
-				return this.weightingForm
-					.get('car')
-					.valueChanges.pipe(
-						takeUntil(this.unsubscribeAll),
-						startWith(''),
-						debounceTime(500),
-						map((car) => (car ? this._filterCar(car) : this.cars.slice()))
-					);
-			})
-		);
+		this.filteredCars = this.weightingForm
+			.get('car')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				debounceTime(300),
+				map((car) => (car ? this._filterCar(car) : this.cars.slice()))
+			);
 
 		this.filteredStates = this.weightingForm
 			.get('contact')
