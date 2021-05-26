@@ -1,23 +1,19 @@
+import {
+	ContactState,
+	ContactStateModel
+} from './../../../shared/state/contact/contact.state';
+import { IContact } from './../../../shared/models/contact.model';
+import {
+	ProductState,
+	ProductStateModel
+} from './../../../shared/state/product/product.state';
+import { IProduct } from './../../../shared/models/product.model';
 import { CarState, CarStateModel } from './../../../shared/state/car/car.state';
-import { Car } from './../../../shared/models/car.model';
-import { CarService } from './../../../shared/services/car.service';
-import { Weighting } from './../../../shared/models/weighting.model';
-import {
-	map,
-	startWith,
-	takeUntil,
-	filter,
-	switchMap,
-	debounceTime
-} from 'rxjs/operators';
-import {
-	Observable,
-	Subject,
-	Subscription,
-	timer,
-	BehaviorSubject
-} from 'rxjs';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ICar } from './../../../shared/models/car.model';
+import { IWeighting } from './../../../shared/models/weighting.model';
+import { map, startWith, takeUntil, debounceTime } from 'rxjs/operators';
+import { Observable, Subject, timer } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
@@ -28,11 +24,6 @@ export interface State {
 	population: string;
 }
 
-export interface Product {
-	id: number;
-	name: string;
-}
-
 @Component({
 	selector: 'app-weight-sheet',
 	templateUrl: './weight-sheet.component.html',
@@ -41,17 +32,26 @@ export interface Product {
 })
 export class WeightSheetComponent implements OnInit, OnDestroy {
 	// Private
-	clock = new Date();
 	private unsubscribeAll: Subject<any>;
 
-	weightSheet: Weighting;
+	clock = new Date();
+	weightSheet: IWeighting = { status: null };
 
-	cars: Car[];
+	cars: ICar[];
 	@Select(CarState) cars$: Observable<CarStateModel>;
+
+	contacts: IContact[];
+	@Select(ContactState) contacts$: Observable<ContactStateModel>;
+
+	products: IProduct[];
+	@Select(ProductState) products$: Observable<ProductStateModel>;
+
+	filteredCars: Observable<ICar[]>;
+	filteredContacts: Observable<IContact[]>;
+	filteredProducts: Observable<IProduct[]>;
 
 	weightingForm: FormGroup;
 
-	weightStatus = null;
 	weightTypes = [
 		{ value: 'buy', label: 'ซื้อของ' },
 		{ value: 'sell', label: 'ขายของ' },
@@ -68,7 +68,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		'Abbey Road',
 		'Fifth Avenue'
 	];
-	filteredCars: Observable<Car[]>;
 
 	stateCtrl = new FormControl();
 	filteredStates: Observable<State[]>;
@@ -104,25 +103,15 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		}
 	];
 
-	products: Product[] = [
-		{ id: 1, name: 'กล่อง' },
-		{ id: 2, name: 'กระดาษสี' },
-		{ id: 3, name: 'เศษเหล็ก' },
-		{ id: 4, name: 'เหล็กหนา' },
-		{ id: 5, name: 'กระป๋อง' },
-		{ id: 6, name: 'สังกะสี' }
-	];
-	filteredProducts: Observable<Product[]>;
-
 	constructor(private store: Store, private formBuilder: FormBuilder) {
-		this.weightingForm = formBuilder.group({
+		this.weightingForm = this.formBuilder.group({
 			id: [ '' ],
 			type: [ 'buy' ],
 			car: [ '' ],
 			contact: [ '' ],
 			product: [ '' ],
 			price: [],
-			weightCut: formBuilder.group({
+			weightCut: this.formBuilder.group({
 				amount: [],
 				type: [ 'unit' ]
 			}),
@@ -145,6 +134,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.unsubscribeAll))
 			.subscribe((data) => (this.cars = data.cars));
 
+		this.contacts$
+			.pipe(takeUntil(this.unsubscribeAll))
+			.subscribe((data) => (this.contacts = data.contacts));
+
+		this.products$.pipe(takeUntil(this.unsubscribeAll)).subscribe((data) => {
+			this.products = data.products;
+		});
+
 		this.filterControls();
 	}
 
@@ -157,19 +154,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// -----------------------------------------------------------------------------------------------------
 	// @ Private methods
 	// -----------------------------------------------------------------------------------------------------
-	setWeightSheet(value?: Weighting): FormGroup {
-		return this.formBuilder.group({
-			id: [ value.id ],
-			status: [ value.status ],
-			type: [ value.type ],
-			car: [ value.carId ],
-			contact: [ value.contactId ],
-			product: [ value.productId ],
-			price: [ value.price ],
-			weightIn: [ value.wIn ],
-			weightOut: [ value.wOut ]
-		});
-	}
 
 	onResetWeightSheet(): void {
 		this.weightingForm.reset();
@@ -182,6 +166,26 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				plateLCP: 'ขอนแก่น'
 			})
 		);
+	}
+
+	onSelectCar(carId: string): void {
+		const car = this.cars.find((c) => c.id === carId);
+		this.weightingForm.get('car').setValue(car.plateLCN);
+		this.weightSheet.carId = car.id;
+	}
+
+	onSelectContact(contactId: string): void {
+		const contact = this.contacts.find((c) => c.id === contactId);
+		this.weightingForm.get('contact').setValue(contact.firstName);
+		this.weightSheet.contactId = contact.id;
+	}
+
+	onSelectProduct(productId: string): void {
+		const product = this.products.find((p) => p.id === productId);
+		this.weightingForm.get('product').setValue(product.name);
+		this.weightingForm.get('price').setValue(product.currentPrice);
+		this.weightSheet.productId = product.id;
+		this.weightSheet.price = product.currentPrice;
 	}
 
 	onSubmitWeightSheet(): void {
@@ -207,13 +211,15 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				map((car) => (car ? this._filterCar(car) : this.cars.slice()))
 			);
 
-		this.filteredStates = this.weightingForm
+		this.filteredContacts = this.weightingForm
 			.get('contact')
 			.valueChanges.pipe(
 				takeUntil(this.unsubscribeAll),
 				startWith(''),
+				debounceTime(300),
 				map(
-					(state) => (state ? this._filterStates(state) : this.states.slice())
+					(contact) =>
+						contact ? this._filterContact(contact) : this.contacts.slice()
 				)
 			);
 
@@ -229,19 +235,24 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			);
 	}
 
-	private _filterProducts(value: string): Product[] {
-		const filterValue = this._normalizeValue(value);
-		return this.products.filter((product) =>
-			this._normalizeValue(product.id + ' ' + product.name).includes(
-				filterValue
-			)
-		);
-	}
-
-	private _filterCar(value: string): Car[] {
+	private _filterCar(value: string): ICar[] {
 		const filterValue = this._normalizeValue(value);
 		return this.cars.filter((car) =>
 			this._normalizeValue(car.id).includes(filterValue)
+		);
+	}
+
+	private _filterContact(value: string): IContact[] {
+		const filterValue = this._normalizeValue(value);
+		return this.contacts.filter((contact) =>
+			this._normalizeValue(contact.id + contact.firstName).includes(filterValue)
+		);
+	}
+
+	private _filterProducts(value: string): IProduct[] {
+		const filterValue = this._normalizeValue(value);
+		return this.products.filter((product) =>
+			this._normalizeValue(product.id + product.name).includes(filterValue)
 		);
 	}
 

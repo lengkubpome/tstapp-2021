@@ -1,4 +1,4 @@
-import { Car } from './../../models/car.model';
+import { ICar } from './../../models/car.model';
 
 // tslint:disable-next-line:no-namespace
 export namespace CarAction {
@@ -9,18 +9,24 @@ export namespace CarAction {
 	export class Add {
 		static readonly type = '[Car] Add';
 
-		constructor(public payload: Car) {}
+		constructor(public payload: ICar) {}
 	}
 
 	export class Edit {
 		static readonly type = '[Car] Edit';
 
-		constructor(public payload: Car, public id: number) {}
+		constructor(public payload: ICar, public id: string) {}
 	}
 
 	export class Delete {
 		static readonly type = '[Car] Delete';
 
-		constructor(public id: number) {}
+		constructor(public id: string) {}
+	}
+
+	export class FetchOwners {
+		static readonly type = '[Car] Fetch Contact All';
+
+		constructor(public payload: ICar, public id: string) {}
 	}
 }

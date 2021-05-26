@@ -1,7 +1,7 @@
 <form [formGroup]="weightingForm" id="weightingForm" (ngSubmit)="onSubmitWeightSheet()">
-  <ul>
-    <li *ngFor="let item of (cars$ | async).cars">{{item.id}}</li>
-  </ul>
+  <!-- <ul>
+    <li *ngFor="let item of (products$ | async).products">{{item.id}}</li>
+  </ul> -->
   <nb-card>
     <nb-card-header>
       <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -49,12 +49,10 @@
               <input type="text" nbInput class="mr-2" id="car" placeholder="ทะเบียนรถ"
                 formControlName="car" [matAutocomplete]="car">
 
-              <input type="text" nbInput class="mr-2" id="car" placeholder="ทะเบียนรถ"
-                [value]="this.weightingForm.get('car').value">
-
-              <mat-autocomplete autoActiveFirstOption #car="matAutocomplete">
-                <mat-option *ngFor="let car of filteredCars | async" [value]="car.plateLCN">
-                  {{car.plateLCN}}
+              <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
+                (optionSelected)="onSelectCar($event.option.value)">
+                <mat-option *ngFor="let car of filteredCars | async" [value]="car.id">
+                  {{car.plateLCN }} {{car.plateLCP}}
                 </mat-option>
               </mat-autocomplete>
 
@@ -69,11 +67,13 @@
               <input type="text" nbInput class="mr-2" id="contact" placeholder="ผู้ติดต่อ"
                 [matAutocomplete]="vendor" formControlName="contact">
 
-              <mat-autocomplete autoActiveFirstOption #vendor="matAutocomplete">
-                <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-                  <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
-                  <span>{{state.name}}</span> |
-                  <small>Population: {{state.population}}</small>
+              <mat-autocomplete autoActiveFirstOption #vendor="matAutocomplete"
+                (optionSelected)="onSelectContact($event.option.value)">
+                <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact.id">
+                  <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
+                  <span>{{contact.firstName}}</span>
+                  <span>{{contact.lastName}}</span>
+                  <!-- <small>Population: {{state.population}}</small> -->
                 </mat-option>
               </mat-autocomplete>
 
@@ -89,8 +89,9 @@
               <input type="text" nbInput class="mr-2" id="product" placeholder="สินค้า"
                 [matAutocomplete]="product" formControlName="product">
 
-              <mat-autocomplete autoActiveFirstOption #product="matAutocomplete">
-                <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
+              <mat-autocomplete autoActiveFirstOption #product="matAutocomplete"
+                (optionSelected)="onSelectProduct($event.option.value)">
+                <mat-option *ngFor="let product of filteredProducts | async" [value]="product.id">
                   <small>{{product.id}}</small> -
                   <span>{{product.name}}</span>
                 </mat-option>
@@ -109,7 +110,7 @@
             </div>
           </div>
 
-          <div *ngIf="weightStatus!==null" class="form-group row align-items-baseline"
+          <div *ngIf="weightSheet.status!==null" class="form-group row align-items-baseline"
             formGroupName="weightCut">
             <label for="" class="label col-sm-3 col-form-label">ตัดน้ำหนัก</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
@@ -166,14 +167,14 @@
                   <td>{{clock | date:'d/MM/yyyy, h:mm:ss'}}</td>
                   <td>23,400</td>
                 </tr>
-                <tr *ngIf="weightStatus !== null">
+                <tr *ngIf="weightSheet.status !== null">
                   <th scope="row">ออก</th>
                   <td>14/05/2021 22:34:32</td>
                   <td>15,400</td>
                 </tr>
 
               </tbody>
-              <tfoot *ngIf="weightStatus !== null">
+              <tfoot *ngIf="weightSheet.status !== null">
                 <tr>
                   <th colspan="2">
                     น้ำหนักสินค้า
@@ -212,7 +213,7 @@
       </div>
     </nb-card-body>
 
-    <nb-card-body class="payment" *ngIf="weightStatus === 'check-in' && 'check-out'">
+    <nb-card-body class="payment" *ngIf="weightSheet.status === 'check-in' && 'check-out'">
       <div class="d-flex flex-column flex-md-row align-items-baseline">
         <div>ชำระเงิน (หากยังไม่ชำระ หรือชำระไม่ครบจะตั้งเป็นเจ้าหนี้การค้าไว้)</div>
         <div class="form-group">

@@ -1,11 +1,12 @@
-export interface Contact {
+export interface IContact {
 	id: string;
 	firstName: string;
 	lastName?: string;
-	bankAccount?: BankAccount[];
+	address?: string;
+	bankAccount?: IBankAccount[];
 }
 
-export interface BankAccount {
+export interface IBankAccount {
 	bankName: string;
 	accountName: string;
 	accountNumber: string;

@@ -1,4 +1,4 @@
-import { Car, CarData } from './../models/car.model';
+import { ICar, CarData } from './../models/car.model';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 	providedIn: 'root'
 })
 export class CarService extends CarData {
-	private cars: Car[] = [
+	private cars: ICar[] = [
 		{ id: 'กอ9555ขก', plateLCN: 'กอ-9555', plateLCP: 'ขอนแก่น' },
 		{ id: '844922ขก', plateLCN: '84-4922', plateLCP: 'ขอนแก่น' },
 		{ id: 'ขง2367ขก', plateLCN: 'ขง-2367', plateLCP: 'ขอนแก่น' }
@@ -18,7 +18,7 @@ export class CarService extends CarData {
 	}
 
 	// getCars = (): Observable<Car[]> => this.$cars;
-	getCars(): Observable<Car[]> {
+	getCars(): Observable<ICar[]> {
 		return of(this.cars);
 	}
 

@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
-export interface Product {
+export interface IProduct {
 	id: string;
 	name: string;
 	currentPrice: number;
 }
 
 export abstract class ProductData {
-	abstract getProducts(): Observable<Product[]>;
+	abstract getProducts(): Observable<IProduct[]>;
 }

@@ -1,16 +1,16 @@
-import { Car } from './../../models/car.model';
+import { ICar } from './../../models/car.model';
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, NgxsOnInit, Selector } from '@ngxs/store';
 import { CarAction } from './car.action';
 
-const cars: Car[] = [
+const cars: ICar[] = [
 	{ id: 'กอ9555ขก', plateLCN: 'กอ-9555', plateLCP: 'ขอนแก่น' },
 	{ id: '844922ขก', plateLCN: '84-4922', plateLCP: 'ขอนแก่น' },
 	{ id: 'ขง2367ขก', plateLCN: 'ขง-2367', plateLCP: 'ขอนแก่น' }
 ];
 
 export interface CarStateModel {
-	cars: Car[];
+	cars: ICar[];
 }
 
 @State<CarStateModel>({
@@ -25,7 +25,7 @@ export class CarState implements NgxsOnInit {
 	}
 
 	@Selector()
-	static myCar(state: CarStateModel): Car[] {
+	static myCar(state: CarStateModel): ICar[] {
 		return state.cars.filter((s) => s.id == 'กอ9555ขก');
 	}
 
