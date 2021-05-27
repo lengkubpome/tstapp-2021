@@ -46,8 +46,15 @@
           <div class="form-group row align-items-baseline ">
             <label for="car" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="text" nbInput class="mr-2" id="car" placeholder="ทะเบียนรถ"
-                formControlName="car" [matAutocomplete]="car">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput id="car" placeholder="ทะเบียนรถ" formControlName="car"
+                  [matAutocomplete]="car">
+                <button *ngIf="weightingForm.get('car').value" type="button" nbSuffix nbButton ghost
+                  (click)="onClearInputValue('car')">
+                  <nb-icon [icon]="'close'" pack="eva">
+                  </nb-icon>
+                </button>
+              </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
                 (optionSelected)="onSelectCar($event.option.value)">
@@ -56,18 +63,28 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button nbButton ghost status="info">
-                <nb-icon icon="person-add-outline"></nb-icon>
+              <button nbButton ghost status="info" [nbContextMenu]="carMenus"
+                nbContextMenuPlacement="right">
+                <nb-icon icon="more-vertical-outline"></nb-icon>
               </button>
+
+
             </div>
           </div>
           <div class="form-group row align-items-baseline">
             <label for="contact" class="label col-sm-3 col-form-label">ผู้ติดต่อ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="text" nbInput class="mr-2" id="contact" placeholder="ผู้ติดต่อ"
-                [matAutocomplete]="vendor" formControlName="contact">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput id="contact" placeholder="ผู้ติดต่อ"
+                  formControlName="contact" [matAutocomplete]="contact">
+                <button *ngIf="weightingForm.get('contact').value" type="button" nbSuffix nbButton
+                  ghost (click)="onClearInputValue('contact')">
+                  <nb-icon [icon]="'close'" pack="eva">
+                  </nb-icon>
+                </button>
+              </nb-form-field>
 
-              <mat-autocomplete autoActiveFirstOption #vendor="matAutocomplete"
+              <mat-autocomplete autoActiveFirstOption #contact="matAutocomplete"
                 (optionSelected)="onSelectContact($event.option.value)">
                 <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact.id">
                   <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
@@ -78,7 +95,7 @@
               </mat-autocomplete>
 
               <button nbButton ghost status="info">
-                <nb-icon icon="person-add-outline"></nb-icon>
+                <nb-icon icon="link-2"></nb-icon>
               </button>
             </div>
 
@@ -86,8 +103,16 @@
           <div class="form-group row align-items-baseline">
             <label for="product" class="label col-sm-3 col-form-label">สินค้า</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="text" nbInput class="mr-2" id="product" placeholder="สินค้า"
-                [matAutocomplete]="product" formControlName="product">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput id="product" placeholder="สินค้า"
+                  (keydown.tab)="onKeyTab('product')" formControlName="product"
+                  [matAutocomplete]="product">
+                <button *ngIf="weightingForm.get('product').value" type="button" nbSuffix nbButton
+                  ghost (click)="onClearInputValue('product')">
+                  <nb-icon [icon]="'close'" pack="eva">
+                  </nb-icon>
+                </button>
+              </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #product="matAutocomplete"
                 (optionSelected)="onSelectProduct($event.option.value)">
@@ -96,8 +121,8 @@
                   <span>{{product.name}}</span>
                 </mat-option>
               </mat-autocomplete>
-              <button nbButton ghost status="info">
-                <nb-icon icon="person-add-outline"></nb-icon>
+              <button *ngIf="weightingForm.get('product').value" nbButton ghost status="info">
+                <nb-icon icon="alert-circle-outline"></nb-icon>
               </button>
 
             </div>
@@ -106,7 +131,15 @@
           <div class="form-group row align-items-baseline">
             <label for="price" class="label col-sm-3 col-form-label">ราคา</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="number" nbInput id="price" placeholder="ราคา" formControlName="price">
+
+              <nb-form-field class="mr-2">
+                <input type="number" nbInput id="price" placeholder="ราคา" formControlName="price">
+                <button *ngIf="weightingForm.get('price').value" type="button" nbSuffix nbButton
+                  ghost (click)="onClearInputValue('price')">
+                  <nb-icon [icon]="'close'" pack="eva">
+                  </nb-icon>
+                </button>
+              </nb-form-field>
             </div>
           </div>
 

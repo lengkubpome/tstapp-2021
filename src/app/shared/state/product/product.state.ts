@@ -7,9 +7,9 @@ const products: IProduct[] = [
 	{ id: 'p1001', name: 'กล่อง', currentPrice: 6.7 },
 	{ id: 'p1002', name: 'กระดาษสี', currentPrice: 5.1 },
 	{ id: 'p1003', name: 'เศษเหล็ก', currentPrice: 13.5 },
-	{ id: 'p1003', name: 'เหล็กหนา', currentPrice: 14.0 },
-	{ id: 'p1003', name: 'กระป๋อง', currentPrice: 8.0 },
-	{ id: 'p1003', name: 'สังกะสี', currentPrice: 7.6 }
+	{ id: 'p1004', name: 'เหล็กหนา', currentPrice: 14.0 },
+	{ id: 'p1005', name: 'กระป๋อง', currentPrice: 8.0 },
+	{ id: 'p1006', name: 'สังกะสี', currentPrice: 7.6 }
 ];
 
 export interface ProductStateModel {

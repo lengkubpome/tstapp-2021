@@ -1,6 +1,7 @@
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
@@ -61,6 +62,7 @@ const routes: Routes = [
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		MatSortModule,
+		MatSelectModule,
 		NgbModule
 	],
 	exports: [],
