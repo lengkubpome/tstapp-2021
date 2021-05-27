@@ -13,10 +13,18 @@ import { ICar } from './../../../shared/models/car.model';
 import { IWeighting } from './../../../shared/models/weighting.model';
 import { map, startWith, takeUntil, debounceTime } from 'rxjs/operators';
 import { Observable, Subject, timer } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	OnDestroy,
+	HostListener,
+	ElementRef,
+	ViewChild
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
+import { InteractivityChecker } from '@angular/cdk/a11y';
 
 export interface State {
 	flag: string;
@@ -31,6 +39,8 @@ export interface State {
 	// encapsulation: ViewEncapsulation.None
 })
 export class WeightSheetComponent implements OnInit, OnDestroy {
+	@ViewChild('wForm') wForm: ElementRef;
+
 	// Private
 	private unsubscribeAll: Subject<any>;
 
@@ -38,19 +48,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	clock = new Date();
 	weightSheet: IWeighting = { status: null };
-
-	cars: ICar[];
-	@Select(CarState) cars$: Observable<CarStateModel>;
-
-	contacts: IContact[];
-	@Select(ContactState) contacts$: Observable<ContactStateModel>;
-
-	products: IProduct[];
-	@Select(ProductState) products$: Observable<ProductStateModel>;
-
-	filteredCars: Observable<ICar[]>;
-	filteredContacts: Observable<IContact[]>;
-	filteredProducts: Observable<IProduct[]>;
 
 	weightTypes = [
 		{ value: 'buy', label: 'ซื้อของ' },
@@ -66,7 +63,40 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// Make up
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
 
-	constructor(private store: Store, private formBuilder: FormBuilder) {
+	cars: ICar[];
+	@Select(CarState) cars$: Observable<CarStateModel>;
+	filteredCars: Observable<ICar[]>;
+
+	contacts: IContact[];
+	@Select(ContactState) contacts$: Observable<ContactStateModel>;
+	filteredContacts: Observable<IContact[]>;
+
+	products: IProduct[];
+	@Select(ProductState) products$: Observable<ProductStateModel>;
+	filteredProducts: Observable<IProduct[]>;
+
+	@HostListener('keyup', [ '$event' ])
+	keyevent(event): void {
+		// key: enter
+		if (event.keyCode === 13) {
+			// this.setValue(event);
+			this.setNextFocus(event.target.name);
+		}
+		// key: escape
+		if (event.keyCode === 27) {
+			this.resetInputValue(event.target.name);
+		}
+
+		// if (event.keyCode === 38) {
+		// 	this.setPrevFocus(event.target.name);
+		// }
+	}
+
+	constructor(
+		private store: Store,
+		private formBuilder: FormBuilder,
+		private interactivityChecker: InteractivityChecker
+	) {
 		this.weightingForm = this.formBuilder.group({
 			id: [ '' ],
 			type: [ 'buy' ],
@@ -74,11 +104,12 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			contact: [ '' ],
 			product: [ '' ],
 			price: [],
-			weightCut: this.formBuilder.group({
+			cutWeight: this.formBuilder.group({
 				amount: [],
 				type: [ 'unit' ]
 			}),
-			notes: []
+			notes: [],
+			liveWeight: [ 7844 ]
 		});
 
 		// Set the private defaults
@@ -143,10 +174,24 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.weightSheet.contactId = contact.id;
 	}
 
-	onClearInputValue(ctrlName: string): void {
-		this.weightingForm.get(ctrlName).reset();
-		if (ctrlName === 'product') {
-			this.weightingForm.get('price').reset();
+	resetInputValue(ctrlName: string): void {
+		switch (ctrlName) {
+			case 'product': {
+				this.weightingForm.get('product').reset();
+				this.weightingForm.get('price').reset();
+				break;
+			}
+			case 'cutWeight': {
+				this.weightingForm.get('cutWeight.amount').reset();
+				this.weightingForm.get('cutWeight.type').setValue('unit');
+				break;
+			}
+			case 'liveWeight': {
+				break;
+			}
+			default: {
+				this.weightingForm.get(ctrlName).reset();
+			}
 		}
 	}
 
@@ -159,16 +204,66 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitWeightSheet(): void {
-		console.log(this.cars);
-		console.log(this.weightingForm.value);
+		// console.log(this.cars);
+		// console.log(this.weightingForm.value);
+		const data: IWeighting[] = [
+			{
+				id: '509903',
+				status: 'success',
+				wIn: { dateTime: new Date(), weight: 6500 }
+			},
+			{
+				id: '509902',
+				status: 'success',
+				wIn: { dateTime: new Date(), weight: 6500 }
+			}
+		];
+
+		const now = new Date();
+		let timestamp = now.getFullYear().toString(); // 2011
+		timestamp +=
+			(now.getMonth() + 1 < 9 ? '0' : '') + (now.getMonth() + 1).toString(); // 0=January, 1=February
+		timestamp += (now.getDate() < 10 ? '0' : '') + now.getDate().toString(); // pad with a 0
+
+		const order = data.filter((d) => d.wIn.dateTime).length + 1;
+		timestamp +=
+			(order < 100 ? '0' : '') + (order < 10 ? '0' : '') + order.toString();
+		console.log(timestamp);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
-	// @ Func Input Control methods
+	// @ Func Set Control Input Focus methods
 	// -----------------------------------------------------------------------------------------------------
-	public onKeyTab(ctrlName: string): void {
-		console.log(ctrlName);
+
+	setPrevFocus(currentId): void {
+		console.log(currentId);
+		const ctrls = Object.keys(this.weightingForm.controls);
+		for (let key = ctrls.indexOf(currentId) - 1; key >= 0; key--) {
+			const control = this.wForm.nativeElement[ctrls[key]];
+			console.log(control);
+
+			if (control && this.interactivityChecker.isFocusable(control)) {
+				control.focus();
+				control.select();
+				break;
+			}
+		}
 	}
+
+	setNextFocus(currentId): void {
+		const ctrls = Object.keys(this.weightingForm.controls);
+		console.log(ctrls);
+
+		for (let key = ctrls.indexOf(currentId) + 1; key < ctrls.length; key++) {
+			const control = this.wForm.nativeElement[ctrls[key]];
+			if (control && this.interactivityChecker.isFocusable(control)) {
+				control.focus();
+				control.select();
+				break;
+			}
+		}
+	}
+
 	// -----------------------------------------------------------------------------------------------------
 	// @ Private Func Filter methods
 	// -----------------------------------------------------------------------------------------------------

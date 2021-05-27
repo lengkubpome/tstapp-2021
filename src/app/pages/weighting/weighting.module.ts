@@ -25,6 +25,7 @@ import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
+import { NgxsModule } from '@ngxs/store';
 
 const routes: Routes = [
 	{
@@ -63,7 +64,8 @@ const routes: Routes = [
 		MatFormFieldModule,
 		MatSortModule,
 		MatSelectModule,
-		NgbModule
+		NgbModule,
+		NgxsModule.forFeature([])
 	],
 	exports: [],
 	providers: []

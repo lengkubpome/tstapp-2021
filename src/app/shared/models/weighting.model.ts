@@ -30,10 +30,10 @@ export interface IWeighting {
 	weightNet?: number;
 	amountNet?: number;
 	notes?: string;
-	payment?: Payment[];
+	payment?: IPaymentWeighting[];
 }
 
-export interface Payment {
+export interface IPaymentWeighting {
 	date: Date;
 	payAccountId: string;
 	amount: number;

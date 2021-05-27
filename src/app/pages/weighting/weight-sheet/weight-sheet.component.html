@@ -1,4 +1,4 @@
-<form [formGroup]="weightingForm" id="weightingForm" (ngSubmit)="onSubmitWeightSheet()">
+<form [formGroup]="weightingForm" id="weightingForm" #wForm (ngSubmit)="onSubmitWeightSheet()">
   <!-- <ul>
     <li *ngFor="let item of (products$ | async).products">{{item.id}}</li>
   </ul> -->
@@ -12,7 +12,7 @@
     </div> -->
         </div>
         <div>
-          <button nbButton [nbContextMenu]="menuItems" size="small" status="success">
+          <button type="button" nbButton [nbContextMenu]="menuItems" size="small" status="success">
             Show Menu
           </button>
         </div>
@@ -36,7 +36,7 @@
           <div class="form-group row align-items-baseline">
             <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
             <div class="col-sm-9">
-              <nb-radio-group class="d-flex" id="type" formControlName="type">
+              <nb-radio-group class="d-flex" id="type" name="type" formControlName="type">
                 <nb-radio *ngFor="let type of weightTypes" [value]="type.value">
                   {{ type.label }}
                 </nb-radio>
@@ -47,13 +47,8 @@
             <label for="car" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
-                <input type="text" nbInput id="car" placeholder="ทะเบียนรถ" formControlName="car"
-                  [matAutocomplete]="car">
-                <button *ngIf="weightingForm.get('car').value" type="button" nbSuffix nbButton ghost
-                  (click)="onClearInputValue('car')">
-                  <nb-icon [icon]="'close'" pack="eva">
-                  </nb-icon>
-                </button>
+                <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
+                  formControlName="car" [matAutocomplete]="car">
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
@@ -63,7 +58,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button nbButton ghost status="info" [nbContextMenu]="carMenus"
+              <button type="button" nbButton ghost status="info" [nbContextMenu]="carMenus"
                 nbContextMenuPlacement="right">
                 <nb-icon icon="more-vertical-outline"></nb-icon>
               </button>
@@ -75,13 +70,8 @@
             <label for="contact" class="label col-sm-3 col-form-label">ผู้ติดต่อ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
-                <input type="text" nbInput id="contact" placeholder="ผู้ติดต่อ"
+                <input type="text" nbInput id="contact" name="contact" placeholder="ผู้ติดต่อ"
                   formControlName="contact" [matAutocomplete]="contact">
-                <button *ngIf="weightingForm.get('contact').value" type="button" nbSuffix nbButton
-                  ghost (click)="onClearInputValue('contact')">
-                  <nb-icon [icon]="'close'" pack="eva">
-                  </nb-icon>
-                </button>
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #contact="matAutocomplete"
@@ -104,14 +94,8 @@
             <label for="product" class="label col-sm-3 col-form-label">สินค้า</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
-                <input type="text" nbInput id="product" placeholder="สินค้า"
-                  (keydown.tab)="onKeyTab('product')" formControlName="product"
-                  [matAutocomplete]="product">
-                <button *ngIf="weightingForm.get('product').value" type="button" nbSuffix nbButton
-                  ghost (click)="onClearInputValue('product')">
-                  <nb-icon [icon]="'close'" pack="eva">
-                  </nb-icon>
-                </button>
+                <input type="text" nbInput id="product" name="product" placeholder="สินค้า"
+                  formControlName="product" [matAutocomplete]="product">
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #product="matAutocomplete"
@@ -133,22 +117,18 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
 
               <nb-form-field class="mr-2">
-                <input type="number" nbInput id="price" placeholder="ราคา" formControlName="price">
-                <button *ngIf="weightingForm.get('price').value" type="button" nbSuffix nbButton
-                  ghost (click)="onClearInputValue('price')">
-                  <nb-icon [icon]="'close'" pack="eva">
-                  </nb-icon>
-                </button>
+                <input type="text" nbInput id="price" name="price" placeholder="ราคา"
+                  formControlName="price">
               </nb-form-field>
             </div>
           </div>
 
-          <div *ngIf="weightSheet.status!==null" class="form-group row align-items-baseline"
-            formGroupName="weightCut">
-            <label for="" class="label col-sm-3 col-form-label">ตัดน้ำหนัก</label>
+          <div *ngIf="weightSheet.status===null" class="form-group row align-items-baseline"
+            formGroupName="cutWeight">
+            <label for="cut-weight" class="label col-sm-3 col-form-label">ตัดน้ำหนัก</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="number" nbInput class="mr-2" id="" placeholder="หักน้ำหนัก"
-                formControlName="amount">
+              <input type="number" nbInput class="mr-2" id="amount" name="cutWeight"
+                placeholder="หักน้ำหนัก" formControlName="amount">
 
               <nb-select placeholder="Select Showcase" formControlName="type">
                 <nb-option value="unit">หน่วย</nb-option>
@@ -161,7 +141,7 @@
           <div class="form-group row ">
             <label for="notes" class="label col-sm-3 col-form-label">หมายเหตุ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <textarea nbInput id="notes" placeholder="หมายเหตุ"
+              <textarea nbInput id="notes" name="notes" placeholder="หมายเหตุ"
                 formControlName="notes"></textarea>
             </div>
           </div>
@@ -176,8 +156,8 @@
               <nb-form-field>
                 <!-- <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon> -->
                 <nb-icon nbPrefix icon="loader-outline" pack="eva"></nb-icon>
-                <input type="text" nbInput class="input-weight-live" value="12345678" fullWidth
-                  readonly>
+                <input type="text" id="liveWeight" name="liveWeight" nbInput
+                  class="input-live-weight" formControlName="liveWeight" fullWidth readonly>
                 <p nbSuffix>KG.</p>
               </nb-form-field>
             </div>
