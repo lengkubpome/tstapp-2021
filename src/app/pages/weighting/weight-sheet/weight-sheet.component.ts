@@ -1,3 +1,4 @@
+import { WeightingService } from './../weighting.service';
 import {
 	ContactState,
 	ContactStateModel
@@ -21,10 +22,16 @@ import {
 	ElementRef,
 	ViewChild
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	Validators
+} from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
+import { productList } from 'src/app/shared/validators/product-list';
 
 export interface State {
 	flag: string;
@@ -95,15 +102,15 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	constructor(
 		private store: Store,
 		private formBuilder: FormBuilder,
-		private interactivityChecker: InteractivityChecker
+		private interactivityChecker: InteractivityChecker,
+		private weightingService: WeightingService
 	) {
 		this.weightingForm = this.formBuilder.group({
-			id: [ '' ],
 			type: [ 'buy' ],
-			car: [ '' ],
+			car: [ '', Validators.compose([ Validators.required ]) ],
 			contact: [ '' ],
-			product: [ '' ],
-			price: [],
+			product: [ '', Validators.required ],
+			price: [ '' ],
 			cutWeight: this.formBuilder.group({
 				amount: [],
 				type: [ 'unit' ]
@@ -134,9 +141,15 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 		this.products$.pipe(takeUntil(this.unsubscribeAll)).subscribe((data) => {
 			this.products = data.products;
+			// set validators
+			this.weightingForm
+				.get('product')
+				.setValidators([ Validators.required, productList(this.products) ]);
 		});
 
 		this.filterControls();
+
+		this.setWeightSheet();
 	}
 
 	ngOnDestroy(): void {
@@ -148,6 +161,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// -----------------------------------------------------------------------------------------------------
 	// @ Public methods
 	// -----------------------------------------------------------------------------------------------------
+	setWeightSheet(weighting?: IWeighting): void {
+		this.weightSheet.id = this.weightingService.generateId();
+	}
 
 	onResetWeightSheet(): void {
 		this.weightingForm.reset();
@@ -174,6 +190,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.weightSheet.contactId = contact.id;
 	}
 
+	onSelectProduct(productId: string): void {
+		const product = this.products.find((p) => p.id === productId);
+		this.weightingForm.get('product').setValue(product.name);
+		this.weightingForm.get('price').setValue(product.currentPrice);
+		this.weightSheet.productId = product.id;
+		this.weightSheet.price = product.currentPrice;
+	}
+
 	resetInputValue(ctrlName: string): void {
 		switch (ctrlName) {
 			case 'product': {
@@ -195,40 +219,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onSelectProduct(productId: string): void {
-		const product = this.products.find((p) => p.id === productId);
-		this.weightingForm.get('product').setValue(product.name);
-		this.weightingForm.get('price').setValue(product.currentPrice);
-		this.weightSheet.productId = product.id;
-		this.weightSheet.price = product.currentPrice;
-	}
-
 	onSubmitWeightSheet(): void {
-		// console.log(this.cars);
-		// console.log(this.weightingForm.value);
-		const data: IWeighting[] = [
-			{
-				id: '509903',
-				status: 'success',
-				wIn: { dateTime: new Date(), weight: 6500 }
-			},
-			{
-				id: '509902',
-				status: 'success',
-				wIn: { dateTime: new Date(), weight: 6500 }
-			}
-		];
-
-		const now = new Date();
-		let timestamp = now.getFullYear().toString(); // 2011
-		timestamp +=
-			(now.getMonth() + 1 < 9 ? '0' : '') + (now.getMonth() + 1).toString(); // 0=January, 1=February
-		timestamp += (now.getDate() < 10 ? '0' : '') + now.getDate().toString(); // pad with a 0
-
-		const order = data.filter((d) => d.wIn.dateTime).length + 1;
-		timestamp +=
-			(order < 100 ? '0' : '') + (order < 10 ? '0' : '') + order.toString();
-		console.log(timestamp);
+		console.log(this.weightingForm.get('product').touched);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -318,7 +310,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	private _filterProducts(value: string): IProduct[] {
-		// console.log('_filterProducts : %s', value);
+		console.log('_filterProducts : %s', value);
 		const filterValue = this._normalizeValue(value);
 		return this.products.filter((product) =>
 			this._normalizeValue(product.id + product.name).includes(filterValue)

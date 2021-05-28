@@ -26,11 +26,10 @@
             <label for="id" class="label col-sm-3 col-form-label">เลขที่ชั่งน้ำหนัก
             </label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <strong>2564051500x</strong>
+              <strong>{{this.weightSheet.id}}</strong>
               <nb-icon nbPrefix icon="info" pack="eva" status="info" class="ml-2">
               </nb-icon>
             </div>
-            <input type="hidden" id="id" formControlName="id">
           </div>
 
           <div class="form-group row align-items-baseline">
@@ -95,6 +94,7 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="product" name="product" placeholder="สินค้า"
+                  [status]="(weightingForm.get('product').errors && this.weightingForm.get('product').touched) ? 'danger' : 'basic'"
                   formControlName="product" [matAutocomplete]="product">
               </nb-form-field>
 

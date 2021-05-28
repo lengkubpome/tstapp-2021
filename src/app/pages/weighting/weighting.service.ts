@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { IWeighting } from 'src/app/shared/models/weighting.model';
 
 @Injectable({
-	providedIn: WeightingModule
+	providedIn: null
 })
 export class WeightingService {
 	private data: IWeighting[] = [];

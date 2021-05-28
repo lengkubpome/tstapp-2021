@@ -1,3 +1,4 @@
+import { WeightingService } from './weighting.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
@@ -68,6 +69,6 @@ const routes: Routes = [
 		NgxsModule.forFeature([])
 	],
 	exports: [],
-	providers: []
+	providers: [ WeightingService ]
 })
 export class WeightingModule {}
