@@ -28,6 +28,7 @@ export class WeightingService {
 		const order = this.data.filter((d) => d.wIn.dateTime).length + 1;
 		timestamp +=
 			(order < 100 ? '0' : '') + (order < 10 ? '0' : '') + order.toString();
+		// console.log(timestamp);
 		return timestamp;
 	}
 }

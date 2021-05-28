@@ -30,15 +30,15 @@ export class WeightingState implements NgxsOnInit {
 		});
 	}
 
-	@Action(ProductAction.Add)
+	@Action(WeightingAction.Add)
 	add(
-		ctx: StateContext<ProductStateModel>,
-		{ payload }: ProductAction.Add
+		ctx: StateContext<WeightingStateModel>,
+		{ payload }: WeightingAction.Add
 	): void {
 		const state = ctx.getState();
 		ctx.setState({
 			...state,
-			products: [ ...state.products, payload ]
+			weightSheets: [ ...state.weightSheets, payload ]
 		});
 	}
 	// @Action(CarAction.FetchAllCars)
