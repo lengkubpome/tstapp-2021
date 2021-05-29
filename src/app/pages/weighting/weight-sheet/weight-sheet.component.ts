@@ -105,6 +105,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private interactivityChecker: InteractivityChecker,
 		private weightingService: WeightingService
 	) {
+		this.setWeightSheet();
+
 		this.weightingForm = this.formBuilder.group({
 			type: [ 'buy' ],
 			car: [ '', Validators.compose([ Validators.required ]) ],
@@ -148,8 +150,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		});
 
 		this.filterControls();
-
-		this.setWeightSheet();
 	}
 
 	ngOnDestroy(): void {
@@ -162,7 +162,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// @ Public methods
 	// -----------------------------------------------------------------------------------------------------
 	setWeightSheet(weighting?: IWeighting): void {
-		this.weightSheet.id = this.weightingService.generateId();
+		if (weighting == null) {
+			this.weightSheet.id = this.weightingService.generateId();
+		}
 	}
 
 	onResetWeightSheet(): void {
@@ -224,8 +226,13 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	// -----------------------------------------------------------------------------------------------------
-	// @ Func Set Control Input Focus methods
+	// @ Func Set Control Input Event methods
 	// -----------------------------------------------------------------------------------------------------
+
+	onBlur(event): void {
+		const ctrlName = event.target.name;
+		const val = this.weightingForm.get('contact').value;
+	}
 
 	setPrevFocus(currentId): void {
 		console.log(currentId);

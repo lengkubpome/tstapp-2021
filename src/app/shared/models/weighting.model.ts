@@ -10,6 +10,7 @@ export interface IWeighting {
 		| null;
 	type?: string;
 	carId?: string;
+	car?: ICar;
 	contactId?: string; // Contact;
 	destination?: string;
 	productId?: string; // Product;

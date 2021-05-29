@@ -70,7 +70,7 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="contact" name="contact" placeholder="ผู้ติดต่อ"
-                  formControlName="contact" [matAutocomplete]="contact">
+                  (blur)="onBlur($event)" formControlName="contact" [matAutocomplete]="contact">
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #contact="matAutocomplete"
