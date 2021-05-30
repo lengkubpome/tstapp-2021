@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatBadgeModule } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { WeightingComponent } from './weighting.component';
@@ -27,6 +28,7 @@ import { NgModule } from '@angular/core';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
 import { NgxsModule } from '@ngxs/store';
+import { CarInfoComponent } from './car-info/car-info.component';
 
 const routes: Routes = [
 	{
@@ -39,7 +41,8 @@ const routes: Routes = [
 	declarations: [
 		WeightingComponent,
 		WeightSheetComponent,
-		WeightStorageComponent
+		WeightStorageComponent,
+  CarInfoComponent
 	],
 	imports: [
 		FormsModule,
@@ -65,6 +68,7 @@ const routes: Routes = [
 		MatFormFieldModule,
 		MatSortModule,
 		MatSelectModule,
+		MatBadgeModule,
 		NgbModule,
 		NgxsModule.forFeature([])
 	],

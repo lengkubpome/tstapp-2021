@@ -180,10 +180,23 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	onSelectCar(carId: string): void {
-		const car = this.cars.find((c) => c.id === carId);
+	onSelectCar(selectCar: ICar): void {
+		const car = this.cars.find((c) => c.id === selectCar.id);
 		this.weightingForm.get('car').setValue(car.plateLCN);
-		this.weightSheet.carId = car.id;
+		this.weightSheet.car = car;
+	}
+
+	checkSelectedCar(): void {
+		const val = this.weightingForm.get('car').value;
+		if (val !== '') {
+			const car = this.cars.find((c) => c.plateLCN === val);
+			if (car !== undefined) {
+				this.weightSheet.car = car;
+			} else {
+				this.weightSheet.car = null;
+				// TODO: การบันทึกข้อมูล ระบบจะสร้าง id ใหม่อัตโนมัติ
+			}
+		}
 	}
 
 	onSelectContact(contactId: string): void {
@@ -192,12 +205,27 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.weightSheet.contactId = contact.id;
 	}
 
-	onSelectProduct(productId: string): void {
-		const product = this.products.find((p) => p.id === productId);
+	onSelectProduct(selectProduct: IProduct): void {
+		const product = this.products.find((p) => p.id === selectProduct.id);
 		this.weightingForm.get('product').setValue(product.name);
 		this.weightingForm.get('price').setValue(product.currentPrice);
 		this.weightSheet.productId = product.id;
-		this.weightSheet.price = product.currentPrice;
+		// this.weightSheet.price = product.currentPrice;
+	}
+
+	checkSelectedProduct(): void {
+		const val = this.weightingForm.get('product').value;
+		if (val !== '') {
+			const product = this.products.find((p) => p.name === val);
+			if (product !== undefined) {
+				this.onSelectProduct(product);
+				// this.weightSheet.productId = product.id;
+			} else {
+				this.weightSheet.productId = null;
+				this.weightSheet.price = null;
+				this.resetInputValue('price');
+			}
+		}
 	}
 
 	resetInputValue(ctrlName: string): void {
@@ -205,11 +233,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			case 'product': {
 				this.weightingForm.get('product').reset();
 				this.weightingForm.get('price').reset();
+				this.weightSheet.productId = null;
+				this.weightSheet.price = null;
 				break;
 			}
 			case 'cutWeight': {
 				this.weightingForm.get('cutWeight.amount').reset();
 				this.weightingForm.get('cutWeight.type').setValue('unit');
+				this.weightSheet.weightCut = null;
 				break;
 			}
 			case 'liveWeight': {
@@ -305,7 +336,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	private _filterCar(value: string): ICar[] {
 		const filterValue = this._normalizeValue(value);
 		return this.cars.filter((car) =>
-			this._normalizeValue(car.id).includes(filterValue)
+			this._normalizeValue(car.plateLCN + car.plateLCP).includes(filterValue)
 		);
 	}
 

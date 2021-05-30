@@ -26,7 +26,7 @@
             <label for="id" class="label col-sm-3 col-form-label">เลขที่ชั่งน้ำหนัก
             </label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <strong>{{this.weightSheet.id}}</strong>
+              <strong>{{this.weightSheet.id}} </strong>
               <nb-icon nbPrefix icon="info" pack="eva" status="info" class="ml-2">
               </nb-icon>
             </div>
@@ -47,12 +47,17 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
-                  formControlName="car" [matAutocomplete]="car">
+                  (blur)="checkSelectedCar()" formControlName="car" [matAutocomplete]="car">
+
+                <button *ngIf="weightSheet.car === null" nbSuffix nbButton ghost>
+                  <nb-icon [icon]="'question-mark-circle'" status="warning" pack="eva">
+                  </nb-icon>
+                </button>
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
                 (optionSelected)="onSelectCar($event.option.value)">
-                <mat-option *ngFor="let car of filteredCars | async" [value]="car.id">
+                <mat-option *ngFor="let car of filteredCars | async" [value]="car">
                   {{car.plateLCN }} {{car.plateLCP}}
                 </mat-option>
               </mat-autocomplete>
@@ -94,18 +99,20 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="product" name="product" placeholder="สินค้า"
+                  (blur)="checkSelectedProduct()"
                   [status]="(weightingForm.get('product').errors && this.weightingForm.get('product').touched) ? 'danger' : 'basic'"
                   formControlName="product" [matAutocomplete]="product">
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #product="matAutocomplete"
                 (optionSelected)="onSelectProduct($event.option.value)">
-                <mat-option *ngFor="let product of filteredProducts | async" [value]="product.id">
+                <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
                   <small>{{product.id}}</small> -
                   <span>{{product.name}}</span>
                 </mat-option>
               </mat-autocomplete>
-              <button *ngIf="weightingForm.get('product').value" nbButton ghost status="info">
+
+              <button *ngIf="weightSheet.productId === null" nbButton ghost status="danger">
                 <nb-icon icon="alert-circle-outline"></nb-icon>
               </button>
 

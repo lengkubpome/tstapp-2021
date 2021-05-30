@@ -4,6 +4,7 @@ export interface ICar {
 	id: string;
 	plateLCN: string; // Plate License Number
 	plateLCP?: string; // Plate License Province
+	type?: string;
 }
 
 export interface ICarContact {

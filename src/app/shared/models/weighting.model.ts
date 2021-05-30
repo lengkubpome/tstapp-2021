@@ -9,7 +9,6 @@ export interface IWeighting {
 		| 'check-in'
 		| null;
 	type?: string;
-	carId?: string;
 	car?: ICar;
 	contactId?: string; // Contact;
 	destination?: string;
@@ -58,14 +57,6 @@ export class Weighting {
 
 	public getStatus(): string {
 		return this.weighting.status;
-	}
-
-	public getCarId(carId: string): void {
-		this.weighting.carId = carId;
-	}
-
-	public setCarId(carId: string): void {
-		this.weighting.carId = carId;
 	}
 
 	public checkIn(): void {}
