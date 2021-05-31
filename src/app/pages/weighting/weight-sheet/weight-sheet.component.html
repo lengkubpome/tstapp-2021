@@ -49,10 +49,10 @@
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
                   (blur)="checkSelectedCar()" formControlName="car" [matAutocomplete]="car">
 
-                <button *ngIf="weightSheet.car === null" nbSuffix nbButton ghost>
+                <!-- <button *ngIf="weightSheet.car === null" nbSuffix nbButton ghost>
                   <nb-icon [icon]="'question-mark-circle'" status="warning" pack="eva">
                   </nb-icon>
-                </button>
+                </button> -->
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
@@ -62,10 +62,25 @@
                 </mat-option>
               </mat-autocomplete>
 
+              <button
+                *ngIf="weightSheet.car === null && this.weightingForm.get('car').value !== ('' || null)"
+                nbButton ghost>
+                <nb-icon [icon]="'question-mark-circle-outline'" status="warning" pack="eva">
+                </nb-icon>
+              </button>
+
+              <button
+                *ngIf="weightSheet.car !== null  && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                nbButton ghost>
+                <nb-icon [icon]="'alert-circle-outline'" status="info" pack="eva">
+                </nb-icon>
+              </button>
+
+              <!--
               <button type="button" nbButton ghost status="info" [nbContextMenu]="carMenus"
                 nbContextMenuPlacement="right">
                 <nb-icon icon="more-vertical-outline"></nb-icon>
-              </button>
+              </button> -->
 
 
             </div>

@@ -197,6 +197,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				// TODO: การบันทึกข้อมูล ระบบจะสร้าง id ใหม่อัตโนมัติ
 			}
 		}
+
+		console.log('Test => %s', typeof this.weightingForm.get('car').value);
 	}
 
 	onSelectContact(contactId: string): void {
