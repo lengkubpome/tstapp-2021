@@ -31,6 +31,19 @@
 		flex-direction: row;
 	}
 
+	.input-error-icon {
+		padding: 0.5625rem;
+		cursor: pointer;
+	}
+
+	.my-class {
+		background: aliceblue;
+		font-size: 125%;
+	}
+	.my-class .arrow::after {
+		border-top-color: aliceblue;
+	}
+
 	.input-live-weight {
 		font-size: 30px;
 		text-align: end;

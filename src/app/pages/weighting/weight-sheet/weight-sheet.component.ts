@@ -20,7 +20,8 @@ import {
 	OnDestroy,
 	HostListener,
 	ElementRef,
-	ViewChild
+	ViewChild,
+	ViewEncapsulation
 } from '@angular/core';
 import {
 	FormBuilder,

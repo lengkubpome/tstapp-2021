@@ -1,5 +1,5 @@
 import { WeightingService } from './weighting.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
@@ -21,7 +21,8 @@ import {
 	NbTabsetModule,
 	NbSelectModule,
 	NbContextMenuModule,
-	NbListModule
+	NbListModule,
+	NbPopoverModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
@@ -42,7 +43,7 @@ const routes: Routes = [
 		WeightingComponent,
 		WeightSheetComponent,
 		WeightStorageComponent,
-  CarInfoComponent
+		CarInfoComponent
 	],
 	imports: [
 		FormsModule,
@@ -64,12 +65,14 @@ const routes: Routes = [
 		NbSelectModule,
 		NbContextMenuModule,
 		NbListModule,
+		NbPopoverModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		MatSortModule,
 		MatSelectModule,
 		MatBadgeModule,
 		NgbModule,
+
 		NgxsModule.forFeature([])
 	],
 	exports: [],
