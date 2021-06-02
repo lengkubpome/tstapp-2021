@@ -36,12 +36,9 @@
 		cursor: pointer;
 	}
 
-	.my-class {
-		background: aliceblue;
-		font-size: 125%;
-	}
-	.my-class .arrow::after {
-		border-top-color: aliceblue;
+	::ng-deep .custom-popover {
+		font-family: unquote('Roboto,Sarabun');
+		font-size: 105%;
 	}
 
 	.input-live-weight {
