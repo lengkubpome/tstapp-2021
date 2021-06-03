@@ -1,0 +1,26 @@
+<nb-card>
+  <nb-card-header>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between">
+      <div class="pb-lg-0 pb-2 d-flex flex-md-column">
+        <h5>{{title}}</h5>
+      </div>
+      <div>
+        <button type="button" nbButton size="small" status="success">
+          Show Menu
+        </button>
+      </div>
+    </div>
+
+  </nb-card-header>
+  <nb-card-body>
+    รหัสรถ: {{ car.id}} <br>
+    ทะเบียนรถ: {{ car.plateLCN}}<br>
+    จังหวัด: {{ car.plateLCP}}<br>
+    ประเภท : {{ car.type}}<br>
+
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="cancel()">Close Dialog</button>
+  </nb-card-footer>
+</nb-card>

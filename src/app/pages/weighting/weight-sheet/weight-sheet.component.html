@@ -49,11 +49,6 @@
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
                   [status]="(weightingForm.get('car').errors && this.weightingForm.get('car').touched) ? 'danger' : 'basic'"
                   (blur)="checkSelectedCar()" formControlName="car" [matAutocomplete]="car">
-
-                <nb-icon [icon]="'alert-circle-outline'" status="danger" pack="eva" nbSuffix
-                  *ngIf="this.weightingForm.get('car').errors  && this.weightingForm.get('car').touched">
-                </nb-icon>
-
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
@@ -63,40 +58,27 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button
-                *ngIf="weightSheet.car === null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
-                nbButton ghost>
-                <nb-icon [icon]="'question-mark-circle-outline'" status="warning" pack="eva">
+              <div class="status-input">
+                <nb-icon
+                  *ngIf="weightSheet.car !== null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                  (click)="openCarInfo()" [icon]="'alert-circle'" status="primary" pack="eva">
                 </nb-icon>
-              </button>
 
-              <button
-                *ngIf="weightSheet.car !== null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
-                nbButton ghost>
-                <nb-icon [icon]="'alert-circle-outline'" status="info" pack="eva">
+                <nb-icon
+                  *ngIf="weightSheet.car === null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
+                  [icon]="'question-mark-circle'" status="warning" pack="eva">
                 </nb-icon>
-              </button>
 
-              <div class="input-error-icon">
-                <nb-icon [icon]="'alert-circle-outline'" status="danger" pack="eva"
-                  placement="bottom" ngbPopover="กรุณาใส่ทะเบียนรถ" nbPopover="กรุณาใส่ทะเบียนรถ"
-                  popoverClass="custom-popover">
+                <nb-icon
+                  *ngIf="this.weightingForm.get('car').errors  && this.weightingForm.get('car').touched"
+                  [icon]="'alert-triangle'" status="danger" pack="eva" nbTooltip="กรุณาใส่ทะเบียนรถ"
+                  nbTooltipPlacement="right" nbTooltipStatus="danger">
                 </nb-icon>
               </div>
 
-
-
-
-
-              <!--
-              <button type="button" nbButton ghost status="info" [nbContextMenu]="carMenus"
-                nbContextMenuPlacement="right">
-                <nb-icon icon="more-vertical-outline"></nb-icon>
-              </button> -->
-
-
             </div>
           </div>
+
           <div class="form-group row align-items-baseline">
             <label for="contact" class="label col-sm-3 col-form-label">ผู้ติดต่อ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">

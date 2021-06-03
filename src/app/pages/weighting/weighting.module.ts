@@ -1,5 +1,5 @@
 import { WeightingService } from './weighting.service';
-import { NgbModule, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,14 +22,15 @@ import {
 	NbSelectModule,
 	NbContextMenuModule,
 	NbListModule,
-	NbPopoverModule
+	NbTooltipModule,
+	NbDialogModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
+import { CarInfoComponent } from './weight-sheet/car-info/car-info.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
 import { NgxsModule } from '@ngxs/store';
-import { CarInfoComponent } from './car-info/car-info.component';
 
 const routes: Routes = [
 	{
@@ -65,14 +66,14 @@ const routes: Routes = [
 		NbSelectModule,
 		NbContextMenuModule,
 		NbListModule,
-		NbPopoverModule,
+		NbTooltipModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		MatSortModule,
 		MatSelectModule,
 		MatBadgeModule,
 		NgbModule,
-
+		NbDialogModule.forChild(),
 		NgxsModule.forFeature([])
 	],
 	exports: [],

@@ -31,14 +31,9 @@
 		flex-direction: row;
 	}
 
-	.input-error-icon {
+	.status-input {
 		padding: 0.5625rem;
 		cursor: pointer;
-	}
-
-	::ng-deep .custom-popover {
-		font-family: unquote('Roboto,Sarabun');
-		font-size: 105%;
 	}
 
 	.input-live-weight {

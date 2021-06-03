@@ -1,3 +1,4 @@
+import { CarInfoComponent } from './car-info/car-info.component';
 import { WeightingService } from './../weighting.service';
 import {
 	ContactState,
@@ -23,16 +24,12 @@ import {
 	ViewChild,
 	ViewEncapsulation
 } from '@angular/core';
-import {
-	FormBuilder,
-	FormControl,
-	FormGroup,
-	Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 import { productList } from 'src/app/shared/validators/product-list';
+import { NbDialogService } from '@nebular/theme';
 
 export interface State {
 	flag: string;
@@ -104,6 +101,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private store: Store,
 		private formBuilder: FormBuilder,
 		private interactivityChecker: InteractivityChecker,
+		private dialogService: NbDialogService,
 		private weightingService: WeightingService
 	) {
 		this.setWeightSheet();
@@ -295,6 +293,19 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				break;
 			}
 		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Private Func Dialog methods
+	// -----------------------------------------------------------------------------------------------------
+
+	openCarInfo(): void {
+		this.dialogService
+			.open(CarInfoComponent, {
+				context: { title: 'ข้อมูลทะเบียนรถ', car: this.weightSheet.car },
+				closeOnBackdropClick: false
+			})
+			.onClose.subscribe((data) => console.log(data));
 	}
 
 	// -----------------------------------------------------------------------------------------------------
