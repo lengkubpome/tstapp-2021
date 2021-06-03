@@ -1,26 +1,81 @@
-<nb-card>
-  <nb-card-header>
+<form [formGroup]="carInfoForm" id="carInfoForm" #ciForm (ngSubmit)="onSubmitCarInfo()">
 
-    <div class="d-flex flex-column flex-md-row justify-content-between">
-      <div class="pb-lg-0 pb-2 d-flex flex-md-column">
-        <h5>{{title}}</h5>
+  <nb-card>
+    <nb-card-header>
+
+      <div class="d-flex flex-row justify-content-between">
+        <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
+          <h5>{{title}}</h5>
+          <div class="pl-2">
+            <nb-icon *ngIf="editState" [icon]="'edit-2'" status="warning" pack="eva"></nb-icon>
+          </div>
+        </div>
+        <div>
+          <nb-form-field>
+            <div nbPrefix>รหัส</div>
+            <input type="text" nbInput class="input-car-id" readonly id="id" name="id"
+              formControlName="id">
+          </nb-form-field>
+        </div>
       </div>
-      <div>
-        <button type="button" nbButton size="small" status="success">
-          Show Menu
-        </button>
+
+    </nb-card-header>
+    <nb-card-body>
+      <div class="form-group row align-items-baseline">
+        <label for="plateLCN" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
+        <div class="col-sm-9 d-inline-flex justify-content-start">
+          <nb-form-field class="mr-2">
+            <input type="text" nbInput id="plateLCN" name="plateLCN" placeholder="ทะเบียนรถ"
+              [status]="editState ? 'warning' : 'primary'" formControlName="plateLCN"
+              [readonly]="!editState">
+          </nb-form-field>
+        </div>
       </div>
-    </div>
 
-  </nb-card-header>
-  <nb-card-body>
-    รหัสรถ: {{ car.id}} <br>
-    ทะเบียนรถ: {{ car.plateLCN}}<br>
-    จังหวัด: {{ car.plateLCP}}<br>
-    ประเภท : {{ car.type}}<br>
+      <div class="form-group row align-items-baseline">
+        <label for="plateLCP" class="label col-sm-3 col-form-label">ทะเบียนจังหวัด</label>
+        <div class="col-sm-9 d-inline-flex justify-content-start">
+          <nb-form-field class="mr-2">
+            <input type="text" nbInput id="plateLCP" name="plateLCP" placeholder="ทะเบียนจังหวัด"
+              [status]="editState ? 'warning' : 'primary'" formControlName="plateLCP"
+              [readonly]="!editState">
+          </nb-form-field>
+        </div>
+      </div>
 
-  </nb-card-body>
-  <nb-card-footer>
-    <button nbButton (click)="cancel()">Close Dialog</button>
-  </nb-card-footer>
-</nb-card>
+      <div class="form-group row align-items-baseline">
+        <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
+        <div class="col-sm-9 d-inline-flex justify-content-start">
+          <nb-form-field class="mr-2">
+            <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
+              [status]="editState ? 'warning' : 'primary'" formControlName="type"
+              [readonly]="!editState">
+          </nb-form-field>
+        </div>
+      </div>
+
+
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="d-flex justify-content-between">
+        <div>
+          <button *ngIf="(canEdit && !editState) || (!canEdit && editState)" type="button" nbButton
+            (click)="onClose()">ปิด</button>
+
+          <button *ngIf="editState" type="button" nbButton
+            (click)="editState = false">ยกเลิก</button>
+        </div>
+        <div>
+          <button *ngIf="canEdit && !editState" type="button" class="" nbButton status="primary"
+            (click)="editState = true">แก้ไข</button>
+
+          <button *ngIf="editState" type="submit" class="ml-2" nbButton
+            [status]="'warning'">บันทึก</button>
+        </div>
+
+      </div>
+
+    </nb-card-footer>
+  </nb-card>
+
+</form>

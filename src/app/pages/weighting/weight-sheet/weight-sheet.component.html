@@ -66,7 +66,8 @@
 
                 <nb-icon
                   *ngIf="weightSheet.car === null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
-                  [icon]="'question-mark-circle'" status="warning" pack="eva">
+                  (click)="openCarInfo(true)" [icon]="'question-mark-circle'" status="warning"
+                  pack="eva">
                 </nb-icon>
 
                 <nb-icon

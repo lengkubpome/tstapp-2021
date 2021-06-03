@@ -299,13 +299,25 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// @ Private Func Dialog methods
 	// -----------------------------------------------------------------------------------------------------
 
-	openCarInfo(): void {
+	openCarInfo(isNew?: boolean): void {
+		let car: ICar;
+		if (isNew) {
+			car = { id: 'NEW', plateLCN: this.weightingForm.get('car').value };
+		} else {
+			car = this.weightSheet.car;
+		}
+
 		this.dialogService
 			.open(CarInfoComponent, {
-				context: { title: 'ข้อมูลทะเบียนรถ', car: this.weightSheet.car },
+				context: { title: 'ข้อมูลทะเบียนรถ', car },
 				closeOnBackdropClick: false
 			})
-			.onClose.subscribe((data) => console.log(data));
+			.onClose.subscribe((res: ICar) => {
+				if (res !== null) {
+					this.weightSheet.car = res;
+					this.weightingForm.get('car').setValue(res.plateLCN);
+				}
+			});
 	}
 
 	// -----------------------------------------------------------------------------------------------------
