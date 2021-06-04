@@ -22,12 +22,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
 	declarations: [ AppComponent ],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
+		HttpClientModule,
 		NbThemeModule.forRoot(),
 		NbLayoutModule,
 		NbEvaIconsModule,

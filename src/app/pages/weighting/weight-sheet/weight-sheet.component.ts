@@ -175,7 +175,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			new CarAction.Add({
 				id: 'ขง236733ขก',
 				plateLCN: 'ขง-236733',
-				plateLCP: 'ขอนแก่น'
+				plateLCP: 'ขอนแก่น',
+				typeId: '0'
 			})
 		);
 	}

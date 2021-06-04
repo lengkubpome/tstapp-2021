@@ -46,12 +46,4 @@ export class CarState implements NgxsOnInit {
 			cars: [ ...state.cars, payload ]
 		});
 	}
-	// @Action(CarAction.FetchAllCars)
-	// add(
-	// 	{ getState, setState }: StateContext<CarStateModel>,
-	// 	{ payload }: CarAction
-	// ) {
-	// 	const state = getState();
-	// 	setState({ items: [ ...state.items, payload ] });
-	// }
 }
