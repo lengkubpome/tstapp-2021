@@ -60,12 +60,12 @@
 
               <div class="status-input">
                 <nb-icon
-                  *ngIf="weightSheet.car !== null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                  *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
                   (click)="openCarInfo()" [icon]="'alert-circle'" status="primary" pack="eva">
                 </nb-icon>
 
                 <nb-icon
-                  *ngIf="weightSheet.car === null && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
+                  *ngIf="stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
                   (click)="openCarInfo(true)" [icon]="'question-mark-circle'" status="warning"
                   pack="eva">
                 </nb-icon>

@@ -53,6 +53,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	clock = new Date();
 	weightSheet: IWeighting = { status: null };
+	stateSheet = { newCar: false };
 
 	weightTypes = [
 		{ value: 'buy', label: 'ซื้อของ' },
@@ -183,6 +184,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		const car = this.cars.find((c) => c.id === selectCar.id);
 		this.weightingForm.get('car').setValue(car.plateLCN);
 		this.weightSheet.car = car;
+		this.stateSheet.newCar = false;
 	}
 
 	checkSelectedCar(): void {
@@ -191,13 +193,12 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			const car = this.cars.find((c) => c.plateLCN === val);
 			if (car !== undefined) {
 				this.weightSheet.car = car;
+				this.stateSheet.newCar = false;
 			} else {
-				this.weightSheet.car = null;
-				// TODO: การบันทึกข้อมูล ระบบจะสร้าง id ใหม่อัตโนมัติ
+				this.stateSheet.newCar = true;
+				// this.openCarInfo(true);
 			}
 		}
-
-		console.log('Test => %s', typeof this.weightingForm.get('car').value);
 	}
 
 	onSelectContact(contactId: string): void {

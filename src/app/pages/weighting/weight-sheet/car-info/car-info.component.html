@@ -7,7 +7,8 @@
         <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
           <h5>{{title}}</h5>
           <div class="pl-2">
-            <nb-icon *ngIf="editState" [icon]="'edit-2'" status="warning" pack="eva"></nb-icon>
+            <nb-icon *ngIf="stateEdit" [icon]="'edit-2'" status="warning" pack="eva">
+            </nb-icon>
           </div>
         </div>
         <div>
@@ -26,9 +27,19 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCN" name="plateLCN" placeholder="ทะเบียนรถ"
-              [status]="editState ? 'warning' : 'primary'" formControlName="plateLCN"
-              [readonly]="!editState">
+              [status]="stateEdit ? 'warning' : 'primary'" formControlName="plateLCN"
+              [readonly]="!stateEdit">
           </nb-form-field>
+
+          <div class="status-input">
+
+            <nb-icon
+              *ngIf="carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched"
+              [icon]="'alert-triangle'" status="danger" pack="eva" nbTooltip="กรุณาใส่ทะเบียนรถ"
+              nbTooltipPlacement="right" nbTooltipStatus="danger">
+            </nb-icon>
+          </div>
+
         </div>
       </div>
 
@@ -37,8 +48,8 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCP" name="plateLCP" placeholder="ทะเบียนจังหวัด"
-              [status]="editState ? 'warning' : 'primary'" formControlName="plateLCP"
-              [readonly]="!editState">
+              [status]="stateEdit ? 'warning' : 'primary'" formControlName="plateLCP"
+              [readonly]="!stateEdit">
           </nb-form-field>
         </div>
       </div>
@@ -47,9 +58,14 @@
         <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
-            <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
-              [status]="editState ? 'warning' : 'primary'" formControlName="type"
-              [readonly]="!editState">
+            <!-- <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
+              [status]="stateEdit ? 'warning' : 'primary'" formControlName="type"
+              [readonly]="!stateEdit"> -->
+
+            <nb-select id="type" name="type" placeholder="ประเภท" formControlName="type"
+              [status]="stateEdit ? 'warning' : 'primary'" [disabled]="!stateEdit" value="">
+              <nb-option *ngFor="let type of carTypes" value="type.value">{{type.title}}</nb-option>
+            </nb-select>
           </nb-form-field>
         </div>
       </div>
@@ -59,17 +75,10 @@
     <nb-card-footer>
       <div class="d-flex justify-content-between">
         <div>
-          <button *ngIf="(canEdit && !editState) || (!canEdit && editState)" type="button" nbButton
-            (click)="onClose()">ปิด</button>
-
-          <button *ngIf="editState" type="button" nbButton
-            (click)="editState = false">ยกเลิก</button>
+          <button type="button" nbButton (click)="onClose()">ปิด</button>
         </div>
         <div>
-          <button *ngIf="canEdit && !editState" type="button" class="" nbButton status="primary"
-            (click)="editState = true">แก้ไข</button>
-
-          <button *ngIf="editState" type="submit" class="ml-2" nbButton
+          <button *ngIf="stateEdit" type="submit" class="ml-2" nbButton
             [status]="'warning'">บันทึก</button>
         </div>
 
