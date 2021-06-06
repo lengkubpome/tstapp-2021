@@ -1,4 +1,6 @@
+import { ProvinceService } from './../../shared/services/province.service';
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-weighting',
@@ -6,6 +8,11 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
-	constructor() {}
-	ngOnInit(): void {}
+	constructor(private proviceService: ProvinceService) {}
+	ngOnInit(): void {
+		this.proviceService.getProvince().subscribe((data) => {
+			const type = data;
+			console.log(type);
+		});
+	}
 }
