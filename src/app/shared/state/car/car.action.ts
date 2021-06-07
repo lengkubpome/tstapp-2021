@@ -24,6 +24,10 @@ export namespace CarAction {
 		constructor(public id: string) {}
 	}
 
+	export class GetCarTypes {
+		static readonly type = '[Car] Get Car Types';
+	}
+
 	export class FetchOwners {
 		static readonly type = '[Car] Fetch Contact All';
 

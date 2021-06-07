@@ -1,14 +1,17 @@
+import {
+	ProvinceState,
+	ProvinceStateModel
+} from './../../../../shared/state/province/province.state';
+import { CarStateModel } from './../../../../shared/state/car/car.state';
 import { ProvinceService } from './../../../../shared/services/province.service';
 import { Observable } from 'rxjs';
-import {
-	CarTypeState,
-	CarTypeStateModel
-} from './../../../../shared/state/car-type/car-type.state';
-import { Select } from '@ngxs/store';
+
+import { Select, Selector } from '@ngxs/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICar } from './../../../../shared/models/car.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
+import { CarState } from 'src/app/shared/state/car/car.state';
 
 @Component({
 	selector: 'app-car-info',
@@ -19,22 +22,12 @@ export class CarInfoComponent implements OnInit {
 	@Input() title: string;
 	@Input() car: ICar;
 
-	@Select(CarTypeState) carTypes$: Observable<CarTypeStateModel>;
+	@Select(CarState) car$: Observable<CarStateModel>;
+	@Select(ProvinceState) province$: Observable<ProvinceStateModel>;
 
 	stateEdit = false;
 
 	carInfoForm: FormGroup;
-
-	carTypes = [
-		{ value: 'pickup-truck', title: 'กระบะ' },
-		{ value: 'mini-truck', title: 'รถบรรทุกเล็ก' },
-		{ value: 'truck', title: 'รถบรรทุก (6 - 12 ล้อ)' },
-		{ value: 'tractor', title: 'รถแทรกเตอร์ (หัวลาก)' },
-		{ value: 'trailer', title: 'พ่วงคอก (หาง)' },
-		{ value: 'flatbed-trailer', title: 'พ่วงพื้นเรียบ (หาง)' },
-		{ value: 'motorcycle-truck', title: 'มอเตอร์ไซค์พ่วง' },
-		{ value: 'etc', title: 'อื่นๆ' }
-	];
 
 	constructor(
 		protected ref: NbDialogRef<CarInfoComponent>,
@@ -62,7 +55,7 @@ export class CarInfoComponent implements OnInit {
 			this.carInfoForm.get('plateLCN').setValue(this.car.plateLCN);
 		}
 
-		this.province.getProvince();
+		this.province$.subscribe(console.log);
 	}
 
 	onSubmitCarInfo(): void {

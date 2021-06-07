@@ -61,13 +61,17 @@
 
             <nb-select id="type" name="type" placeholder="ประเภท" formControlName="typeId"
               [status]="stateEdit ? 'warning' : 'primary'" [disabled]="!stateEdit" value="">
-              <nb-option *ngFor="let type of  (carTypes$ | async).carTypes" value="type.id">
+              <nb-option *ngFor="let type of  (car$ | async).type" value="type.id">
                 {{type.th}}
               </nb-option>
             </nb-select>
           </nb-form-field>
         </div>
       </div>
+
+      <ul>
+        <li *ngFor="let item of (province$ | async)"></li>
+      </ul>
 
     </nb-card-body>
     <nb-card-footer>
