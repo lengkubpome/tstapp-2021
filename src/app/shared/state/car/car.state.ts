@@ -26,16 +26,15 @@ export interface CarStateModel {
 @Injectable()
 export class CarState implements NgxsOnInit {
 	constructor(private carService: CarService) {}
+	@Selector()
+	static getType(state: CarStateModel): ICarType[] {
+		return state.type;
+	}
 
 	ngxsOnInit(ctx: StateContext<CarStateModel>): void {
 		console.log('State initialized, now getting cars');
 		ctx.dispatch(new CarAction.FetchAll());
 		ctx.dispatch(new CarAction.GetCarTypes());
-	}
-
-	@Selector()
-	static myCar(state: CarStateModel): ICar[] {
-		return state.cars.filter((s) => s.id == 'กอ9555ขก');
 	}
 
 	@Action(CarAction.FetchAll)

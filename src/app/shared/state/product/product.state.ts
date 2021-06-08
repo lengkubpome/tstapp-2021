@@ -22,14 +22,14 @@ export interface ProductStateModel {
 })
 @Injectable()
 export class ProductState implements NgxsOnInit {
+	@Selector()
+	static myCar(state: ProductStateModel): IProduct[] {
+		return state.products.filter((s) => s.id === 'p1003');
+	}
+
 	ngxsOnInit(ctx: StateContext<ProductStateModel>): void {
 		console.log('State initialized, now getting product');
 		ctx.dispatch(new ProductAction.FetchAll());
-	}
-
-	@Selector()
-	static myCar(state: ProductStateModel): IProduct[] {
-		return state.products.filter((s) => s.id == 'p1003');
 	}
 
 	@Action(ProductAction.FetchAll)

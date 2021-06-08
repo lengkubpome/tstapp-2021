@@ -49,8 +49,14 @@
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCP" name="plateLCP" placeholder="ทะเบียนจังหวัด"
               [status]="stateEdit ? 'warning' : 'primary'" formControlName="plateLCP"
-              [readonly]="!stateEdit">
+              [matAutocomplete]="province" [readonly]="!stateEdit">
           </nb-form-field>
+
+          <mat-autocomplete autoActiveFirstOption #province="matAutocomplete">
+            <mat-option *ngFor="let province of filteredProvinces | async" [value]="province">
+              {{ province }}
+            </mat-option>
+          </mat-autocomplete>
         </div>
       </div>
 
@@ -61,17 +67,13 @@
 
             <nb-select id="type" name="type" placeholder="ประเภท" formControlName="typeId"
               [status]="stateEdit ? 'warning' : 'primary'" [disabled]="!stateEdit" value="">
-              <nb-option *ngFor="let type of  (car$ | async).type" value="type.id">
+              <nb-option *ngFor="let type of  (car$ | async).type" [value]="type.id">
                 {{type.th}}
               </nb-option>
             </nb-select>
           </nb-form-field>
         </div>
       </div>
-
-      <ul>
-        <li *ngFor="let item of (province$ | async)"></li>
-      </ul>
 
     </nb-card-body>
     <nb-card-footer>

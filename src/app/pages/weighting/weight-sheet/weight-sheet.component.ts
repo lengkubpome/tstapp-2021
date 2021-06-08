@@ -256,7 +256,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitWeightSheet(): void {
-		console.log(this.weightingForm.get('product').touched);
+		console.log(this.weightingForm.valid);
 	}
 
 	// -----------------------------------------------------------------------------------------------------

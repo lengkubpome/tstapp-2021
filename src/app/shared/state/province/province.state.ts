@@ -1,5 +1,5 @@
-import { tap, distinct, map } from 'rxjs/operators';
-import { Action, NgxsOnInit, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { IProvince } from '../../models/province.model';
 import { ProvinceAction } from './province.action';
@@ -19,6 +19,18 @@ export interface ProvinceStateModel {
 export class ProvinceState implements NgxsOnInit {
 	constructor(private http: HttpClient) {}
 
+	@Selector()
+	static onlyProvince(state: ProvinceStateModel): string[] {
+		const vaulesAlreadySeen = [];
+		for (const p of state.province) {
+			const value = p;
+			if (vaulesAlreadySeen.indexOf(value.province) === -1) {
+				vaulesAlreadySeen.push(value.province);
+			}
+		}
+		return vaulesAlreadySeen;
+	}
+
 	ngxsOnInit(ctx: StateContext<ProvinceStateModel>): void {
 		console.log('State initialized, now getting province');
 		ctx.dispatch(new ProvinceAction.GetProvince());
@@ -27,16 +39,6 @@ export class ProvinceState implements NgxsOnInit {
 	@Action(ProvinceAction.GetProvince)
 	getProvince(ctx: StateContext<ProvinceStateModel>): Observable<IProvince[]> {
 		return this.http.get<IProvince[]>('assets/data/province.json').pipe(
-			map((data: IProvince[]) => {
-				const vaulesAlreadySeen = [];
-				for (const p of data) {
-					const value = p;
-					if (vaulesAlreadySeen.indexOf(value.province) === -1) {
-						vaulesAlreadySeen.push(value.province);
-					}
-				}
-				return vaulesAlreadySeen;
-			}),
 			tap((result) => {
 				const state = ctx.getState();
 				ctx.setState({
