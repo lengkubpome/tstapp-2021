@@ -27,7 +27,7 @@ export interface CarStateModel {
 export class CarState implements NgxsOnInit {
 	constructor(private carService: CarService) {}
 	@Selector()
-	static getType(state: CarStateModel): ICarType[] {
+	static carType(state: CarStateModel): ICarType[] {
 		return state.type;
 	}
 

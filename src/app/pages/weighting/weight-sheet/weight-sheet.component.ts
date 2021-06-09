@@ -28,7 +28,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
-import { productList } from 'src/app/shared/validators/product-list';
+import { productInList } from 'src/app/shared/validators/product.validator';
 import { NbDialogService } from '@nebular/theme';
 
 export interface State {
@@ -146,7 +146,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			// set validators
 			this.weightingForm
 				.get('product')
-				.setValidators([ Validators.required, productList(this.products) ]);
+				.setValidators([ Validators.required, productInList(this.products) ]);
 		});
 
 		this.filterControls();
@@ -175,8 +175,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			new CarAction.Add({
 				id: 'ขง236733ขก',
 				plateLCN: 'ขง-236733',
-				plateLCP: 'ขอนแก่น',
-				typeId: '0'
+				plateLCP: 'ขอนแก่น'
 			})
 		);
 	}

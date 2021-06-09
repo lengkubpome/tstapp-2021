@@ -64,16 +64,20 @@
         <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
-
-            <nb-select id="type" name="type" placeholder="ประเภท" formControlName="typeId"
-              [status]="stateEdit ? 'warning' : 'primary'" [disabled]="!stateEdit" value="">
-              <nb-option *ngFor="let type of  (car$ | async).type" [value]="type.id">
-                {{type.th}}
-              </nb-option>
-            </nb-select>
+            <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
+              [status]="stateEdit ? 'warning' : 'primary'" formControlName="typeId"
+              [matAutocomplete]="carType" [readonly]="!stateEdit">
           </nb-form-field>
+
+          <mat-autocomplete autoActiveFirstOption #carType="matAutocomplete"
+            (optionSelected)="onSelectCarType($event.option.value)">
+            <mat-option *ngFor="let carType of filteredCarTypes | async" [value]="carType">
+              {{ carType.id }} - {{ carType.th }}
+            </mat-option>
+          </mat-autocomplete>
         </div>
       </div>
+
 
     </nb-card-body>
     <nb-card-footer>

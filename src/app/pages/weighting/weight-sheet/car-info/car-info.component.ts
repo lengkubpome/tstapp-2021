@@ -9,7 +9,8 @@ import { ICar, ICarType } from './../../../../shared/models/car.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { CarState } from 'src/app/shared/state/car/car.state';
-import { provinceList } from 'src/app/shared/validators/province-list';
+import { provinceInList } from 'src/app/shared/validators/provinces.validator';
+import { carTypesInListTH } from 'src/app/shared/validators/car.validator';
 
 @Component({
 	selector: 'app-car-info',
@@ -23,6 +24,7 @@ export class CarInfoComponent implements OnInit {
 	@Select(CarState) car$: Observable<CarStateModel>;
 
 	carTypes: ICarType[];
+	filteredCarTypes: Observable<ICarType[]>;
 
 	provinces: string[];
 	filteredProvinces: Observable<string[]>;
@@ -39,13 +41,14 @@ export class CarInfoComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private store: Store
 	) {
-		this.provinces = this.store.selectSnapshot(ProvinceState.onlyProvince);
+		this.provinces = this.store.selectSnapshot(ProvinceState.provinceOnly);
+		this.carTypes = this.store.selectSnapshot(CarState.carType);
 
 		this.carInfoForm = this.formBuilder.group({
 			id: [ '' ],
 			plateLCN: [ '', Validators.required ],
-			plateLCP: [ '', Validators.compose([ provinceList(this.provinces) ]) ],
-			typeId: [ '' ]
+			plateLCP: [ '', Validators.compose([ provinceInList(this.provinces) ]) ],
+			typeId: [ '', Validators.compose([ carTypesInListTH(this.carTypes) ]) ]
 		});
 
 		this.unsubscribeAll = new Subject();
@@ -64,11 +67,11 @@ export class CarInfoComponent implements OnInit {
 			this.carInfoForm.get('plateLCN').setValue(this.car.plateLCN);
 		}
 
-		this.filterProvinces();
+		this.filterFunc();
 	}
 
 	onSubmitCarInfo(): void {
-		console.log(this.carInfoForm.valid);
+		console.log(this.carInfoForm.get('typeId').errors);
 
 		// this.ref.close(this.carInfoForm.value);
 	}
@@ -77,7 +80,13 @@ export class CarInfoComponent implements OnInit {
 		this.ref.close(null);
 	}
 
-	private filterProvinces(): void {
+	onSelectCarType(selectCarType: ICarType): void {
+		const carType = this.carTypes.find((t) => t.id === selectCarType.id);
+		this.carInfoForm.get('typeId').setValue(carType.th);
+		this.car.typeId = carType;
+	}
+
+	private filterFunc(): void {
 		this.filteredProvinces = this.carInfoForm
 			.get('plateLCP')
 			.valueChanges.pipe(
@@ -85,8 +94,20 @@ export class CarInfoComponent implements OnInit {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(province) =>
-						province ? this._filterProvinces(province) : this.provinces.slice()
+					(value) =>
+						value ? this._filterProvinces(value) : this.provinces.slice()
+				)
+			);
+
+		this.filteredCarTypes = this.carInfoForm
+			.get('typeId')
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(''),
+				debounceTime(300),
+				map(
+					(value) =>
+						value ? this._filterCarType(value) : this.carTypes.slice()
 				)
 			);
 	}
@@ -95,6 +116,13 @@ export class CarInfoComponent implements OnInit {
 		const filterValue = this._normalizeValue(value);
 		return this.provinces.filter((province) =>
 			this._normalizeValue(province).includes(filterValue)
+		);
+	}
+
+	private _filterCarType(value: string): ICarType[] {
+		const filterValue = this._normalizeValue(value);
+		return this.carTypes.filter((type) =>
+			this._normalizeValue(type.id + type.th).includes(filterValue)
 		);
 	}
 

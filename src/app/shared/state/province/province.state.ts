@@ -20,7 +20,7 @@ export class ProvinceState implements NgxsOnInit {
 	constructor(private http: HttpClient) {}
 
 	@Selector()
-	static onlyProvince(state: ProvinceStateModel): string[] {
+	static provinceOnly(state: ProvinceStateModel): string[] {
 		const vaulesAlreadySeen = [];
 		for (const p of state.province) {
 			const value = p;

@@ -25,7 +25,7 @@ export class CarService extends CarData {
 	addCar(): void {
 		this.cars = [
 			...this.cars,
-			{ id: '1234', plateLCN: 'กอ-1234', plateLCP: 'ขอนแก่น', typeId: '0' }
+			{ id: '1234', plateLCN: 'กอ-1234', plateLCP: 'ขอนแก่น' }
 		];
 	}
 
