@@ -10,7 +10,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { CarState } from 'src/app/shared/state/car/car.state';
 import { provinceInList } from 'src/app/shared/validators/provinces.validator';
-import { carTypesInListTH } from 'src/app/shared/validators/car.validator';
+import { inList } from 'src/app/shared/validators/in-list.validator';
 
 @Component({
 	selector: 'app-car-info',
@@ -47,8 +47,8 @@ export class CarInfoComponent implements OnInit {
 		this.carInfoForm = this.formBuilder.group({
 			id: [ '' ],
 			plateLCN: [ '', Validators.required ],
-			plateLCP: [ '', Validators.compose([ provinceInList(this.provinces) ]) ],
-			typeId: [ '', Validators.compose([ carTypesInListTH(this.carTypes) ]) ]
+			plateLCP: [ '', Validators.compose([ inList(this.provinces) ]) ],
+			typeId: [ '', Validators.compose([ inList(this.carTypes, 'th') ]) ]
 		});
 
 		this.unsubscribeAll = new Subject();
@@ -71,6 +71,7 @@ export class CarInfoComponent implements OnInit {
 	}
 
 	onSubmitCarInfo(): void {
+		console.log(this.carInfoForm.get('plateLCP').errors);
 		console.log(this.carInfoForm.get('typeId').errors);
 
 		// this.ref.close(this.carInfoForm.value);

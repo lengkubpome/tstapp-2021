@@ -30,6 +30,7 @@ import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 import { productInList } from 'src/app/shared/validators/product.validator';
 import { NbDialogService } from '@nebular/theme';
+import { inList } from 'src/app/shared/validators/in-list.validator';
 
 export interface State {
 	flag: string;
@@ -78,7 +79,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	filteredContacts: Observable<IContact[]>;
 
 	products: IProduct[];
-	@Select(ProductState) products$: Observable<ProductStateModel>;
+	// @Select(ProductState) products$: Observable<ProductStateModel>;
 	filteredProducts: Observable<IProduct[]>;
 
 	@HostListener('keyup', [ '$event' ])
@@ -105,13 +106,25 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private dialogService: NbDialogService,
 		private weightingService: WeightingService
 	) {
+		this.products = this.store.selectSnapshot<ProductStateModel>(
+			ProductState
+		).products;
+
+		this.cars = this.store.selectSnapshot<CarStateModel>(CarState).cars;
+
 		this.setWeightSheet();
 
 		this.weightingForm = this.formBuilder.group({
 			type: [ 'buy' ],
 			car: [ '', Validators.compose([ Validators.required ]) ],
 			contact: [ '' ],
-			product: [ '', Validators.required ],
+			product: [
+				'',
+				Validators.compose([
+					Validators.required,
+					inList(this.products, 'name')
+				])
+			],
 			price: [ '' ],
 			cutWeight: this.formBuilder.group({
 				amount: [],
@@ -133,21 +146,13 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				this.clock = time;
 			});
 
-		this.cars$
-			.pipe(takeUntil(this.unsubscribeAll))
-			.subscribe((data) => (this.cars = data.cars));
+		// this.cars$
+		// 	.pipe(takeUntil(this.unsubscribeAll))
+		// 	.subscribe((data) => (this.cars = data.cars));
 
 		this.contacts$
 			.pipe(takeUntil(this.unsubscribeAll))
 			.subscribe((data) => (this.contacts = data.contacts));
-
-		this.products$.pipe(takeUntil(this.unsubscribeAll)).subscribe((data) => {
-			this.products = data.products;
-			// set validators
-			this.weightingForm
-				.get('product')
-				.setValidators([ Validators.required, productInList(this.products) ]);
-		});
 
 		this.filterControls();
 	}
@@ -332,7 +337,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				takeUntil(this.unsubscribeAll),
 				startWith(''),
 				debounceTime(300),
-				map((car) => (car ? this._filterCar(car) : this.cars.slice()))
+				map(
+					(inpurValue) =>
+						inpurValue ? this._filterCar(inpurValue) : this.cars.slice()
+				)
 			);
 
 		this.filteredContacts = this.weightingForm
@@ -342,8 +350,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(contact) =>
-						contact ? this._filterContact(contact) : this.contacts.slice()
+					(inpurValue) =>
+						inpurValue ? this._filterContact(inpurValue) : this.contacts.slice()
 				)
 			);
 
@@ -354,8 +362,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(product) =>
-						product ? this._filterProducts(product) : this.products.slice()
+					(inpurValue: string) =>
+						inpurValue
+							? this._filterProducts(inpurValue)
+							: this.products.slice()
 				)
 			);
 	}
@@ -375,7 +385,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	private _filterProducts(value: string): IProduct[] {
-		console.log('_filterProducts : %s', value);
 		const filterValue = this._normalizeValue(value);
 		return this.products.filter((product) =>
 			this._normalizeValue(product.id + product.name).includes(filterValue)
