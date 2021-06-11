@@ -32,8 +32,13 @@
 	}
 
 	.status-input {
+		display: inline-flex;
 		padding: 0.5625rem;
-		cursor: pointer;
+
+		> * {
+			margin: 1px 6px;
+			// cursor: pointer;
+		}
 	}
 
 	.input-live-weight {

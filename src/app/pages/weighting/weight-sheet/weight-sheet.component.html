@@ -49,6 +49,28 @@
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
                   [status]="(weightingForm.get('car').errors && this.weightingForm.get('car').touched) ? 'danger' : 'basic'"
                   (blur)="checkSelectedCar()" formControlName="car" [matAutocomplete]="car">
+
+                <div nbSuffix class="status-input">
+                  <button nbSuffix nbButton ghost type="button"
+                    *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                    (click)="openCarInfo()">
+                    <nb-icon [icon]="'alert-circle'" status="primary"></nb-icon>
+                  </button>
+
+                  <button nbSuffix nbButton ghost type="button"
+                    *ngIf="stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
+                    (click)="openCarInfo(true)" [icon]="'question-mark-circle'" status="warning">
+                    <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
+                  </button>
+
+                  <nb-icon
+                    *ngIf="this.weightingForm.get('car').errors  && this.weightingForm.get('car').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ทะเบียนรถ" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon>
+                </div>
+
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #car="matAutocomplete"
@@ -58,7 +80,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <div class="status-input">
+              <!-- <div class="status-input">
                 <nb-icon
                   *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
                   (click)="openCarInfo()" [icon]="'alert-circle'" status="primary" pack="eva">
@@ -75,7 +97,7 @@
                   [icon]="'alert-triangle'" status="danger" pack="eva" nbTooltip="กรุณาใส่ทะเบียนรถ"
                   nbTooltipPlacement="right" nbTooltipStatus="danger">
                 </nb-icon>
-              </div>
+              </div> -->
 
             </div>
           </div>
@@ -86,6 +108,27 @@
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="contact" name="contact" placeholder="ผู้ติดต่อ"
                   (blur)="onBlur($event)" formControlName="contact" [matAutocomplete]="contact">
+
+                <div nbSuffix class="status-input">
+                  <button nbSuffix nbButton ghost type="button"
+                    *ngIf="!stateSheet.newCar && !this.weightingForm.get('contact').errors && this.weightingForm.get('contact').touched && this.weightingForm.get('contact').value !== ''">
+                    <nb-icon [icon]="'alert-circle'" status="primary"></nb-icon>
+                  </button>
+
+                  <button nbSuffix nbButton ghost type="button"
+                    *ngIf="stateSheet.newCar && !this.weightingForm.get('contact').errors && this.weightingForm.get('contact').value !== ('' || null)"
+                    [icon]="'question-mark-circle'" status="warning">
+                    <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
+                  </button>
+
+                  <!-- <nb-icon
+                    *ngIf="this.weightingForm.get('contact').errors  && this.weightingForm.get('contact').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ข้อมูล" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon> -->
+                </div>
+
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #contact="matAutocomplete"
@@ -98,9 +141,6 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button nbButton ghost status="info">
-                <nb-icon icon="link-2"></nb-icon>
-              </button>
             </div>
 
           </div>
@@ -112,6 +152,15 @@
                   (blur)="checkSelectedProduct()"
                   [status]="(weightingForm.get('product').errors && this.weightingForm.get('product').touched) ? 'danger' : 'basic'"
                   formControlName="product" [matAutocomplete]="product">
+
+                <div nbSuffix class="status-input">
+                  <nb-icon
+                    *ngIf="this.weightingForm.get('product').errors  && this.weightingForm.get('product').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ข้อมูลสินค้าให้ถูกต้อง" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon>
+                </div>
               </nb-form-field>
 
               <mat-autocomplete autoActiveFirstOption #product="matAutocomplete"
@@ -122,9 +171,6 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button *ngIf="weightSheet.productId === null" nbButton ghost status="danger">
-                <nb-icon icon="alert-circle-outline"></nb-icon>
-              </button>
 
             </div>
           </div>
@@ -136,7 +182,10 @@
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="price" name="price" placeholder="ราคา"
                   formControlName="price">
+
+                <div nbSuffix class="status-input"></div>
               </nb-form-field>
+
             </div>
           </div>
 
@@ -144,13 +193,24 @@
             formGroupName="cutWeight">
             <label for="cut-weight" class="label col-sm-3 col-form-label">ตัดน้ำหนัก</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <input type="number" nbInput class="mr-2" id="amount" name="cutWeight"
-                placeholder="หักน้ำหนัก" formControlName="amount">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput class="mr-2" id="amount" name="cutWeight"
+                  placeholder="หักน้ำหนัก" formControlName="amount">
+                <div nbSuffix class="status-input">
+                  <nb-icon
+                    *ngIf="this.weightingForm.get('product').errors  && this.weightingForm.get('product').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ข้อมูลตัวเลขให้ถูกต้อง" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon>
+                </div>
 
+              </nb-form-field>
               <nb-select placeholder="Select Showcase" formControlName="type">
                 <nb-option value="unit">หน่วย</nb-option>
                 <nb-option value="%">%</nb-option>
               </nb-select>
+
             </div>
           </div>
 
@@ -158,8 +218,12 @@
           <div class="form-group row ">
             <label for="notes" class="label col-sm-3 col-form-label">หมายเหตุ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
-              <textarea nbInput id="notes" name="notes" placeholder="หมายเหตุ"
-                formControlName="notes"></textarea>
+              <nb-form-field class="mr-2">
+                <textarea nbInput id="notes" name="notes" placeholder="หมายเหตุ"
+                  formControlName="notes"></textarea>
+
+                <div nbSuffix class="status-input"></div>
+              </nb-form-field>
             </div>
           </div>
         </div>

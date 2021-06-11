@@ -28,7 +28,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
-import { productInList } from 'src/app/shared/validators/product.validator';
 import { NbDialogService } from '@nebular/theme';
 import { inList } from 'src/app/shared/validators/in-list.validator';
 
@@ -260,7 +259,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitWeightSheet(): void {
-		console.log(this.weightingForm.valid);
+		console.log(this.weightingForm.value);
+		console.log(this.weightSheet);
 	}
 
 	// -----------------------------------------------------------------------------------------------------

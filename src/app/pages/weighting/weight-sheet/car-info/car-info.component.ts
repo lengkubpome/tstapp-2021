@@ -9,7 +9,6 @@ import { ICar, ICarType } from './../../../../shared/models/car.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { CarState } from 'src/app/shared/state/car/car.state';
-import { provinceInList } from 'src/app/shared/validators/provinces.validator';
 import { inList } from 'src/app/shared/validators/in-list.validator';
 
 @Component({
@@ -48,7 +47,7 @@ export class CarInfoComponent implements OnInit {
 			id: [ '' ],
 			plateLCN: [ '', Validators.required ],
 			plateLCP: [ '', Validators.compose([ inList(this.provinces) ]) ],
-			typeId: [ '', Validators.compose([ inList(this.carTypes, 'th') ]) ]
+			type: [ '', Validators.compose([ inList(this.carTypes, 'th') ]) ]
 		});
 
 		this.unsubscribeAll = new Subject();
@@ -60,7 +59,7 @@ export class CarInfoComponent implements OnInit {
 			this.carInfoForm.get('id').setValue(this.car.id);
 			this.carInfoForm.get('plateLCN').setValue(this.car.plateLCN);
 			this.carInfoForm.get('plateLCP').setValue(this.car.plateLCP);
-			this.carInfoForm.get('typeId').setValue(this.car.typeId);
+			this.carInfoForm.get('type').setValue(this.car.type);
 		} else {
 			this.stateEdit = true;
 			this.carInfoForm.get('id').setValue(this.car.id);
@@ -71,10 +70,9 @@ export class CarInfoComponent implements OnInit {
 	}
 
 	onSubmitCarInfo(): void {
-		console.log(this.carInfoForm.get('plateLCP').errors);
-		console.log(this.carInfoForm.get('typeId').errors);
-
-		// this.ref.close(this.carInfoForm.value);
+		if (this.carInfoForm.valid) {
+			this.ref.close(this.car);
+		}
 	}
 
 	onClose(): void {
@@ -83,8 +81,8 @@ export class CarInfoComponent implements OnInit {
 
 	onSelectCarType(selectCarType: ICarType): void {
 		const carType = this.carTypes.find((t) => t.id === selectCarType.id);
-		this.carInfoForm.get('typeId').setValue(carType.th);
-		this.car.typeId = carType;
+		this.carInfoForm.get('type').setValue(carType.th);
+		this.car.type = carType;
 	}
 
 	private filterFunc(): void {
@@ -101,7 +99,7 @@ export class CarInfoComponent implements OnInit {
 			);
 
 		this.filteredCarTypes = this.carInfoForm
-			.get('typeId')
+			.get('type')
 			.valueChanges.pipe(
 				takeUntil(this.unsubscribeAll),
 				startWith(''),

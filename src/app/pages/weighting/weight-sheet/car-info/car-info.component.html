@@ -27,8 +27,9 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCN" name="plateLCN" placeholder="ทะเบียนรถ"
-              [status]="stateEdit ? 'warning' : 'primary'" formControlName="plateLCN"
-              [readonly]="!stateEdit">
+              [status]="!stateEdit ? 'primary' :
+                (carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched)? 'danger':'warning' "
+              formControlName="plateLCN" [readonly]="!stateEdit">
           </nb-form-field>
 
           <div class="status-input">
@@ -48,7 +49,8 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCP" name="plateLCP" placeholder="ทะเบียนจังหวัด"
-              [status]="stateEdit ? 'warning' : 'primary'" formControlName="plateLCP"
+              [status]="!stateEdit ? 'primary' :
+            (carInfoForm.get('plateLCP').errors)? 'danger':'warning' " formControlName="plateLCP"
               [matAutocomplete]="province" [readonly]="!stateEdit">
           </nb-form-field>
 
@@ -57,6 +59,14 @@
               {{ province }}
             </mat-option>
           </mat-autocomplete>
+
+          <div class="status-input">
+            <nb-icon *ngIf="carInfoForm.get('plateLCP').errors" [icon]="'alert-triangle'"
+              status="danger" pack="eva" nbTooltip="ใส่จังหวัดไม่ถูกต้อง" nbTooltipPlacement="right"
+              nbTooltipStatus="danger">
+            </nb-icon>
+          </div>
+
         </div>
       </div>
 
@@ -64,8 +74,8 @@
         <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
-            <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
-              [status]="stateEdit ? 'warning' : 'primary'" formControlName="typeId"
+            <input type="text" nbInput id="type" name="type" placeholder="ประเภท" [status]="!stateEdit ? 'primary' :
+            (carInfoForm.get('type').errors)? 'danger':'warning' " formControlName="type"
               [matAutocomplete]="carType" [readonly]="!stateEdit">
           </nb-form-field>
 
@@ -75,6 +85,14 @@
               {{ carType.id }} - {{ carType.th }}
             </mat-option>
           </mat-autocomplete>
+
+
+          <div class="status-input">
+            <nb-icon *ngIf="carInfoForm.get('type').errors" [icon]="'alert-triangle'"
+              status="danger" pack="eva" nbTooltip="ใส่ประเภทรถไม่ถูกต้อง"
+              nbTooltipPlacement="right" nbTooltipStatus="danger">
+            </nb-icon>
+          </div>
         </div>
       </div>
 
@@ -86,8 +104,12 @@
           <button type="button" nbButton (click)="onClose()">ปิด</button>
         </div>
         <div>
+          <button *ngIf="!stateEdit" type="submit" class="ml-2" nbButton
+            [disabled]="this.carInfoForm.invalid" [status]="'primary'">
+            <nb-icon icon="link-2"></nb-icon>
+          </button>
           <button *ngIf="stateEdit" type="submit" class="ml-2" nbButton
-            [status]="'warning'">บันทึก</button>
+            [disabled]="this.carInfoForm.invalid" [status]="'warning'">บันทึก</button>
         </div>
 
       </div>
