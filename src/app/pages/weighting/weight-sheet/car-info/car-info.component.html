@@ -104,11 +104,11 @@
           <button type="button" nbButton (click)="onClose()">ปิด</button>
         </div>
         <div>
-          <button *ngIf="!stateEdit" type="submit" class="ml-2" nbButton
+          <button *ngIf="!stateEdit" type="button" class="ml-2" nbButton
             [disabled]="this.carInfoForm.invalid" [status]="'primary'">
             <nb-icon icon="link-2"></nb-icon>
           </button>
-          <button *ngIf="stateEdit" type="submit" class="ml-2" nbButton
+          <button *ngIf="stateEdit" type="button" class="ml-2" nbButton (click)="onSubmitCarInfo()"
             [disabled]="this.carInfoForm.invalid" [status]="'warning'">บันทึก</button>
         </div>
 
