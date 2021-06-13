@@ -126,8 +126,6 @@ export class CarInfoComponent implements OnInit {
 	}
 
 	private _normalizeValue(value: string): string {
-		console.log(value);
-
 		return value.toLowerCase().replace(/\s/g, '');
 	}
 }
