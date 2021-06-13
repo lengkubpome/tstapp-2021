@@ -1,3 +1,5 @@
+import { IProduct } from './product.model';
+import { IContact } from './contact.model';
 import { ICar } from './car.model';
 export interface IWeighting {
 	id?: string;
@@ -10,9 +12,9 @@ export interface IWeighting {
 		| null;
 	type?: string;
 	car?: ICar;
-	contactId?: string; // Contact;
+	contact?: IContact; // Contact;
 	destination?: string;
-	productId?: string; // Product;
+	product?: IProduct; // Product;
 	price?: number;
 	wIn?: {
 		dateTime: Date;
@@ -23,10 +25,7 @@ export interface IWeighting {
 		weight: number;
 	};
 	weight?: number;
-	weightCut?: {
-		amount: number;
-		type: 'unit' | '%';
-	};
+	weightCut?: string;
 	weightNet?: number;
 	amountNet?: number;
 	notes?: string;

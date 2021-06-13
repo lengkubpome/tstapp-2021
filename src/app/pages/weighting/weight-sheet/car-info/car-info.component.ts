@@ -47,7 +47,7 @@ export class CarInfoComponent implements OnInit {
 			id: [ '' ],
 			plateLCN: [ '', Validators.required ],
 			plateLCP: [ '', Validators.compose([ inList(this.provinces) ]) ],
-			type: [ '', Validators.compose([ inList(this.carTypes, 'th') ]) ]
+			type: [ '', Validators.compose([ inList(this.carTypes, [ 'th' ]) ]) ]
 		});
 
 		this.unsubscribeAll = new Subject();

@@ -31,6 +31,7 @@ import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
 import { CarInfoComponent } from './weight-sheet/car-info/car-info.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
 import { NgxsModule } from '@ngxs/store';
+import { ContactInfoComponent } from './weight-sheet/contact-info/contact-info.component';
 
 const routes: Routes = [
 	{
@@ -44,7 +45,8 @@ const routes: Routes = [
 		WeightingComponent,
 		WeightSheetComponent,
 		WeightStorageComponent,
-		CarInfoComponent
+		CarInfoComponent,
+		ContactInfoComponent
 	],
 	imports: [
 		FormsModule,

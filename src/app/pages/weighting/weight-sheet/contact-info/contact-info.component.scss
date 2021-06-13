@@ -1,0 +1,24 @@
+@import '../../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+	position: relative;
+	display: block;
+	overflow: hidden;
+
+	nb-card {
+		position: relative;
+		width: 500px;
+	}
+
+	.input-car-id {
+		width: 120px;
+		text-align: center;
+	}
+
+	.status-input {
+		padding: 0.5625rem;
+		cursor: pointer;
+	}
+}

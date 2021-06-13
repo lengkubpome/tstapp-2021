@@ -1,3 +1,4 @@
+import { ContactInfoComponent } from './contact-info/contact-info.component';
 import { CarInfoComponent } from './car-info/car-info.component';
 import { WeightingService } from './../weighting.service';
 import {
@@ -61,20 +62,15 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		{ value: 'etc', label: 'อื่นๆ' }
 	];
 
-	carMenus = [
-		{ value: 'findContact', title: 'ค้นหาผู้ติดต่อ' },
-		{ value: 'addCar', title: 'เพิ่มรถ' }
-	];
-
 	// Make up
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
 
 	cars: ICar[];
-	@Select(CarState) cars$: Observable<CarStateModel>;
+	// @Select(CarState) cars$: Observable<CarStateModel>;
 	filteredCars: Observable<ICar[]>;
 
 	contacts: IContact[];
-	@Select(ContactState) contacts$: Observable<ContactStateModel>;
+	// @Select(ContactState) contacts$: Observable<ContactStateModel>;
 	filteredContacts: Observable<IContact[]>;
 
 	products: IProduct[];
@@ -109,6 +105,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			ProductState
 		).products;
 
+		this.contacts = this.store.selectSnapshot<ContactStateModel>(
+			ContactState
+		).contacts;
+
 		this.cars = this.store.selectSnapshot<CarStateModel>(CarState).cars;
 
 		this.setWeightSheet();
@@ -116,19 +116,27 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.weightingForm = this.formBuilder.group({
 			type: [ 'buy' ],
 			car: [ '', Validators.compose([ Validators.required ]) ],
-			contact: [ '' ],
+			contact: [
+				'',
+				Validators.compose([
+					inList(this.contacts, [ 'firstName', 'lastName' ])
+				])
+			],
 			product: [
 				'',
 				Validators.compose([
 					Validators.required,
-					inList(this.products, 'name')
+					inList(this.products, [ 'name' ])
 				])
 			],
-			price: [ '' ],
-			cutWeight: this.formBuilder.group({
-				amount: [],
-				type: [ 'unit' ]
-			}),
+			price: [
+				'',
+				Validators.compose([ Validators.pattern('(^[0-9]*[.]?[0-9]{0,2})') ])
+			],
+			cutWeight: [
+				'',
+				Validators.compose([ Validators.pattern('(^[0-9]*[.]?[0-9]*[%]?)') ])
+			],
 			notes: [],
 			liveWeight: [ 7844 ]
 		});
@@ -149,9 +157,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		// 	.pipe(takeUntil(this.unsubscribeAll))
 		// 	.subscribe((data) => (this.cars = data.cars));
 
-		this.contacts$
-			.pipe(takeUntil(this.unsubscribeAll))
-			.subscribe((data) => (this.contacts = data.contacts));
+		// this.contacts$
+		// 	.pipe(takeUntil(this.unsubscribeAll))
+		// 	.subscribe((data) => (this.contacts = data.contacts));
 
 		this.filterControls();
 	}
@@ -205,17 +213,22 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onSelectContact(contactId: string): void {
-		const contact = this.contacts.find((c) => c.id === contactId);
-		this.weightingForm.get('contact').setValue(contact.firstName);
-		this.weightSheet.contactId = contact.id;
+	onSelectContact(selectContact: IContact): void {
+		const contact = this.contacts.find((c) => c === selectContact);
+		let showInput = contact.firstName;
+		if (contact.lastName !== undefined) {
+			showInput = showInput + ' ' + contact.lastName;
+		}
+
+		this.weightingForm.get('contact').setValue(showInput);
+		this.weightSheet.contact = contact;
 	}
 
 	onSelectProduct(selectProduct: IProduct): void {
 		const product = this.products.find((p) => p.id === selectProduct.id);
 		this.weightingForm.get('product').setValue(product.name);
 		this.weightingForm.get('price').setValue(product.currentPrice);
-		this.weightSheet.productId = product.id;
+		this.weightSheet.product = product;
 		// this.weightSheet.price = product.currentPrice;
 	}
 
@@ -225,9 +238,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			const product = this.products.find((p) => p.name === val);
 			if (product !== undefined) {
 				this.onSelectProduct(product);
-				// this.weightSheet.productId = product.id;
+				// this.weightSheet.product = product.;
 			} else {
-				this.weightSheet.productId = null;
+				this.weightSheet.product = null;
 				this.weightSheet.price = null;
 				this.resetInputValue('price');
 			}
@@ -239,7 +252,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			case 'product': {
 				this.weightingForm.get('product').reset();
 				this.weightingForm.get('price').reset();
-				this.weightSheet.productId = null;
+				this.weightSheet.product = null;
 				this.weightSheet.price = null;
 				break;
 			}
@@ -259,8 +272,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitWeightSheet(): void {
-		console.log(this.weightingForm.value);
-		console.log(this.weightSheet);
+		console.log(this.weightingForm.errors);
+		console.log(this.weightingForm.get('cutWeight').value);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -273,11 +286,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	setPrevFocus(currentId): void {
-		console.log(currentId);
 		const ctrls = Object.keys(this.weightingForm.controls);
 		for (let key = ctrls.indexOf(currentId) - 1; key >= 0; key--) {
 			const control = this.wForm.nativeElement[ctrls[key]];
-			console.log(control);
+			// console.log(control);
 
 			if (control && this.interactivityChecker.isFocusable(control)) {
 				control.focus();
@@ -289,7 +301,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	setNextFocus(currentId): void {
 		const ctrls = Object.keys(this.weightingForm.controls);
-		console.log(ctrls);
+		// console.log(ctrls);
 
 		for (let key = ctrls.indexOf(currentId) + 1; key < ctrls.length; key++) {
 			const control = this.wForm.nativeElement[ctrls[key]];
@@ -322,6 +334,23 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				if (res !== null) {
 					this.weightSheet.car = res;
 					this.weightingForm.get('car').setValue(res.plateLCN);
+				}
+			});
+	}
+
+	openContactInfo(): void {
+		this.dialogService
+			.open(ContactInfoComponent, {
+				context: {
+					title: 'ข้อมูลผู้ติดต่อ',
+					contact: this.weightSheet.contact
+				},
+				closeOnBackdropClick: false
+			})
+			.onClose.subscribe((res: IContact) => {
+				if (res !== null) {
+					// this.weightSheet.contactId = res;
+					// this.weightingForm.get('car').setValue(res.plateLCN);
 				}
 			});
 	}

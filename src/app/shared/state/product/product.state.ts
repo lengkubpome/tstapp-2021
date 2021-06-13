@@ -1,31 +1,23 @@
+import { tap } from 'rxjs/operators';
+import { ProductService } from './../../services/product.service';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit, Selector, State, StateContext, Action } from '@ngxs/store';
 import { IProduct } from './../../models/product.model';
 import { ProductAction } from './product.action';
 
-const products: IProduct[] = [
-	{ id: 'p1001', name: 'กล่อง', currentPrice: 6.7 },
-	{ id: 'p1002', name: 'กระดาษสี', currentPrice: 5.1 },
-	{ id: 'p1003', name: 'เศษเหล็ก', currentPrice: 13.5 },
-	{ id: 'p1004', name: 'เหล็กหนา', currentPrice: 14.0 },
-	{ id: 'p1005', name: 'กระป๋อง', currentPrice: 8.0 },
-	{ id: 'p1006', name: 'สังกะสี', currentPrice: 7.6 }
-];
-
 export interface ProductStateModel {
 	products: IProduct[];
+	isLoaded: boolean;
 }
 
 @State<ProductStateModel>({
 	name: 'product',
-	defaults: { products: [] }
+	defaults: { products: [], isLoaded: false }
 })
 @Injectable()
 export class ProductState implements NgxsOnInit {
-	@Selector()
-	static myCar(state: ProductStateModel): IProduct[] {
-		return state.products.filter((s) => s.id === 'p1003');
-	}
+	constructor(private productService: ProductService) {}
 
 	ngxsOnInit(ctx: StateContext<ProductStateModel>): void {
 		console.log('State initialized, now getting product');
@@ -33,12 +25,17 @@ export class ProductState implements NgxsOnInit {
 	}
 
 	@Action(ProductAction.FetchAll)
-	fetchAll(ctx: StateContext<ProductStateModel>): void {
-		const state = ctx.getState();
-		ctx.setState({
-			...state,
-			products: [ ...state.products, ...products ]
-		});
+	fetchAll(ctx: StateContext<ProductStateModel>): Observable<IProduct[]> {
+		return this.productService.getProducts().pipe(
+			tap((result) => {
+				const state = ctx.getState();
+				ctx.setState({
+					...state,
+					products: result,
+					isLoaded: true
+				});
+			})
+		);
 	}
 
 	@Action(ProductAction.Add)
@@ -52,12 +49,4 @@ export class ProductState implements NgxsOnInit {
 			products: [ ...state.products, payload ]
 		});
 	}
-	// @Action(CarAction.FetchAllCars)
-	// add(
-	// 	{ getState, setState }: StateContext<CarStateModel>,
-	// 	{ payload }: CarAction
-	// ) {
-	// 	const state = getState();
-	// 	setState({ items: [ ...state.items, payload ] });
-	// }
 }
