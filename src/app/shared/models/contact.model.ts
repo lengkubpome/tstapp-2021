@@ -1,13 +1,58 @@
+import { ICar } from './car.model';
 export interface IContact {
 	id: string;
 	firstName: string;
 	lastName?: string;
-	address?: string;
+	address?: IAddress;
+	basicInfo?: {};
+	contact?: { phone: string; email: string; line: string };
 	bankAccount?: IBankAccount[];
 }
 
+export interface Contact {
+	id: string;
+	businessType: string; // 'Individual'|'Corporate';
+	name: string;
+	taxId: string;
+	type: {
+		vendor: boolean;
+		customer: boolean;
+		// employee: boolean;
+	};
+	branchCode?: string;
+	individual?: {
+		prefixName?: string;
+		firstName: string;
+		lastName: string;
+		birthDate?: Date;
+	};
+	address?: IAddress;
+	shippingAddress?: IAddress;
+
+	primaryContactName?: string;
+	communicates?: {
+		phone1?: string; // 'phone' | 'email' | 'line' | 'Web'
+		phone2?: string;
+		email?: string;
+		lineId?: string;
+	};
+
+	profileImageUrl?: any;
+	bankAccount?: IBankAccount;
+	carList?: ICar[];
+}
+
 export interface IBankAccount {
-	bankName: string;
+	accountType: string;
 	accountName: string;
-	accountNumber: string;
+	accountNumber: number;
+	bankName: string;
+}
+
+interface IAddress {
+	line: string;
+	subDistrict: string;
+	district: string;
+	province: string;
+	postCode: string;
 }

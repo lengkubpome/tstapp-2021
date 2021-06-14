@@ -20,14 +20,13 @@ export class ContactInfoComponent implements OnInit {
 
 	constructor(
 		protected ref: NbDialogRef<ContactInfoComponent>,
-		private formBuilder: FormBuilder,
+		private fb: FormBuilder,
 		private store: Store
 	) {
-		this.carInfoForm = this.formBuilder.group({
+		this.carInfoForm = this.fb.group({
 			id: [ '' ],
-			plateLCN: [ '' ]
-			// plateLCP: [ '' ],
-			// type: [ '' ]
+			firstName: [ '' ],
+			lastName: [ '' ]
 		});
 
 		this.unsubscribeAll = new Subject();
