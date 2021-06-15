@@ -1,15 +1,6 @@
 import { ICar } from './car.model';
-export interface IContact {
-	id: string;
-	firstName: string;
-	lastName?: string;
-	address?: IAddress;
-	basicInfo?: {};
-	contact?: { phone: string; email: string; line: string };
-	bankAccount?: IBankAccount[];
-}
 
-export interface Contact {
+export interface IContact {
 	id: string;
 	businessType: string; // 'Individual'|'Corporate';
 	name: string;
@@ -31,7 +22,7 @@ export interface Contact {
 
 	primaryContactName?: string;
 	communicates?: {
-		phone1?: string; // 'phone' | 'email' | 'line' | 'Web'
+		phone1: string; // 'phone' | 'email' | 'line' | 'Web'
 		phone2?: string;
 		email?: string;
 		lineId?: string;

@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
-import { IContact } from './../../../../shared/models/contact.model';
+import { IContact } from 'src/app/shared/models/contact.model';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({

@@ -1,19 +1,19 @@
-import { ContactInfoComponent } from './contact-info/contact-info.component';
-import { CarInfoComponent } from './car-info/car-info.component';
+import { ContactInfoComponent } from '../contact-info/contact-info.component';
+import { CarInfoComponent } from '../car-info/car-info.component';
 import { WeightingService } from './../weighting.service';
 import {
 	ContactState,
 	ContactStateModel
-} from './../../../shared/state/contact/contact.state';
-import { IContact } from './../../../shared/models/contact.model';
+} from 'src/app/shared/state/contact/contact.state';
+import { IContact } from 'src/app/shared/models/contact.model';
 import {
 	ProductState,
 	ProductStateModel
-} from './../../../shared/state/product/product.state';
-import { IProduct } from './../../../shared/models/product.model';
-import { CarState, CarStateModel } from './../../../shared/state/car/car.state';
-import { ICar } from './../../../shared/models/car.model';
-import { IWeighting } from './../../../shared/models/weighting.model';
+} from 'src/app/shared/state/product/product.state';
+import { IProduct } from 'src/app/shared/models/product.model';
+import { CarState, CarStateModel } from 'src/app/shared/state/car/car.state';
+import { ICar } from 'src/app/shared/models/car.model';
+import { IWeighting } from 'src/app/shared/models/weighting.model';
 import { map, startWith, takeUntil, debounceTime } from 'rxjs/operators';
 import { Observable, Subject, timer } from 'rxjs';
 import {
@@ -118,9 +118,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			car: [ '', Validators.compose([ Validators.required ]) ],
 			contact: [
 				'',
-				Validators.compose([
-					inList(this.contacts, [ 'firstName', 'lastName' ])
-				])
+				Validators.compose([ inList(this.contacts, [ 'name' ]) ])
 			],
 			product: [
 				'',
@@ -215,10 +213,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	onSelectContact(selectContact: IContact): void {
 		const contact = this.contacts.find((c) => c === selectContact);
-		let showInput = contact.firstName;
-		if (contact.lastName !== undefined) {
-			showInput = showInput + ' ' + contact.lastName;
-		}
+		const showInput = contact.name;
+		// if (contact.lastName !== undefined) {
+		// 	showInput = showInput + ' ' + contact.lastName;
+		// }
 
 		this.weightingForm.get('contact').setValue(showInput);
 		this.weightSheet.contact = contact;
@@ -409,7 +407,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	private _filterContact(value: string): IContact[] {
 		const filterValue = this._normalizeValue(value);
 		return this.contacts.filter((contact) =>
-			this._normalizeValue(contact.id + contact.firstName).includes(filterValue)
+			this._normalizeValue(contact.name).includes(filterValue)
 		);
 	}
 

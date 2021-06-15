@@ -31,7 +31,7 @@ export function inList(list: any[], findInProperties?: string[]): ValidatorFn {
 				result = { ...result, error: ' value is not string' };
 			}
 		}
-		console.log(result);
+		// console.log(result);
 
 		return result;
 	};

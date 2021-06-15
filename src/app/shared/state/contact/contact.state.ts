@@ -1,6 +1,6 @@
+import { IContact } from 'src/app/shared/models/contact.model';
 import { tap } from 'rxjs/operators';
 import { ContactService } from './../../services/contact.service';
-import { IContact } from './../../models/contact.model';
 import { Injectable } from '@angular/core';
 import { NgxsOnInit, Selector, State, StateContext, Action } from '@ngxs/store';
 import { ContactAction } from './contact.action';

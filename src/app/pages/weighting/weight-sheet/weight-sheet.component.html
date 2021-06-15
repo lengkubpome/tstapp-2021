@@ -121,8 +121,8 @@
                 (optionSelected)="onSelectContact($event.option.value)">
                 <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact">
                   <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
-                  <span>{{contact.firstName}}</span> &nbsp;
-                  <span>{{contact.lastName}}</span>
+                  <span>{{contact.name}}</span> &nbsp;
+                  <!-- <span>{{contact.lastName}}</span> -->
                   <!-- <small>Population: {{state.population}}</small> -->
                 </mat-option>
               </mat-autocomplete>

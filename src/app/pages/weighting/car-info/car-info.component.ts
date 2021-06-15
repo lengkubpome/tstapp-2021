@@ -1,11 +1,11 @@
 import { takeUntil, startWith, debounceTime, map } from 'rxjs/operators';
-import { ProvinceState } from './../../../../shared/state/province/province.state';
-import { CarStateModel } from './../../../../shared/state/car/car.state';
+import { ProvinceState } from 'src/app/shared/state/province/province.state';
+import { CarStateModel } from 'src/app/shared/state/car/car.state';
 import { Observable, Subject } from 'rxjs';
 
 import { Select, Store } from '@ngxs/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ICar, ICarType } from './../../../../shared/models/car.model';
+import { ICar, ICarType } from 'src/app/shared/models/car.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { CarState } from 'src/app/shared/state/car/car.state';

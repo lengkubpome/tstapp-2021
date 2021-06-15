@@ -1,11 +1,110 @@
+
+
 [
-	{
-		"id": "c1001",
-		"firstName": "เกียรติพงศ์",
-		"lastName": "แซ่ตั้ง",
-		"address": "165/81"
-	},
-	{ "id": "c1002", "firstName": "โตโต้" },
-	{ "id": "c1003", "firstName": "คาวาซากิ" },
-	{ "id": "c1004", "firstName": "มากาต้า" }
+  {
+    "id": "sxiiee",
+    "profileImageUrl":"https://avatarfiles.alphacoders.com/103/103373.png",
+    "businessType": "บริษัทจำกัด",
+    "branchCode": "00000",
+    "name": "โกลด์ 2009",
+    "taxId": "1409900464861",
+    "type": { "vendor": false, "customer": true },
+    "address": {
+      "line": "74/1 ถ.นิกรสำราญ",
+      "subDistrict": "ในเมือง",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+    "shippingAddress": {
+      "line": "74/1 ถ.นิกรสำราญ",
+      "subDistrict": "ในเมือง",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+    "primaryContactName": "ก.ไก่1 นามสกุลหรู",
+    "communicates": { "phone1": "0868551701" }
+  },
+  {
+    "id": "vfsff",
+    "businessType": "บุคคลธรรมดา",
+    "branchCode": "00001",
+    "name": "ก.ไก่2 นามสกุลหรู",
+    "taxId": "1409900464862",
+    "type": { "vendor": true, "customer": true },
+    "individual": {
+      "prefixName": "นาย",
+      "firstName": "ก.ไก่2",
+      "lastName": "นามสกุลหรู"
+    },
+    "address": {
+      "line": "135 หมู่7 ถ.มิตรภาพ",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+    "shippingAddress": {
+      "line": "135 หมู่7 ถ.มิตรภาพ",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+
+    "primaryContactName": "เฮียเล้ง",
+    "communicates": { "phone1": "0868551701", "lineId": "0868551702" }
+  },
+  {
+    "id": "rqewe",
+    "businessType": "บุคคลธรรมดา",
+    "branchCode": "",
+    "name": "ข.ไข่ มีเยอะแยะ",
+    "taxId": "1409900464863",
+    "type": { "vendor": true, "customer": true },
+    "individual": {
+      "prefixName": "นาย",
+      "firstName": "ข.ไข่",
+      "lastName": "มีเยอะแยะ"
+    },
+    "communicates": { "phone1": "0868551703", "lineId": "0868551703" }
+  },
+  {
+    "id": "3qerqe",
+    "businessType": "บุคคลธรรมดา",
+    "name": "แพท",
+    "taxId": "349004648633",
+    "type": { "vendor": true, "customer": false },
+    "individual": {
+      "prefixName": "นางสาว",
+      "firstName": "แพท",
+      "lastName": "ลูกปอศิริ"
+    },
+    "communicates": { "phone1": "0868551704", "lineId": "0868551704" }
+  },
+  {
+    "id": "qwqw",
+    "businessType": "บริษัทจำกัด",
+    "branchCode": "00000",
+    "name": "ไทยสุทัศน์",
+    "taxId": "0403549000606",
+    "type": { "vendor": false, "customer": true },
+    "address": {
+      "line": "135 หมู่ 7",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+    "shippingAddress": {
+      "line": "135 หมู่ 7",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น"
+    },
+    "communicates": { "phone1": "0868551705", "lineId": "0868551705" },
+    "primaryContactName": "ถิรตา แซ่ตั้ง"
+  }
 ]

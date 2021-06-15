@@ -28,10 +28,10 @@ import {
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
-import { CarInfoComponent } from './weight-sheet/car-info/car-info.component';
+import { CarInfoComponent } from './car-info/car-info.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
 import { NgxsModule } from '@ngxs/store';
-import { ContactInfoComponent } from './weight-sheet/contact-info/contact-info.component';
+import { ContactInfoComponent } from './contact-info/contact-info.component';
 
 const routes: Routes = [
 	{
