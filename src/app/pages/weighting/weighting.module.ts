@@ -27,6 +27,7 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
+import { AvatarModule } from 'ngx-avatar';
 import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
 import { CarInfoComponent } from './car-info/car-info.component';
 import { WeightStorageComponent } from './weight-storage/weight-storage.component';
@@ -76,7 +77,8 @@ const routes: Routes = [
 		MatBadgeModule,
 		NgbModule,
 		NbDialogModule.forChild(),
-		NgxsModule.forFeature([])
+		NgxsModule.forFeature([]),
+		AvatarModule
 	],
 	exports: [],
 	providers: [ WeightingService ]

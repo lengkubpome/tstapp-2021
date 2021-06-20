@@ -23,12 +23,19 @@
 
     <nb-card-body>
       <div class="row">
-        <div class="col-sm-6">
+
+        <div class="col-sm-3">
+          <ngx-avatar src="assets/images/alan.png" size="150" [round]="false" cornerRadius="5"
+            borderColor="#000">
+          </ngx-avatar>
+        </div>
+
+        <div class="col-sm-9">
           <div class="form-group">
-            <label for="firstName" class="label">ชื่อ</label>
+            <label for="firstName" class="label">ชื่อผู้ติดต่อ</label>
             <nb-form-field>
-              <input type="text" nbInput fullWidth id="firstName" placeholder="ชื่อจริง"
-                formControlName="firstName">
+              <input type="text" nbInput fullWidth id="firstName" placeholder="ชื่อผู้ติดต่อ"
+                formControlName="name">
 
               <div nbSuffix class="status-input">
 
@@ -44,14 +51,9 @@
               </div>
             </nb-form-field>
           </div>
+
         </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="lastName" class="label">นามสกุล</label>
-            <input type="text" nbInput fullWidth id="lastName" placeholder="นามสกุล"
-              formControlName="lastName">
-          </div>
-        </div>
+
       </div>
 
     </nb-card-body>

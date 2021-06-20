@@ -25,8 +25,7 @@ export class ContactInfoComponent implements OnInit {
 	) {
 		this.carInfoForm = this.fb.group({
 			id: [ '' ],
-			firstName: [ '' ],
-			lastName: [ '' ]
+			name: [ '' ]
 		});
 
 		this.unsubscribeAll = new Subject();

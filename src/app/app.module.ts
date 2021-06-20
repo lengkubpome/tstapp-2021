@@ -49,6 +49,7 @@ import { HttpClientModule } from '@angular/common/http';
 		}),
 		NgxsLoggerPluginModule.forRoot(),
 		NgxsReduxDevtoolsPluginModule.forRoot()
+		// Another
 	],
 	providers: [],
 	bootstrap: [ AppComponent ]
