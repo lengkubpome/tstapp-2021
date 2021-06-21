@@ -47,3 +47,36 @@ interface IAddress {
 	province: string;
 	postCode: string;
 }
+
+export interface IContact2 {
+	id: string;
+	type: string; // 'Individual'|'Corporate' => เลือกประเภทได้เลย;
+	name: string;
+	taxId: string;
+	isVendor: boolean;
+	isCustomer: boolean;
+	// isEmployee: boolean;
+	branchCode?: string;
+
+	individualInfo?: {
+		prefix?: string;
+		firstName: string;
+		lastName: string;
+		birthDate?: Date;
+	};
+
+	address?: IAddress;
+	shippingAddress?: IAddress;
+
+	primaryContactId?: string; // เชื่อมกับร้านค้า
+	communicateInfo?: {
+		phone1: string; // 'phone' | 'email' | 'line' | 'Web'
+		phone2?: string;
+		email?: string;
+		lineId?: string;
+	};
+
+	profileImageUrl?: any;
+	bankAccount?: IBankAccount;
+	carList?: ICar[];
+}
