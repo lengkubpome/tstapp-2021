@@ -42,41 +42,63 @@ export interface IBankAccount {
 
 interface IAddress {
 	line: string;
-	subDistrict: string;
 	district: string;
 	province: string;
-	postCode: string;
+	country?: string;
+	postCode?: string;
 }
 
 export interface IContact2 {
 	id: string;
 	type: string; // 'Individual'|'Corporate' => เลือกประเภทได้เลย;
-	name: string;
-	taxId: string;
+	displayName: string;
+	taxId?: string;
 	isVendor: boolean;
 	isCustomer: boolean;
-	// isEmployee: boolean;
-	branchCode?: string;
 
 	individualInfo?: {
-		prefix?: string;
-		firstName: string;
-		lastName: string;
-		birthDate?: Date;
+		title?: string;
+		firstName?: string;
+		lastName?: string;
+	};
+	corporateInfo?: {
+		companyName?: string;
+		branchCode?: string;
 	};
 
 	address?: IAddress;
-	shippingAddress?: IAddress;
 
-	primaryContactId?: string; // เชื่อมกับร้านค้า
+	shippingAddress?: {
+		address?: IAddress;
+		isSameAddress: boolean;
+	};
+
 	communicateInfo?: {
 		phone1: string; // 'phone' | 'email' | 'line' | 'Web'
 		phone2?: string;
+		line1?: {
+			displayName: string;
+			userId: string;
+		};
+		line2?: {
+			displayName: string;
+			userId: string;
+		};
 		email?: string;
-		lineId?: string;
 	};
 
+	bankAccounts?: IBankAccount[];
+
+	subContactId?: string; // เชื่อมกับร้านค้า
+	memberClassId?: string;
+
+	locationGoogle?: { lat: number; lng: number };
 	profileImageUrl?: any;
-	bankAccount?: IBankAccount;
 	carList?: ICar[];
+}
+
+export interface IMemberClass {
+	id: string;
+	name: string;
+	description: string;
 }
