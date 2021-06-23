@@ -118,7 +118,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			car: [ '', Validators.compose([ Validators.required ]) ],
 			contact: [
 				'',
-				Validators.compose([ inList(this.contacts, [ 'name' ]) ])
+				Validators.compose([ inList(this.contacts, [ 'displayName' ]) ])
 			],
 			product: [
 				'',
@@ -213,7 +213,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	onSelectContact(selectContact: IContact): void {
 		const contact = this.contacts.find((c) => c === selectContact);
-		const showInput = contact.name;
+		const showInput = contact.displayName;
 		// if (contact.lastName !== undefined) {
 		// 	showInput = showInput + ' ' + contact.lastName;
 		// }
@@ -407,7 +407,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	private _filterContact(value: string): IContact[] {
 		const filterValue = this._normalizeValue(value);
 		return this.contacts.filter((contact) =>
-			this._normalizeValue(contact.name).includes(filterValue)
+			this._normalizeValue(contact.displayName).includes(filterValue)
 		);
 	}
 

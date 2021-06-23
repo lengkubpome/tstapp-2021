@@ -1,0 +1,97 @@
+[
+  {
+    "id": "c0001",
+    "profileImageUrl": "https://avatarfiles.alphacoders.com/103/103373.png",
+    "type": "บุคคลธรรมดา",
+    "displayName": "เกียรติพงศ์ แซ่ตั้ง",
+    "taxId": "140992002934",
+    "isVendor": true,
+    "isCustomer": true,
+
+    "personalInfo": {
+      "title": "นาย",
+      "firstName":"เกียรติพงศ์",
+      "lastName": "แซ่่ตั้ง"
+    },
+
+    "address": {
+      "line": "135 หมู่7 ถ.มิตรภาพ",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น",
+      "country":"ประเทศไทย"
+    },
+
+    "shippingAddress": {
+      "isSameAddress": true
+    },
+
+    "communicateInfo": {
+      "phone1": "0868667839"
+    },
+
+    "subContactId": "c0002"
+
+  },
+  {
+    "id": "c0002",
+    "type": "นิติบุคคล",
+    "displayName": "บจก.โกลด์ 2009",
+    "taxId": "0405552000294",
+    "isVendor": true,
+    "isCustomer": true,
+
+    "corporateInfo": {
+      "type": "บริษัทจำกัด",
+      "companyName": "โกลด์ 2009",
+      "branchCode": "00000"
+    },
+
+    "address": {
+      "line": "74/1 ถ.นิกรสำราญ",
+      "subDistrict": "ในเมือง",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น",
+      "country":"ประเทศไทย"
+    },
+
+    "shippingAddress": {
+      "isSameAddress": true
+    },
+
+    "communicateInfo": {
+      "phone1": "0868667839"
+    },
+
+    "profileImageUrl": ""
+  },
+  {
+    "id": "c0003",
+    "type": "นิติบุคคล",
+    "displayName": "หจก.ไทยสุทัศน์",
+    "taxId": "0403549000606",
+    "isVendor": true,
+    "isCustomer": true,
+    "corporateInfo": {
+      "type": "ห้างหุ้นส่วนจำกัด",
+      "companyName": "ไทยสุทัศน์",
+      "branchCode": "00000"
+    },
+    "address": {
+      "line": "135 หมู่7 ถ.มิตรภาพ",
+      "subDistrict": "โนนท่อน",
+      "district": "เมือง",
+      "postCode": "40000",
+      "province": "ขอนแก่น",
+      "country":"ประเทศไทย"
+    },
+    "shippingAddress": {
+      "isSameAddress": true
+    },
+    "communicateInfo": {
+      "phone1": "0868667839"
+    }
+  }
+]

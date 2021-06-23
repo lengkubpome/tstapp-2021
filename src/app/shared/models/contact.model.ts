@@ -1,6 +1,6 @@
 import { ICar } from './car.model';
 
-export interface IContact {
+export interface IContact1 {
 	id: string;
 	businessType: string; // 'Individual'|'Corporate';
 	name: string;
@@ -42,13 +42,14 @@ export interface IBankAccount {
 
 interface IAddress {
 	line: string;
+	subDistrict: string;
 	district: string;
 	province: string;
 	country?: string;
 	postCode?: string;
 }
 
-export interface IContact2 {
+export interface IContact {
 	id: string;
 	type: string; // 'Individual'|'Corporate' => เลือกประเภทได้เลย;
 	displayName: string;
@@ -56,14 +57,16 @@ export interface IContact2 {
 	isVendor: boolean;
 	isCustomer: boolean;
 
-	individualInfo?: {
+	corporateInfo?: {
+		type: string;
+		companyName?: string;
+		branchCode?: string;
+	};
+
+	personalInfo?: {
 		title?: string;
 		firstName?: string;
 		lastName?: string;
-	};
-	corporateInfo?: {
-		companyName?: string;
-		branchCode?: string;
 	};
 
 	address?: IAddress;

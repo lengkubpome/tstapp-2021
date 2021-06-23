@@ -22,15 +22,26 @@
     </nb-card-header>
 
     <nb-card-body>
-      <div class="row">
+      <div class="d-flex flex-row mb-3">
 
-        <div class="col-sm-3">
+        <div class="col-3">
           <ngx-avatar src="assets/images/alan.png" size="150" [round]="false" cornerRadius="5"
             borderColor="#000">
           </ngx-avatar>
         </div>
+        <div class="col-9">
+          <h5>
+            นายกลมดิ ผ่านกินข้าว
+          </h5>
+          <span class="subtitle">
+            นายกลมดิ ผ่านกินข้าว
+          </span>
+        </div>
 
-        <div class="col-sm-9">
+      </div>
+      <div class="row">
+
+        <div class="col">
           <div class="form-group">
             <label for="firstName" class="label">ชื่อผู้ติดต่อ</label>
             <nb-form-field>
@@ -53,7 +64,6 @@
           </div>
 
         </div>
-
       </div>
 
     </nb-card-body>

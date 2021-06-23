@@ -3,9 +3,9 @@
 @import '~@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
-	position: relative;
-	display: block;
-	overflow: hidden;
+	// position: relative;
+	// display: block;
+	// overflow: hidden;
 
 	nb-card {
 		position: relative;
@@ -20,5 +20,9 @@
 	.status-input {
 		padding: 0.5625rem;
 		cursor: pointer;
+	}
+
+	.subtitle {
+		color: nb-theme(text-hint-color);
 	}
 }

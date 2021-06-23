@@ -10,6 +10,6 @@ export class ContactService {
 	constructor(private http: HttpClient) {}
 
 	getContacts(): Observable<IContact[]> {
-		return this.http.get<IContact[]>('assets/data/contact-dummy.json');
+		return this.http.get<IContact[]>('assets/data/contact-dummy2.json');
 	}
 }
