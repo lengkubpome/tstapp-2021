@@ -25,17 +25,26 @@
       <div class="d-flex flex-row mb-3">
 
         <div class="col-sm-4">
-          <ngx-avatar src="assets/images/alan.png" size="150" [round]="false" cornerRadius="5"
-            borderColor="#000">
+          <ngx-avatar src="assets/images/alan.png" size="150" [round]="false" cornerRadius="5">
           </ngx-avatar>
         </div>
         <div class="col-sm-8">
+          <nb-tag-list>
+            <!-- <nb-tag status="success" appearance="filled" text="นิติบุคคล"></nb-tag> -->
+            <nb-tag status="info" appearance="filled" [size]="'small'" [text]="'บุคคลธรรมดา'">
+            </nb-tag>
+
+
+          </nb-tag-list>
           <h6>
             นายกลมดิ ผ่านกินข้าว
           </h6>
           <span class="subtitle">
-            นายกลมดิ ผ่านกินข้าว
+            1409900484834
           </span>
+
+          <nb-checkbox status="basic">Basic</nb-checkbox>
+          <nb-checkbox status="primary">Primary</nb-checkbox>
         </div>
 
       </div>

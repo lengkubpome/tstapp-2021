@@ -23,7 +23,9 @@ import {
 	NbContextMenuModule,
 	NbListModule,
 	NbTooltipModule,
-	NbDialogModule
+	NbDialogModule,
+	NbTagModule,
+	NbCheckboxModule
 } from '@nebular/theme';
 import { ThemeModule } from './../../@theme/theme.module';
 import { NgModule } from '@angular/core';
@@ -70,6 +72,8 @@ const routes: Routes = [
 		NbContextMenuModule,
 		NbListModule,
 		NbTooltipModule,
+		NbTagModule,
+		NbCheckboxModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		MatSortModule,
