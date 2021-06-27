@@ -7,9 +7,14 @@
 /* SystemJS module definition */
 declare var module: NodeModule;
 interface NodeModule {
-  id: string;
+	id: string;
 }
 
 declare var tinymce: any;
 
 declare var echarts: any;
+
+declare module '*.svg' {
+	const svg: string;
+	export default svg;
+}

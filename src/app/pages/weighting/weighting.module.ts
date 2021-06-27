@@ -5,6 +5,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { WeightingComponent } from './weighting.component';
@@ -74,14 +75,18 @@ const routes: Routes = [
 		NbTooltipModule,
 		NbTagModule,
 		NbCheckboxModule,
+		NbDialogModule.forChild(),
+		NgxsModule.forFeature([]),
+		// Material
+		MatIconModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		MatSortModule,
 		MatSelectModule,
 		MatBadgeModule,
+
 		NgbModule,
-		NbDialogModule.forChild(),
-		NgxsModule.forFeature([]),
+		// Avatar
 		AvatarModule
 	],
 	exports: [],

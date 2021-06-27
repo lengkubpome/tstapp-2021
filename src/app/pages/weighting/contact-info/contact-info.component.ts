@@ -5,6 +5,9 @@ import { NbDialogRef } from '@nebular/theme';
 import { IContact } from 'src/app/shared/models/contact.model';
 import { Component, OnInit, Input } from '@angular/core';
 
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
 	selector: 'app-contact-info',
 	templateUrl: './contact-info.component.html',
@@ -21,7 +24,9 @@ export class ContactInfoComponent implements OnInit {
 	constructor(
 		protected ref: NbDialogRef<ContactInfoComponent>,
 		private fb: FormBuilder,
-		private store: Store
+		private store: Store,
+		private matIconRegistry: MatIconRegistry,
+		private domSanitizer: DomSanitizer
 	) {
 		this.carInfoForm = this.fb.group({
 			id: [ '' ],
@@ -29,6 +34,13 @@ export class ContactInfoComponent implements OnInit {
 		});
 
 		this.unsubscribeAll = new Subject();
+
+		this.matIconRegistry.addSvgIcon(
+			`icon_line`,
+			this.domSanitizer.bypassSecurityTrustResourceUrl(
+				'../../../../assets/images/line.svg'
+			)
+		);
 	}
 
 	ngOnInit(): void {}

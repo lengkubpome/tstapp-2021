@@ -1,78 +1,117 @@
 <form [formGroup]="carInfoForm" id="carInfoForm" #ciForm (ngSubmit)="onSubmitContactInfo()">
 
+
   <nb-card>
-    <nb-card-header>
-
-      <div class="d-flex flex-row justify-content-between">
-        <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
-          <h5>{{title}}</h5>
-          <div class="pl-2">
-
-          </div>
-        </div>
-        <div>
-          <nb-form-field>
-            <div nbPrefix>รหัส</div>
-            <input type="text" nbInput class="input-car-id" readonly id="id" name="id"
-              formControlName="id">
-          </nb-form-field>
-        </div>
+    <nb-card-body>
+      <div class="d-flex justify-content-between">
+        <nb-icon icon="close-outline"></nb-icon>
+        <!-- <nb-icon icon="more-horizontal-outline"></nb-icon> -->
+        <nb-tag-list>
+          <nb-tag status="info" appearance="outline" [size]="'small'" [text]="'C0001'"></nb-tag>
+        </nb-tag-list>
+      </div>
+      <div class="d-flex justify-content-center">
+        <ngx-avatar src="assets/images/alan.png" size="120" [round]="true" cornerRadius="5">
+        </ngx-avatar>
       </div>
 
-    </nb-card-header>
-
-    <nb-card-body>
-      <div class="d-flex flex-row mb-3">
-
-        <div class="col-sm-4">
-          <ngx-avatar src="assets/images/alan.png" size="150" [round]="false" cornerRadius="5">
-          </ngx-avatar>
-        </div>
-        <div class="col-sm-8">
-          <nb-tag-list>
-            <!-- <nb-tag status="success" appearance="filled" text="นิติบุคคล"></nb-tag> -->
-            <nb-tag status="info" appearance="filled" [size]="'small'" [text]="'บุคคลธรรมดา'">
-            </nb-tag>
-
-
-          </nb-tag-list>
+      <div class="d-flex justify-content-center mt-4">
+        <div class="display-name">
           <h6>
             นายกลมดิ ผ่านกินข้าว
           </h6>
-          <span class="subtitle">
-            1409900484834
-          </span>
-
-          <nb-checkbox status="basic">Basic</nb-checkbox>
-          <nb-checkbox status="primary">Primary</nb-checkbox>
+          <p>( 1409900467893 )</p>
         </div>
 
       </div>
-      <div class="row">
-
-        <div class="col">
-          <div class="form-group">
-            <label for="firstName" class="label">ชื่อผู้ติดต่อ</label>
-            <nb-form-field>
-              <input type="text" nbInput fullWidth id="firstName" placeholder="ชื่อผู้ติดต่อ"
-                formControlName="name">
-
-              <div nbSuffix class="status-input">
-
-                <nb-icon [icon]="'alert-triangle'" status="danger" pack="eva"
-                  nbTooltip="กรุณาใส่ทะเบียนรถ" nbTooltipPlacement="right" nbTooltipStatus="danger">
-                </nb-icon>
-
-                <!-- <nb-icon
-                  *ngIf="carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched"
-                  [icon]="'alert-triangle'" status="danger" pack="eva" nbTooltip="กรุณาใส่ทะเบียนรถ"
-                  nbTooltipPlacement="right" nbTooltipStatus="danger">
-                </nb-icon> -->
-              </div>
-            </nb-form-field>
-          </div>
-
+      <div class="d-flex justify-content-center ">
+        <div class="store-name">
+          <mat-icon>store</mat-icon>
+          <p>
+            ร้านค้ามาขายให้
+          </p>
         </div>
+      </div>
+
+
+    </nb-card-body>
+    <nb-card-body class="detail">
+
+      <div class="mt-3 mb-1">
+        <div class="mb-1">
+          <nb-icon icon="people"></nb-icon>
+          <strong>
+            ประเภท :
+          </strong>
+        </div>
+        <nb-tag-list>
+          <nb-tag status="success" appearance="filled" [size]="'tiny'" text="ผู้ขาย"></nb-tag>
+          <nb-tag status="info" appearance="filled" [size]="'tiny'" text="ลูกค้า">
+          </nb-tag>
+        </nb-tag-list>
+      </div>
+
+      <div class="mt-3 mb-3">
+        <div class="d-flex align-items-center mb-1">
+          <nb-icon icon="car"></nb-icon>
+          <strong>
+            รายการรถ :
+          </strong>
+        </div>
+        <nb-tag-list>
+          <nb-tag appearance="outline" [size]="'small'" text="กอ-9555"></nb-tag>
+          <nb-tag appearance="outline" [size]="'small'" text="66-4402">
+          </nb-tag>
+        </nb-tag-list>
+      </div>
+
+
+
+      <div class="mt-3 mb-1">
+        <div class="mb-1">
+          <nb-icon icon="pin"></nb-icon>
+          <strong>
+            ที่อยู่ :
+          </strong>
+        </div>
+        <p>
+          165/81 หมู่บ้านพิมานชล 2 ถนนแก่นตูมประชาราษฎร์ ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น
+          40000
+        </p>
+      </div>
+
+      <div class="mt-3 mb-1">
+        <div class="mb-1">
+          <nb-icon icon="phone"></nb-icon>
+          <strong>
+            โทรศัพท์ :
+          </strong>
+        </div>
+        <p>
+          (086)-955-1705
+        </p>
+      </div>
+      <!-- <div class="mt-3 mb-1">
+        <div class="mb-1">
+          <mat-icon svgIcon="icon_line"></mat-icon>
+          <strong>
+            LINE ID :
+          </strong>
+        </div>
+        <p>
+          (086)-955-1705
+        </p>
+      </div> -->
+      <div class="mt-3 mb-1">
+        <div class="d-flex align-items-center mb-1">
+          <mat-icon>account_balance</mat-icon>
+          <strong>
+            บัญชีธนาคาร :
+          </strong>
+        </div>
+        <p>
+          กสิกรไทย 242-0-403233-1 นายมาดี ไปมา
+        </p>
       </div>
 
     </nb-card-body>
@@ -93,5 +132,6 @@
 
     </nb-card-footer>
   </nb-card>
+
 
 </form>
