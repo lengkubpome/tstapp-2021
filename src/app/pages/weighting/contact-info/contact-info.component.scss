@@ -52,7 +52,7 @@ $screen-xl-min: 1200px;
 		max-width: 600px;
 
 		@media (min-width: #{$screen-sm-min}) {
-			width: 600px;
+			width: 400px;
 		}
 	}
 
@@ -72,5 +72,52 @@ $screen-xl-min: 1200px;
 
 	nb-checkbox:not(:only-child) {
 		margin-right: 1.5rem;
+	}
+
+	nb-card-body {
+		* > .display-name {
+			text-align: center;
+		}
+		* > .store-name {
+			display: flex;
+			padding: 0.5rem 1.2rem;
+			border-style: solid;
+			border-width: 0.0625rem;
+			border-radius: 1.5rem;
+			background-color: nb-theme(color-basic-transparent-100);
+			border-color: nb-theme(color-basic-400);
+			color: nb-theme(color-basic-400);
+
+			> * {
+				color: nb-theme(color-basic-700);
+			}
+			mat-icon,
+			nb-icon {
+				// color: nb-theme(text-hint-color);
+				margin-right: 0.25rem;
+			}
+			> mat-icon + p {
+				// color: nb-theme(text-hint-color);
+				padding-top: 0.25rem;
+				margin: 0;
+			}
+		}
+	}
+
+	nb-card-body.detail {
+		border-top: 1px solid #edf1f7;
+		border-bottom-left-radius: 0.25rem;
+		border-bottom-right-radius: 0.25rem;
+
+		* > nb-icon,
+		mat-icon {
+			margin-right: 0.25rem;
+		}
+		* > mat-icon + strong {
+			padding-top: 0.25rem;
+		}
+		* > p {
+			color: nb-theme(color-basic-700);
+		}
 	}
 }
