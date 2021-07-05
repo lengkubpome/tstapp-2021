@@ -1,97 +1,138 @@
 <form [formGroup]="carInfoForm" id="carInfoForm" #ciForm (ngSubmit)="onSubmitContactInfo()">
 
+  <nb-reveal-card [showToggleButton]="bool" [revealed]="bool">
+    <nb-card-front>
 
-  <nb-card>
-    <nb-card-body>
-      <div class="d-flex justify-content-between">
-        <nb-icon icon="close-outline"></nb-icon>
-        <!-- <nb-icon icon="more-horizontal-outline"></nb-icon> -->
-        <nb-tag-list>
-          <nb-tag status="info" appearance="outline" [size]="'small'" [text]="'C0001'"></nb-tag>
-        </nb-tag-list>
-      </div>
-      <div class="d-flex justify-content-center">
-        <ngx-avatar src="assets/images/alan.png" size="120" [round]="true" cornerRadius="5">
-        </ngx-avatar>
-      </div>
+      <nb-card>
+        <nb-card-body>
+          <div class="d-flex justify-content-between">
+            <nb-icon icon="close-outline" (click)="test()"></nb-icon>
+            <!-- <nb-icon icon="more-horizontal-outline"></nb-icon> -->
+            <nb-tag-list>
+              <nb-tag status="info" appearance="outline" [size]="'small'" [text]="'C0001'"></nb-tag>
+            </nb-tag-list>
+          </div>
+          <div class="d-flex justify-content-center">
+            <ngx-avatar src="assets/images/alan.png" size="120" [round]="true" cornerRadius="5">
+            </ngx-avatar>
+          </div>
 
-      <div class="d-flex justify-content-center mt-4">
-        <div class="display-name">
-          <h6>
-            นายกลมดิ ผ่านกินข้าว
-          </h6>
-          <p>( 1409900467893 )</p>
-        </div>
+          <div class="d-flex justify-content-center mt-4">
+            <div class="display-name">
+              <h6>
+                นายกลมดิ ผ่านกินข้าว
+              </h6>
+            </div>
 
-      </div>
-      <div class="d-flex justify-content-center ">
-        <div class="store-name">
-          <mat-icon>store</mat-icon>
-          <p>
-            ร้านค้ามาขายให้
-          </p>
-        </div>
-      </div>
+          </div>
+          <div class="d-flex justify-content-center ">
+            <div class="store-name">
+              <mat-icon>store</mat-icon>
+              <p>
+                ร้านค้ามาขายให้
+              </p>
+            </div>
+          </div>
+          <!-- <div class="hr">
+            <hr>
 
+          </div>
 
-    </nb-card-body>
-    <nb-card-body class="detail">
-
-      <div class="mt-3 mb-1">
-        <div class="mb-1">
-          <nb-icon icon="people"></nb-icon>
-          <strong>
-            ประเภท :
-          </strong>
-        </div>
-        <nb-tag-list>
-          <nb-tag status="success" appearance="filled" [size]="'tiny'" text="ผู้ขาย"></nb-tag>
-          <nb-tag status="info" appearance="filled" [size]="'tiny'" text="ลูกค้า">
-          </nb-tag>
-        </nb-tag-list>
-      </div>
-
-      <div class="mt-3 mb-3">
-        <div class="d-flex align-items-center mb-1">
-          <nb-icon icon="car"></nb-icon>
-          <strong>
-            รายการรถ :
-          </strong>
-        </div>
-        <nb-tag-list>
-          <nb-tag appearance="outline" [size]="'small'" text="กอ-9555"></nb-tag>
-          <nb-tag appearance="outline" [size]="'small'" text="66-4402">
-          </nb-tag>
-        </nb-tag-list>
-      </div>
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <strong>
+                ID เลขทะเบียนนิติบุคคล :
+              </strong>
+            </div>
+            <p>
+              1409900464862
+            </p>
+          </div> -->
 
 
+        </nb-card-body>
+        <nb-card-body class="detail">
 
-      <div class="mt-3 mb-1">
-        <div class="mb-1">
-          <nb-icon icon="pin"></nb-icon>
-          <strong>
-            ที่อยู่ :
-          </strong>
-        </div>
-        <p>
-          165/81 หมู่บ้านพิมานชล 2 ถนนแก่นตูมประชาราษฎร์ ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น
-          40000
-        </p>
-      </div>
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <strong>
+                ID เลขทะเบียนนิติบุคคล :
+              </strong>
+            </div>
+            <p>
+              1409900464862
+            </p>
+          </div>
 
-      <div class="mt-3 mb-1">
-        <div class="mb-1">
-          <nb-icon icon="phone"></nb-icon>
-          <strong>
-            โทรศัพท์ :
-          </strong>
-        </div>
-        <p>
-          (086)-955-1705
-        </p>
-      </div>
-      <!-- <div class="mt-3 mb-1">
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <nb-icon icon="people"></nb-icon>
+              <strong>
+                ประเภท :
+              </strong>
+            </div>
+            <nb-tag-list>
+              <nb-tag status="success" appearance="filled" [size]="'tiny'" text="ผู้ขาย"></nb-tag>
+              <nb-tag status="info" appearance="filled" [size]="'tiny'" text="ลูกค้า">
+              </nb-tag>
+            </nb-tag-list>
+          </div>
+
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <nb-icon icon="people"></nb-icon>
+              <strong>
+                ประเภท :
+              </strong>
+            </div>
+            <nb-tag-list>
+              <nb-tag status="success" appearance="filled" [size]="'tiny'" text="ผู้ขาย"></nb-tag>
+              <nb-tag status="info" appearance="filled" [size]="'tiny'" text="ลูกค้า">
+              </nb-tag>
+            </nb-tag-list>
+          </div>
+
+          <div class="mt-3 mb-3">
+            <div class="d-flex align-items-center mb-1">
+              <nb-icon icon="car"></nb-icon>
+              <strong>
+                รายการรถ :
+              </strong>
+            </div>
+            <nb-tag-list>
+              <nb-tag appearance="outline" [size]="'small'" text="กอ-9555"></nb-tag>
+              <nb-tag appearance="outline" [size]="'small'" text="66-4402">
+              </nb-tag>
+            </nb-tag-list>
+          </div>
+
+
+
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <nb-icon icon="pin"></nb-icon>
+              <strong>
+                ที่อยู่ :
+              </strong>
+            </div>
+            <p>
+              165/81 หมู่บ้านพิมานชล 2 ถนนแก่นตูมประชาราษฎร์ ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น
+              40000
+            </p>
+          </div>
+
+          <div class="mt-3 mb-1">
+            <div class="mb-1">
+              <nb-icon icon="phone"></nb-icon>
+              <strong>
+                โทรศัพท์ :
+              </strong>
+            </div>
+            <p>
+              (086)-955-1705
+            </p>
+          </div>
+          <!-- <div class="mt-3 mb-1">
         <div class="mb-1">
           <mat-icon svgIcon="icon_line"></mat-icon>
           <strong>
@@ -102,36 +143,48 @@
           (086)-955-1705
         </p>
       </div> -->
-      <div class="mt-3 mb-1">
-        <div class="d-flex align-items-center mb-1">
-          <mat-icon>account_balance</mat-icon>
-          <strong>
-            บัญชีธนาคาร :
-          </strong>
-        </div>
-        <p>
-          กสิกรไทย 242-0-403233-1 นายมาดี ไปมา
-        </p>
-      </div>
+          <div class="mt-3 mb-1">
+            <div class="d-flex align-items-center mb-1">
+              <mat-icon>account_balance</mat-icon>
+              <strong>
+                บัญชีธนาคาร :
+              </strong>
+            </div>
+            <p>
+              กสิกรไทย 242-0-403233-1 นายมาดี ไปมา
+            </p>
+          </div>
 
-    </nb-card-body>
+        </nb-card-body>
 
-    <nb-card-footer>
-      <div class="d-flex justify-content-between">
-        <div>
-          <button type="button" nbButton (click)="onClose()">ปิด</button>
-        </div>
-        <div>
-          <button type="submit" class="ml-2" nbButton [disabled]="this.carInfoForm.invalid"
-            [status]="'primary'">
-            <nb-icon icon="link-2"></nb-icon>
-          </button>
-        </div>
+        <nb-card-footer>
+          <div class="d-flex justify-content-between">
+            <div>
+              <button type="button" nbButton (click)="onClose()">ปิด</button>
+            </div>
+            <div>
+              <button type="submit" class="ml-2" nbButton [disabled]="this.carInfoForm.invalid"
+                [status]="'primary'">
+                <nb-icon icon="link-2"></nb-icon>
+              </button>
+            </div>
 
-      </div>
+          </div>
 
-    </nb-card-footer>
-  </nb-card>
+        </nb-card-footer>
+      </nb-card>
 
-
+    </nb-card-front>
+    <nb-card-back>
+      <nb-card>
+        <nb-card-body>
+          A nebula is an interstellar cloud of dust, hydrogen,
+          helium and other ionized gases.
+          Originally, nebula was a name for
+          any diffuse astronomical object,
+          including galaxies beyond the Milky Way.
+        </nb-card-body>
+      </nb-card>
+    </nb-card-back>
+  </nb-reveal-card>
 </form>

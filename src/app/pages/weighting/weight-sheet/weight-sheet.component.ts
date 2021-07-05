@@ -343,7 +343,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 					title: 'ข้อมูลผู้ติดต่อ',
 					contact: this.weightSheet.contact
 				},
-				closeOnBackdropClick: false
+				closeOnBackdropClick: false,
+				hasScroll: true
 			})
 			.onClose.subscribe((res: IContact) => {
 				if (res !== null) {

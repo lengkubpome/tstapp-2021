@@ -49,5 +49,11 @@ export class ContactInfoComponent implements OnInit {
 		this.ref.close(null);
 	}
 
+	bool = false;
+
+	test() {
+		this.bool = !this.bool;
+	}
+
 	onSubmitContactInfo() {}
 }

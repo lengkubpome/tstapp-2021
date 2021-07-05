@@ -47,13 +47,37 @@ $screen-xl-min: 1200px;
 	// display: block;
 	// overflow: hidden;
 
+	// #carInfoForm {
+	// 	background-color: blue;
+	// 	height: 800px;
+	// 	overflow-y: scroll;
+
+	// 	@media (min-width: #{$screen-sm-min}) {
+	// 		overflow-y: none;
+	// 		background-color: red;
+	// 		height: 100%;
+	// 	}
+	// }
+
 	nb-card {
 		position: relative;
-		max-width: 600px;
+		max-width: 400px;
 
 		@media (min-width: #{$screen-sm-min}) {
 			width: 400px;
+			// height: 860px;
+			// background-color: red;
 		}
+
+		// nb-card-body {
+		// 	div {
+		// 		hr {
+		// 			position: absolute;
+		// 			left: 0;
+		// 			width: 398px;
+		// 		}
+		// 	}
+		// }
 	}
 
 	.input-car-id {
