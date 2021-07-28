@@ -53,7 +53,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	weightingForm: FormGroup;
 
 	clock = new Date();
-	weightSheet: IWeighting = { status: null };
+	weightSheet: IWeighting = { status: 'success' };
 	stateSheet = { newCar: false };
 
 	weightTypes = [
