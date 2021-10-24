@@ -43,7 +43,7 @@ export interface IContact {
 
 	bankAccounts?: IBankAccount[];
 
-	subContactId?: string; // เชื่อมกับร้านค้า
+	linkContactId?: string; // เชื่อมกับร้านค้า
 	memberClassId?: string;
 
 	locationGoogle?: { lat: number; lng: number };
