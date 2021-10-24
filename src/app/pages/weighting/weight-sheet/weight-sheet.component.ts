@@ -136,7 +136,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				Validators.compose([ Validators.pattern('(^[0-9]*[.]?[0-9]*[%]?)') ])
 			],
 			notes: [],
-			liveWeight: [ 7844 ]
+			liveWeight: [ 23044 ]
 		});
 
 		// Set the private defaults
