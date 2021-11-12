@@ -1,3 +1,5 @@
+import { WeightingState } from './../state/weighting.state';
+import { IWeightingType } from './../../../shared/models/weighting.model';
 import { ContactInfoComponent } from '../contact-info/contact-info.component';
 import { CarInfoComponent } from '../car-info/car-info.component';
 import { WeightingService } from './../weighting.service';
@@ -23,7 +25,8 @@ import {
 	HostListener,
 	ElementRef,
 	ViewChild,
-	ViewEncapsulation
+	ViewEncapsulation,
+  Input
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -31,12 +34,8 @@ import { CarAction } from 'src/app/shared/state/car/car.action';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 import { NbDialogService } from '@nebular/theme';
 import { inList } from 'src/app/shared/validators/in-list.validator';
+import { WeightingStateModel } from '../state/weighting.state';
 
-export interface State {
-	flag: string;
-	name: string;
-	population: string;
-}
 
 @Component({
 	selector: 'app-weight-sheet',
@@ -64,6 +63,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	// Make up
 	menuItems = [ { title: 'Profile' }, { title: 'Logout' } ];
+
+  weightingTypes: IWeightingType[];
+  filteredWeightingTypes: Observable<IWeightingType[]>;
 
 	cars: ICar[];
 	// @Select(CarState) cars$: Observable<CarStateModel>;
@@ -101,20 +103,25 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private dialogService: NbDialogService,
 		private weightingService: WeightingService
 	) {
-		this.products = this.store.selectSnapshot<ProductStateModel>(
+    this.weightingTypes = this.store.selectSnapshot<WeightingStateModel>(
+      WeightingState
+    ).weightingTypes;
+
+		  this.products = this.store.selectSnapshot<ProductStateModel>(
 			ProductState
 		).products;
 
-		this.contacts = this.store.selectSnapshot<ContactStateModel>(
+		  this.contacts = this.store.selectSnapshot<ContactStateModel>(
 			ContactState
 		).contacts;
 
-		this.cars = this.store.selectSnapshot<CarStateModel>(CarState).cars;
+		  this.cars = this.store.selectSnapshot<CarStateModel>(CarState).cars;
 
-		this.setWeightSheet();
+		  this.setWeightSheet();
 
-		this.weightingForm = this.formBuilder.group({
-			type: [ 'buy' ],
+
+		  this.weightingForm = this.formBuilder.group({
+			type: [ 'buy' , Validators.compose([ inList(this.weightingTypes, [ 'th' ]) ])],
 			car: [ '', Validators.compose([ Validators.required ]) ],
 			contact: [
 				'',
@@ -140,7 +147,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		});
 
 		// Set the private defaults
-		this.unsubscribeAll = new Subject();
+		  this.unsubscribeAll = new Subject();
 	}
 
 	ngOnInit(): void {
@@ -158,6 +165,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		// this.contacts$
 		// 	.pipe(takeUntil(this.unsubscribeAll))
 		// 	.subscribe((data) => (this.contacts = data.contacts));
+
 
 		this.filterControls();
 	}
@@ -188,6 +196,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				plateLCP: 'ขอนแก่น'
 			})
 		);
+	}
+
+
+	onSelectWeightingType(selectType: IWeightingType): void {
+		const type = this.weightingTypes.find((t) => t.id === selectType.id);
+		this.weightingForm.get('type').setValue(type.id);
+		this.weightSheet.type = type.id;
+		this.stateSheet.newCar = false;
 	}
 
 	onSelectCar(selectCar: ICar): void {
@@ -359,6 +375,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// -----------------------------------------------------------------------------------------------------
 
 	private filterControls(): void {
+
 		this.filteredCars = this.weightingForm
 			.get('car')
 			.valueChanges.pipe(
@@ -366,8 +383,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(inpurValue) =>
-						inpurValue ? this._filterCar(inpurValue) : this.cars.slice()
+					(inputValue) =>
+						inputValue ? this._filterCar(inputValue) : this.cars.slice()
 				)
 			);
 
@@ -378,8 +395,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(inpurValue) =>
-						inpurValue ? this._filterContact(inpurValue) : this.contacts.slice()
+					(inputValue) =>
+						inputValue ? this._filterContact(inputValue) : this.contacts.slice()
 				)
 			);
 
@@ -390,12 +407,31 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				startWith(''),
 				debounceTime(300),
 				map(
-					(inpurValue: string) =>
-						inpurValue
-							? this._filterProducts(inpurValue)
+					(inputValue: string) =>
+						inputValue
+							? this._filterProducts(inputValue)
 							: this.products.slice()
 				)
 			);
+
+  this.filteredWeightingTypes = this.weightingForm
+      .get('type')
+      .valueChanges.pipe(
+        takeUntil(this.unsubscribeAll),
+				startWith(''),
+				debounceTime(300),
+				map(
+					(inputValue) =>
+						inputValue ? this._filterWeightingType(inputValue) : this.weightingTypes.slice()
+				)
+      );
+	}
+
+  private _filterWeightingType(value: string): IWeightingType[] {
+		const filterValue = this._normalizeValue(value);
+		return this.weightingTypes.filter((type) =>
+			this._normalizeValue(type.th).includes(filterValue)
+		);
 	}
 
 	private _filterCar(value: string): ICar[] {

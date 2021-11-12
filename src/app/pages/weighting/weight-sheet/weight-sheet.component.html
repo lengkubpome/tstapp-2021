@@ -33,7 +33,7 @@
             </div>
           </div>
 
-          <div class="form-group row align-items-baseline">
+          <!-- <div class="form-group row align-items-baseline">
             <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
             <div class="col-sm-9">
               <nb-radio-group class="d-flex" id="type" name="type" formControlName="type">
@@ -42,7 +42,52 @@
                 </nb-radio>
               </nb-radio-group>
             </div>
+          </div> -->
+
+          <div class="form-group row align-items-baseline ">
+            <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
+            <div class="col-sm-9 d-inline-flex justify-content-start">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput id="type" name="type" placeholder="ทะเบียนรถ"
+                  [status]="(weightingForm.get('type').errors && this.weightingForm.get('type').touched) ? 'danger' : 'basic'"
+                  formControlName="type" [matAutocomplete]="type">
+
+                <div nbSuffix class="status-input">
+                  <!-- <button nbSuffix nbButton ghost type="button"
+                    *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                    nbTooltip="แสดงข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
+                    nbTooltipStatus="primary" (click)="openCarInfo()">
+                    <nb-icon [icon]="'alert-circle'" status="primary"></nb-icon>
+                  </button>
+
+                  <button nbSuffix nbButton ghost type="button"
+                    *ngIf="stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
+                    nbTooltip="เพิ่มเติมข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
+                    nbTooltipStatus="warning" (click)="openCarInfo(true)"
+                    [icon]="'question-mark-circle'">
+                    <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
+                  </button> -->
+
+                  <!-- <nb-icon
+                    *ngIf="this.weightingForm.get('car').errors  && this.weightingForm.get('car').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ทะเบียนรถ" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon> -->
+                </div>
+
+              </nb-form-field>
+
+              <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
+                (optionSelected)="onSelectWeightingType($event.option.value)">
+                <mat-option *ngFor="let type of filteredWeightingTypes | async" [value]="type">
+                  {{type.th }}
+                </mat-option>
+              </mat-autocomplete>
+
+            </div>
           </div>
+
           <div class="form-group row align-items-baseline ">
             <label for="car" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
@@ -242,7 +287,10 @@
         <div class="contain-info-right col-sm-6 ">
 
           <div class="form-group row align-items-center ">
-            <label for="" class="label col-sm-4 col-form-label ">น้ำหนักเครื่องชั่ง</label>
+            <label for="" class="label col-sm-4 col-form-label ">
+              น้ำหนักเครื่องชั่ง
+              <!-- <nb-icon nbPrefix icon="edit" pack="eva" status="info" class="ml-2"></nb-icon> -->
+            </label>
             <div class="col-sm-8">
               <nb-form-field>
                 <!-- <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon> -->

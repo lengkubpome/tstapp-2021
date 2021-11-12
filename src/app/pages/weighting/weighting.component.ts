@@ -1,3 +1,6 @@
+import { WeightingState, WeightingStateModel } from './state/weighting.state';
+import { IWeightingType } from './../../shared/models/weighting.model';
+import { Store } from '@ngxs/store';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,6 +9,11 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: [ './weighting.component.scss' ]
 })
 export class WeightingComponent implements OnInit {
-	constructor() {}
+
+  weightingTypes: IWeightingType[];
+
+	constructor(private store: Store) {
+    this.weightingTypes = this.store.selectSnapshot<WeightingStateModel>(WeightingState).weightingTypes;
+  }
 	ngOnInit(): void {}
 }

@@ -31,6 +31,10 @@
 		flex-direction: row;
 	}
 
+  .contain-info-left{
+    border-right: 2px dashed nb-theme(border-basic-color-3);
+  }
+
 	.status-input {
 		display: inline-flex;
 		padding: 0.5625rem;

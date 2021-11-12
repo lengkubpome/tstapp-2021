@@ -1,3 +1,4 @@
+import { WeightingState } from './state/weighting.state';
 import { WeightingService } from './weighting.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -76,7 +77,7 @@ const routes: Routes = [
 		NbTagModule,
 		NbCheckboxModule,
 		NbDialogModule.forChild(),
-		NgxsModule.forFeature([]),
+		NgxsModule.forFeature([WeightingState]),
 		// Material
 		MatIconModule,
 		MatAutocompleteModule,

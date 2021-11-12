@@ -39,25 +39,33 @@ export interface IPaymentWeighting {
 	note: string;
 }
 
+export interface IWeightingType {
+	id: string;
+	th: string;
+	en: string;
+}
+
+
 const WeightingDefault: IWeighting = {
 	status: null
 };
 
-export class Weighting {
-	private weighting: IWeighting;
 
-	constructor() {
-		this.weighting.status = null;
-	}
+// export class Weighting {
+// 	private weighting: IWeighting;
 
-	public getWeighting(): IWeighting {
-		return this.weighting;
-	}
+// 	constructor() {
+// 		this.weighting.status = null;
+// 	}
 
-	public getStatus(): string {
-		return this.weighting.status;
-	}
+// 	public getWeighting(): IWeighting {
+// 		return this.weighting;
+// 	}
 
-	public checkIn(): void {}
-	public checkOut(): void {}
-}
+// 	public getStatus(): string {
+// 		return this.weighting.status;
+// 	}
+
+// 	public checkIn(): void {}
+// 	public checkOut(): void {}
+// }

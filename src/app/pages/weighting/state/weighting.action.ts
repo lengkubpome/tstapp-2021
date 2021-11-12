@@ -22,9 +22,7 @@ export namespace WeightingAction {
 		constructor(public payload: IWeighting, public id: string) {}
 	}
 
-	export class Void {
-		static readonly type = '[Weighting] Void';
-
-		constructor(public id: string) {}
+	export class FetchWeightingType {
+		static readonly type = '[Weighting] Weighting Types';
 	}
 }

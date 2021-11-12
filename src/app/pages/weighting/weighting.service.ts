@@ -1,5 +1,5 @@
+import { IWeightingType } from './../../shared/models/weighting.model';
 import { Observable, of } from 'rxjs';
-import { WeightingModule } from './weighting.module';
 import { Injectable } from '@angular/core';
 import { IWeighting } from 'src/app/shared/models/weighting.model';
 
@@ -8,6 +8,11 @@ import { IWeighting } from 'src/app/shared/models/weighting.model';
 })
 export class WeightingService {
 	private data: IWeighting[] = [];
+  private weightingTypes: IWeightingType[] = [
+    { id: 'buy', th: 'ซื้อของเข้า', en: 'Buy' },
+		{ id: 'sell', th: 'ขายของออก', en: 'Sell' }
+	];
+
 	constructor() {}
 
 	fetchAll(): Observable<IWeighting[]> {
@@ -30,5 +35,10 @@ export class WeightingService {
 			(order < 100 ? '0' : '') + (order < 10 ? '0' : '') + order.toString();
 		// console.log(timestamp);
 		return timestamp;
+	}
+
+  // Weighting Type
+  fetchWeightingType(): Observable<IWeightingType[]> {
+		return of(this.weightingTypes);
 	}
 }
