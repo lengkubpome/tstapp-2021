@@ -11,7 +11,7 @@
     "p:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.html,.scss}\"",
     "p:vertify": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.html,.scss}\""
   },
-  "husky":{
+  "husky": {
     "hooks": {
       "pre-commit": "npm run p:fix"
     }
