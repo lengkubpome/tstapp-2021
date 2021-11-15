@@ -33,17 +33,6 @@
             </div>
           </div>
 
-          <!-- <div class="form-group row align-items-baseline">
-            <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
-            <div class="col-sm-9">
-              <nb-radio-group class="d-flex" id="type" name="type" formControlName="type">
-                <nb-radio *ngFor="let type of weightTypes" [value]="type.value">
-                  {{ type.label }}
-                </nb-radio>
-              </nb-radio-group>
-            </div>
-          </div> -->
-
           <div class="form-group row align-items-baseline ">
             <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
@@ -53,27 +42,12 @@
                   formControlName="type" [matAutocomplete]="type">
 
                 <div nbSuffix class="status-input">
-                  <!-- <button nbSuffix nbButton ghost type="button"
-                    *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
-                    nbTooltip="แสดงข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
-                    nbTooltipStatus="primary" (click)="openCarInfo()">
-                    <nb-icon [icon]="'alert-circle'" status="primary"></nb-icon>
-                  </button>
-
-                  <button nbSuffix nbButton ghost type="button"
-                    *ngIf="stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
-                    nbTooltip="เพิ่มเติมข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
-                    nbTooltipStatus="warning" (click)="openCarInfo(true)"
-                    [icon]="'question-mark-circle'">
-                    <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
-                  </button> -->
-
-                  <!-- <nb-icon
-                    *ngIf="this.weightingForm.get('car').errors  && this.weightingForm.get('car').touched"
+                  <nb-icon
+                    *ngIf="this.weightingForm.get('type').errors  && this.weightingForm.get('type').touched"
                     [icon]="'alert-triangle'" status="danger" pack="eva"
-                    nbTooltip="กรุณาใส่ทะเบียนรถ" nbTooltipPlacement="right"
+                    nbTooltip="กรุณาใส่ประเภทการชั่ง" nbTooltipPlacement="right"
                     nbTooltipStatus="danger">
-                  </nb-icon> -->
+                  </nb-icon>
                 </div>
 
               </nb-form-field>

@@ -25,6 +25,7 @@ import {
 	HostListener,
 	ElementRef,
 	ViewChild,
+	ViewEncapsulation,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Select, Store } from "@ngxs/store";
@@ -38,7 +39,7 @@ import { WeightingStateModel } from "../state/weighting.state";
 	selector: "app-weight-sheet",
 	templateUrl: "./weight-sheet.component.html",
 	styleUrls: ["./weight-sheet.component.scss"],
-	// encapsulation: ViewEncapsulation.None
+	// encapsulation: ViewEncapsulation.None,
 })
 export class WeightSheetComponent implements OnInit, OnDestroy {
 	@ViewChild("wForm") wForm: ElementRef;
@@ -51,12 +52,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	clock = new Date();
 	weightSheet: IWeighting = { status: "success" };
 	stateSheet = { newCar: false };
-
-	weightTypes = [
-		{ value: "buy", label: "ซื้อของ" },
-		{ value: "sell", label: "ขายของ" },
-		{ value: "etc", label: "อื่นๆ" },
-	];
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
@@ -118,7 +113,10 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.weightingForm = this.formBuilder.group({
 			type: [
 				"ซื้อของเข้า",
-				Validators.compose([inList(this.weightingTypes, ["th"])]),
+				Validators.compose([
+					Validators.required,
+					inList(this.weightingTypes, ["th"]),
+				]),
 			],
 			car: ["", Validators.compose([Validators.required])],
 			contact: [

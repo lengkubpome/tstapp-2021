@@ -59,15 +59,18 @@ $screen-xl-min: 1200px;
 	// 	}
 	// }
 
-	nb-card {
-		position: relative;
-		max-width: 400px;
 
-		@media (min-width: #{$screen-sm-min}) {
-			width: 400px;
-			// height: 860px;
-			// background-color: red;
-		}
+
+	nb-card {
+		// position: relative;
+		// max-width: 400px;
+    height: 810px;
+
+		// @media (min-width: #{$screen-sm-min}) {
+		// 	width: 400px;
+		// 	// height: 860px;
+		// 	// background-color: red;
+		// }
 
 		// nb-card-body {
 		// 	div {
@@ -79,6 +82,8 @@ $screen-xl-min: 1200px;
 		// 	}
 		// }
 	}
+
+
 
 	.input-car-id {
 		width: 120px;
@@ -98,7 +103,9 @@ $screen-xl-min: 1200px;
 		margin-right: 1.5rem;
 	}
 
-	nb-card-body {
+	nb-card-body.header {
+    max-height: 280px;
+
 		* > .display-name {
 			text-align: center;
 		}
@@ -129,6 +136,7 @@ $screen-xl-min: 1200px;
 	}
 
 	nb-card-body.detail {
+    max-height: 500px;
 		border-top: 1px solid #edf1f7;
 		border-bottom-left-radius: 0.25rem;
 		border-bottom-right-radius: 0.25rem;

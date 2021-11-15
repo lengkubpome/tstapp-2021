@@ -1,17 +1,18 @@
-import { Subject } from 'rxjs';
-import { Store } from '@ngxs/store';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NbDialogRef } from '@nebular/theme';
-import { IContact } from 'src/app/shared/models/contact.model';
-import { Component, OnInit, Input } from '@angular/core';
+import { Subject } from "rxjs";
+import { Store } from "@ngxs/store";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NbDialogRef } from "@nebular/theme";
+import { IContact } from "src/app/shared/models/contact.model";
+import { Component, OnInit, Input } from "@angular/core";
 
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
+import { ViewEncapsulation } from "@angular/compiler";
 
 @Component({
-	selector: 'app-contact-info',
-	templateUrl: './contact-info.component.html',
-	styleUrls: [ './contact-info.component.scss' ]
+	selector: "app-contact-info",
+	templateUrl: "./contact-info.component.html",
+	styleUrls: ["./contact-info.component.scss"],
 })
 export class ContactInfoComponent implements OnInit {
 	@Input() title: string;
@@ -29,8 +30,8 @@ export class ContactInfoComponent implements OnInit {
 		private domSanitizer: DomSanitizer
 	) {
 		this.carInfoForm = this.fb.group({
-			id: [ '' ],
-			name: [ '' ]
+			id: [""],
+			name: [""],
 		});
 
 		this.unsubscribeAll = new Subject();
@@ -38,7 +39,7 @@ export class ContactInfoComponent implements OnInit {
 		this.matIconRegistry.addSvgIcon(
 			`icon_line`,
 			this.domSanitizer.bypassSecurityTrustResourceUrl(
-				'../../../../assets/images/line.svg'
+				"../../../../assets/images/line.svg"
 			)
 		);
 	}
