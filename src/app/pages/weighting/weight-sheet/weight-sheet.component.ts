@@ -26,9 +26,10 @@ import {
 	ElementRef,
 	ViewChild,
 	ViewEncapsulation,
+	AfterContentInit,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Select, Store } from "@ngxs/store";
+import { Select, Selector, Store } from "@ngxs/store";
 import { CarAction } from "src/app/shared/state/car/car.action";
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import { NbDialogService } from "@nebular/theme";
@@ -41,12 +42,15 @@ import { WeightingStateModel } from "../state/weighting.state";
 	styleUrls: ["./weight-sheet.component.scss"],
 	// encapsulation: ViewEncapsulation.None,
 })
-export class WeightSheetComponent implements OnInit, OnDestroy {
+export class WeightSheetComponent
+	implements OnInit, OnDestroy, AfterContentInit
+{
 	@ViewChild("wForm") wForm: ElementRef;
 
 	// Private
 	private unsubscribeAll: Subject<any>;
 
+	// form$: Observable<FormGroup> = this.weightingService.getNewWeightSheetForm();
 	weightingForm: FormGroup;
 
 	clock = new Date();
@@ -55,6 +59,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
+
+	@Select(WeightingState) weightingState$: Observable<WeightingStateModel>;
 
 	weightingTypes: IWeightingType[];
 	filteredWeightingTypes: Observable<IWeightingType[]>;
@@ -68,7 +74,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	filteredContacts: Observable<IContact[]>;
 
 	products: IProduct[];
-	// @Select(ProductState) products$: Observable<ProductStateModel>;
+	@Select(ProductState) products$: Observable<ProductStateModel>;
 	filteredProducts: Observable<IProduct[]>;
 
 	@HostListener("keyup", ["$event"])
@@ -95,10 +101,26 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private dialogService: NbDialogService,
 		private weightingService: WeightingService
 	) {
-		this.weightingTypes =
-			this.store.selectSnapshot<WeightingStateModel>(
-				WeightingState
-			).weightingTypes;
+		// Set the private defaults
+		this.unsubscribeAll = new Subject();
+
+		this.weightingService
+			.getNewWeightSheetForm()
+			.subscribe((form) => (this.weightingForm = form));
+	}
+
+	ngOnInit(): void {
+		// this.weightingTypes =
+		// 	this.store.selectSnapshot<WeightingStateModel>(
+		// 		WeightingState
+		// 	).weightingTypes;
+
+		this.store
+			.select((state) => state.weighting)
+			.subscribe(
+				(data: WeightingStateModel) =>
+					(this.weightingTypes = data.weightingTypes)
+			);
 
 		this.products =
 			this.store.selectSnapshot<ProductStateModel>(ProductState).products;
@@ -110,9 +132,31 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 		this.setWeightSheet();
 
+		this.setupFormbuilder();
+
+		// this.cars$
+		// 	.pipe(takeUntil(this.unsubscribeAll))
+		// 	.subscribe((data) => (this.cars = data.cars));
+
+		// this.contacts$
+		// 	.pipe(takeUntil(this.unsubscribeAll))
+		// 	.subscribe((data) => (this.contacts = data.contacts));
+
+		this.filterControls();
+	}
+	ngAfterContentInit(): void {}
+
+	ngOnDestroy(): void {
+		// Unsubscribe from all subscriptions
+		this.unsubscribeAll.next();
+		this.unsubscribeAll.complete();
+	}
+
+	private setupFormbuilder(): void {
+		// create form
 		this.weightingForm = this.formBuilder.group({
 			type: [
-				"ซื้อของเข้า",
+				"ซื้อ",
 				Validators.compose([
 					Validators.required,
 					inList(this.weightingTypes, ["th"]),
@@ -142,11 +186,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			liveWeight: [23044],
 		});
 
-		// Set the private defaults
-		this.unsubscribeAll = new Subject();
-	}
-
-	ngOnInit(): void {
 		// set clock
 		timer(0, 1000)
 			.pipe(
@@ -156,22 +195,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			.subscribe((time) => {
 				this.clock = time;
 			});
-
-		// this.cars$
-		// 	.pipe(takeUntil(this.unsubscribeAll))
-		// 	.subscribe((data) => (this.cars = data.cars));
-
-		// this.contacts$
-		// 	.pipe(takeUntil(this.unsubscribeAll))
-		// 	.subscribe((data) => (this.contacts = data.contacts));
-
-		this.filterControls();
-	}
-
-	ngOnDestroy(): void {
-		// Unsubscribe from all subscriptions
-		this.unsubscribeAll.next();
-		this.unsubscribeAll.complete();
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -235,6 +258,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSelectProduct(selectProduct: IProduct): void {
+		console.log(selectProduct);
+
 		const product = this.products.find((p) => p.id === selectProduct.id);
 		this.weightingForm.get("product").setValue(product.name);
 		this.weightingForm.get("price").setValue(product.currentPrice);

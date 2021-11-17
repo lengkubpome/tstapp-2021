@@ -1,7 +1,13 @@
 <form [formGroup]="weightingForm" id="weightingForm" #wForm (ngSubmit)="onSubmitWeightSheet()">
+  <!-- <form *ngIf="form$ | async as form" [formGroup]="form" id="weightingForm" #wForm
+  (ngSubmit)="onSubmitWeightSheet()"> -->
   <!-- <ul>
     <li *ngFor="let item of (products$ | async).products">{{item.id}}</li>
   </ul> -->
+  <!-- <ul>
+    <li *ngFor="let type of (weightingTypes )">{{type.th}}</li>
+  </ul> -->
+
   <nb-card>
     <nb-card-header>
       <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -41,7 +47,7 @@
             <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
-                <input type="text" nbInput id="type" name="type" placeholder="ทะเบียนรถ"
+                <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
                   [status]="(weightingForm.get('type').errors && this.weightingForm.get('type').touched) ? 'danger' : 'basic'"
                   formControlName="type" [matAutocomplete]="type">
 
@@ -56,10 +62,18 @@
 
               </nb-form-field>
 
-              <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
+              <!-- <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
                 (optionSelected)="onSelectWeightingType($event.option.value)">
                 <mat-option *ngFor="let type of filteredWeightingTypes | async ; index as i"
                   [value]="type.th">
+                  {{type.id}} - {{type.th }}
+                </mat-option>
+              </mat-autocomplete> -->
+
+              <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
+                (optionSelected)="onSelectWeightingType($event.option.value)">
+                <mat-option *ngFor="let type of ( weightingState$ | async).weightingTypes"
+                  [value]="type">
                   {{type.id}} - {{type.th }}
                 </mat-option>
               </mat-autocomplete>

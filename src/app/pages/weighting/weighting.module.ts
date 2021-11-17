@@ -1,15 +1,15 @@
-import { WeightingState } from './state/weighting.state';
-import { WeightingService } from './weighting.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSortModule } from '@angular/material/sort';
-import { MatSelectModule } from '@angular/material/select';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { WeightingComponent } from './weighting.component';
+import { WeightingState } from "./state/weighting.state";
+import { WeightingService } from "./weighting.service";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSortModule } from "@angular/material/sort";
+import { MatSelectModule } from "@angular/material/select";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatIconModule } from "@angular/material/icon";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule, Routes } from "@angular/router";
+import { WeightingComponent } from "./weighting.component";
 import {
 	NbCardModule,
 	NbButtonModule,
@@ -27,22 +27,22 @@ import {
 	NbTooltipModule,
 	NbDialogModule,
 	NbTagModule,
-	NbCheckboxModule
-} from '@nebular/theme';
-import { ThemeModule } from './../../@theme/theme.module';
-import { NgModule } from '@angular/core';
-import { AvatarModule } from 'ngx-avatar';
-import { WeightSheetComponent } from './weight-sheet/weight-sheet.component';
-import { CarInfoComponent } from './car-info/car-info.component';
-import { WeightStorageComponent } from './weight-storage/weight-storage.component';
-import { NgxsModule } from '@ngxs/store';
-import { ContactInfoComponent } from './contact-info/contact-info.component';
+	NbCheckboxModule,
+} from "@nebular/theme";
+import { ThemeModule } from "./../../@theme/theme.module";
+import { NgModule } from "@angular/core";
+import { AvatarModule } from "ngx-avatar";
+import { WeightSheetComponent } from "./weight-sheet/weight-sheet.component";
+import { CarInfoComponent } from "./car-info/car-info.component";
+import { WeightStorageComponent } from "./weight-storage/weight-storage.component";
+import { NgxsModule } from "@ngxs/store";
+import { ContactInfoComponent } from "./contact-info/contact-info.component";
 
 const routes: Routes = [
 	{
-		path: '',
-		component: WeightingComponent
-	}
+		path: "",
+		component: WeightingComponent,
+	},
 ];
 
 @NgModule({
@@ -51,7 +51,7 @@ const routes: Routes = [
 		WeightSheetComponent,
 		WeightStorageComponent,
 		CarInfoComponent,
-		ContactInfoComponent
+		ContactInfoComponent,
 	],
 	imports: [
 		FormsModule,
@@ -88,9 +88,9 @@ const routes: Routes = [
 
 		NgbModule,
 		// Avatar
-		AvatarModule
+		AvatarModule,
 	],
 	exports: [],
-	providers: [ WeightingService ]
+	providers: [WeightingService],
 })
 export class WeightingModule {}

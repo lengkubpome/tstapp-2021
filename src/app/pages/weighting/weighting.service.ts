@@ -1,7 +1,11 @@
+import { inList } from "src/app/shared/validators/in-list.validator";
+import { map } from "rxjs/operators";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IWeightingType } from "src/app/shared/models/weighting.model";
 import { Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { IWeighting } from "src/app/shared/models/weighting.model";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 @Injectable({
 	providedIn: null,
@@ -13,17 +17,20 @@ export class WeightingService {
 		{ id: "sell", th: "ขายของออก", en: "Sell" },
 	];
 
-	constructor() {}
+	constructor(
+		private readonly fb: FormBuilder,
+		private afs: AngularFirestore
+	) {}
 
 	// -----------------------------------------------------------------------------------------------------
 	// #Weighting
 	// -----------------------------------------------------------------------------------------------------
 
-	fetchAll(): Observable<IWeighting[]> {
+	getAllWeightSheet(): Observable<IWeighting[]> {
 		return of(this.data);
 	}
 
-	fetchByDate(date: Date): Observable<IWeighting[]> {
+	getWeightSheetByDate(date: Date): Observable<IWeighting[]> {
 		return of(this.data.filter((d) => d.wIn.dateTime));
 	}
 
@@ -48,7 +55,45 @@ export class WeightingService {
 	// -----------------------------------------------------------------------------------------------------
 	// #Weighting Type
 	// -----------------------------------------------------------------------------------------------------
+	// fetchWeightingType(): Observable<IWeightingType[]> {
+	// 	return of(this.weightingTypes);
+	// }
+
 	fetchWeightingType(): Observable<IWeightingType[]> {
-		return of(this.weightingTypes);
+		const typeCollection =
+			this.afs.collection<IWeightingType>("weightingTypes");
+		return typeCollection.valueChanges();
+	}
+
+	getNewWeightSheetForm(): Observable<FormGroup> {
+		return this.fetchWeightingType().pipe(
+			map((apiResponse: any) => {
+				console.log("apiResponse");
+				console.log(apiResponse);
+
+				return this.fb.group({
+					type: [
+						"ซื้อ",
+						Validators.compose([
+							Validators.required,
+							inList(apiResponse, ["th"]),
+						]),
+					],
+					car: ["", Validators.compose([Validators.required])],
+					contact: [""],
+					product: ["", Validators.compose([Validators.required])],
+					price: [
+						"",
+						Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]{0,2})")]),
+					],
+					cutWeight: [
+						"",
+						Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]*[%]?)")]),
+					],
+					notes: [],
+					liveWeight: [23044],
+				});
+			})
+		);
 	}
 }
