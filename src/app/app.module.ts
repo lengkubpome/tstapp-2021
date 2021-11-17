@@ -23,6 +23,10 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpClientModule } from '@angular/common/http';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 @NgModule({
 	declarations: [ AppComponent ],
@@ -48,7 +52,10 @@ import { HttpClientModule } from '@angular/common/http';
 			developmentMode: !environment.production
 		}),
 		NgxsLoggerPluginModule.forRoot(),
-		NgxsReduxDevtoolsPluginModule.forRoot()
+		NgxsReduxDevtoolsPluginModule.forRoot(),
+  provideFirebaseApp(() => initializeApp(environment.firebase)),
+  provideAuth(() => getAuth()),
+  provideFirestore(() => getFirestore())
 		// Another
 	],
 	providers: [],
