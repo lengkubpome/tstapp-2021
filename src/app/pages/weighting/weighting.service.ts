@@ -55,45 +55,42 @@ export class WeightingService {
 	// -----------------------------------------------------------------------------------------------------
 	// #Weighting Type
 	// -----------------------------------------------------------------------------------------------------
-	// fetchWeightingType(): Observable<IWeightingType[]> {
-	// 	return of(this.weightingTypes);
-	// }
 
-	fetchWeightingType(): Observable<IWeightingType[]> {
+	getWeightingTypes(): Observable<IWeightingType[]> {
 		const typeCollection =
 			this.afs.collection<IWeightingType>("weightingTypes");
 		return typeCollection.valueChanges();
 	}
 
-	getNewWeightSheetForm(): Observable<FormGroup> {
-		return this.fetchWeightingType().pipe(
-			map((apiResponse: any) => {
-				console.log("apiResponse");
-				console.log(apiResponse);
+	// getNewWeightSheetForm(): Observable<FormGroup> {
+	// 	return this.fetchWeightingType().pipe(
+	// 		map((apiResponse: any) => {
+	// 			console.log("apiResponse");
+	// 			console.log(apiResponse);
 
-				return this.fb.group({
-					type: [
-						"ซื้อ",
-						Validators.compose([
-							Validators.required,
-							inList(apiResponse, ["th"]),
-						]),
-					],
-					car: ["", Validators.compose([Validators.required])],
-					contact: [""],
-					product: ["", Validators.compose([Validators.required])],
-					price: [
-						"",
-						Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]{0,2})")]),
-					],
-					cutWeight: [
-						"",
-						Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]*[%]?)")]),
-					],
-					notes: [],
-					liveWeight: [23044],
-				});
-			})
-		);
-	}
+	// 			return this.fb.group({
+	// 				type: [
+	// 					"ซื้อ",
+	// 					Validators.compose([
+	// 						Validators.required,
+	// 						inList(apiResponse, ["th"]),
+	// 					]),
+	// 				],
+	// 				car: ["", Validators.compose([Validators.required])],
+	// 				contact: [""],
+	// 				product: ["", Validators.compose([Validators.required])],
+	// 				price: [
+	// 					"",
+	// 					Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]{0,2})")]),
+	// 				],
+	// 				cutWeight: [
+	// 					"",
+	// 					Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]*[%]?)")]),
+	// 				],
+	// 				notes: [],
+	// 				liveWeight: [23044],
+	// 			});
+	// 		})
+	// 	);
+	// }
 }

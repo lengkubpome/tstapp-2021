@@ -16,7 +16,13 @@ import { IProduct } from "src/app/shared/models/product.model";
 import { CarState, CarStateModel } from "src/app/shared/state/car/car.state";
 import { ICar } from "src/app/shared/models/car.model";
 import { IWeighting } from "src/app/shared/models/weighting.model";
-import { map, startWith, takeUntil, debounceTime } from "rxjs/operators";
+import {
+	map,
+	startWith,
+	takeUntil,
+	debounceTime,
+	mergeMap,
+} from "rxjs/operators";
 import { Observable, Subject, timer } from "rxjs";
 import {
 	Component,
@@ -25,8 +31,6 @@ import {
 	HostListener,
 	ElementRef,
 	ViewChild,
-	ViewEncapsulation,
-	AfterContentInit,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Select, Selector, Store } from "@ngxs/store";
@@ -35,6 +39,7 @@ import { InteractivityChecker } from "@angular/cdk/a11y";
 import { NbDialogService } from "@nebular/theme";
 import { inList } from "src/app/shared/validators/in-list.validator";
 import { WeightingStateModel } from "../state/weighting.state";
+import { WeightingValidator } from "../weighting.validator";
 
 @Component({
 	selector: "app-weight-sheet",
@@ -42,15 +47,12 @@ import { WeightingStateModel } from "../state/weighting.state";
 	styleUrls: ["./weight-sheet.component.scss"],
 	// encapsulation: ViewEncapsulation.None,
 })
-export class WeightSheetComponent
-	implements OnInit, OnDestroy, AfterContentInit
-{
+export class WeightSheetComponent implements OnInit, OnDestroy {
 	@ViewChild("wForm") wForm: ElementRef;
 
 	// Private
-	private unsubscribeAll: Subject<any>;
+	private unsubscribeAll: Subject<any> = new Subject();
 
-	// form$: Observable<FormGroup> = this.weightingService.getNewWeightSheetForm();
 	weightingForm: FormGroup;
 
 	clock = new Date();
@@ -61,10 +63,10 @@ export class WeightSheetComponent
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
 
 	@Select(WeightingState) weightingState$: Observable<WeightingStateModel>;
-
-	weightingTypes: IWeightingType[];
 	filteredWeightingTypes: Observable<IWeightingType[]>;
 
+	@Select(ProductState) products$: Observable<ProductStateModel>;
+	filteredProducts: Observable<IProduct[]>;
 	cars: ICar[];
 	// @Select(CarState) cars$: Observable<CarStateModel>;
 	filteredCars: Observable<ICar[]>;
@@ -72,10 +74,6 @@ export class WeightSheetComponent
 	contacts: IContact[];
 	// @Select(ContactState) contacts$: Observable<ContactStateModel>;
 	filteredContacts: Observable<IContact[]>;
-
-	products: IProduct[];
-	@Select(ProductState) products$: Observable<ProductStateModel>;
-	filteredProducts: Observable<IProduct[]>;
 
 	@HostListener("keyup", ["$event"])
 	keyevent(event): void {
@@ -99,32 +97,11 @@ export class WeightSheetComponent
 		private formBuilder: FormBuilder,
 		private interactivityChecker: InteractivityChecker,
 		private dialogService: NbDialogService,
-		private weightingService: WeightingService
-	) {
-		// Set the private defaults
-		this.unsubscribeAll = new Subject();
-
-		this.weightingService
-			.getNewWeightSheetForm()
-			.subscribe((form) => (this.weightingForm = form));
-	}
+		private weightingService: WeightingService,
+		private weightingValidators: WeightingValidator
+	) {}
 
 	ngOnInit(): void {
-		// this.weightingTypes =
-		// 	this.store.selectSnapshot<WeightingStateModel>(
-		// 		WeightingState
-		// 	).weightingTypes;
-
-		this.store
-			.select((state) => state.weighting)
-			.subscribe(
-				(data: WeightingStateModel) =>
-					(this.weightingTypes = data.weightingTypes)
-			);
-
-		this.products =
-			this.store.selectSnapshot<ProductStateModel>(ProductState).products;
-
 		this.contacts =
 			this.store.selectSnapshot<ContactStateModel>(ContactState).contacts;
 
@@ -134,17 +111,8 @@ export class WeightSheetComponent
 
 		this.setupFormbuilder();
 
-		// this.cars$
-		// 	.pipe(takeUntil(this.unsubscribeAll))
-		// 	.subscribe((data) => (this.cars = data.cars));
-
-		// this.contacts$
-		// 	.pipe(takeUntil(this.unsubscribeAll))
-		// 	.subscribe((data) => (this.contacts = data.contacts));
-
 		this.filterControls();
 	}
-	ngAfterContentInit(): void {}
 
 	ngOnDestroy(): void {
 		// Unsubscribe from all subscriptions
@@ -156,30 +124,34 @@ export class WeightSheetComponent
 		// create form
 		this.weightingForm = this.formBuilder.group({
 			type: [
-				"ซื้อ",
-				Validators.compose([
-					Validators.required,
-					inList(this.weightingTypes, ["th"]),
-				]),
+				null,
+				{
+					validators: Validators.compose([Validators.required]),
+					asyncValidators: [
+						this.weightingValidators.weightingTypeAsyncValidator("th"),
+					],
+				},
 			],
-			car: ["", Validators.compose([Validators.required])],
+			car: [null, Validators.compose([Validators.required])],
 			contact: [
-				"",
+				null,
 				Validators.compose([inList(this.contacts, ["displayName"])]),
 			],
 			product: [
-				"",
-				Validators.compose([
-					Validators.required,
-					inList(this.products, ["name"]),
-				]),
+				null,
+				{
+					validators: Validators.compose([Validators.required]),
+					asyncValidators: [
+						this.weightingValidators.productAsyncValidator("name"),
+					],
+				},
 			],
 			price: [
-				"",
+				null,
 				Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]{0,2})")]),
 			],
 			cutWeight: [
-				"",
+				null,
 				Validators.compose([Validators.pattern("(^[0-9]*[.]?[0-9]*[%]?)")]),
 			],
 			notes: [],
@@ -219,10 +191,10 @@ export class WeightSheetComponent
 		);
 	}
 
-	onSelectWeightingType(selectType: string): void {
-		const type = this.weightingTypes.find((t) => t.th === selectType);
-		this.weightingForm.get("type").setValue(type.th);
-		this.weightSheet.type = type.id;
+	onSelectWeightingType(selectType: IWeightingType): void {
+		// const type = this.weightingTypes.find((t) => t.th === selectType);
+		this.weightingForm.get("type").setValue(selectType.th);
+		this.weightSheet.type = selectType.id;
 	}
 
 	onSelectCar(selectCar: ICar): void {
@@ -258,28 +230,10 @@ export class WeightSheetComponent
 	}
 
 	onSelectProduct(selectProduct: IProduct): void {
-		console.log(selectProduct);
-
-		const product = this.products.find((p) => p.id === selectProduct.id);
-		this.weightingForm.get("product").setValue(product.name);
-		this.weightingForm.get("price").setValue(product.currentPrice);
-		this.weightSheet.product = product;
-		// this.weightSheet.price = product.currentPrice;
-	}
-
-	checkSelectedProduct(): void {
-		const val = this.weightingForm.get("product").value;
-		if (val !== "") {
-			const product = this.products.find((p) => p.name === val);
-			if (product !== undefined) {
-				this.onSelectProduct(product);
-				// this.weightSheet.product = product.;
-			} else {
-				this.weightSheet.product = null;
-				this.weightSheet.price = null;
-				this.resetInputValue("price");
-			}
-		}
+		this.weightingForm.get("product").setValue(selectProduct.name);
+		this.weightingForm.get("price").setValue(selectProduct.currentPrice);
+		this.weightSheet.product = selectProduct;
+		this.weightSheet.price = selectProduct.currentPrice;
 	}
 
 	resetInputValue(ctrlName: string): void {
@@ -317,6 +271,8 @@ export class WeightSheetComponent
 			}
 		}
 	}
+
+	onTest(): void {}
 
 	// -----------------------------------------------------------------------------------------------------
 	// @ Func Set Control Input Event methods
@@ -423,33 +379,46 @@ export class WeightSheetComponent
 		);
 
 		this.filteredProducts = this.weightingForm.get("product").valueChanges.pipe(
-			takeUntil(this.unsubscribeAll),
 			startWith(""),
 			debounceTime(300),
-			map((inputValue: string) =>
-				inputValue ? this._filterProducts(inputValue) : this.products.slice()
-			)
+			mergeMap((inputValue) => {
+				return this.products$.pipe(
+					map((stateModel) => {
+						const products = stateModel.products;
+						return inputValue
+							? products.filter((product) =>
+									this._normalizeValue(product.id + product.name).includes(
+										this._normalizeValue(inputValue)
+									)
+							  )
+							: products;
+					})
+				);
+			})
 		);
 
 		this.filteredWeightingTypes = this.weightingForm
 			.get("type")
 			.valueChanges.pipe(
-				takeUntil(this.unsubscribeAll),
+				// takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(300),
-				map((inputValue) =>
-					inputValue
-						? this._filterWeightingType(inputValue)
-						: this.weightingTypes.slice()
-				)
+				// ผสม Observable อื่น
+				mergeMap((inputValue) => {
+					return this.weightingState$.pipe(
+						map((stateModel) => {
+							const types = stateModel.weightingTypes;
+							return inputValue
+								? types.filter((type) =>
+										this._normalizeValue(type.id + type.th).includes(
+											this._normalizeValue(inputValue)
+										)
+								  )
+								: types;
+						})
+					);
+				})
 			);
-	}
-
-	private _filterWeightingType(value: string): IWeightingType[] {
-		const filterValue = this._normalizeValue(value);
-		return this.weightingTypes.filter((type) =>
-			this._normalizeValue(type.id + type.th).includes(filterValue)
-		);
 	}
 
 	private _filterCar(value: string): ICar[] {
@@ -465,13 +434,6 @@ export class WeightSheetComponent
 			this._normalizeValue(contact.id + contact.displayName).includes(
 				filterValue
 			)
-		);
-	}
-
-	private _filterProducts(value: string): IProduct[] {
-		const filterValue = this._normalizeValue(value);
-		return this.products.filter((product) =>
-			this._normalizeValue(product.id + product.name).includes(filterValue)
 		);
 	}
 

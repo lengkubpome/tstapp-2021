@@ -57,7 +57,7 @@ export class WeightingState implements NgxsOnInit {
 	fetchWeightingType(
 		ctx: StateContext<WeightingStateModel>
 	): Observable<IWeightingType[]> {
-		return this.weightingService.fetchWeightingType().pipe(
+		return this.weightingService.getWeightingTypes().pipe(
 			tap((result) => {
 				const state = ctx.getState();
 				ctx.setState({

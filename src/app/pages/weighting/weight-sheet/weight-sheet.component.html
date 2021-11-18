@@ -44,44 +44,6 @@
           </div>
 
           <div class="form-group row align-items-baseline ">
-            <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
-            <div class="col-sm-9 d-inline-flex justify-content-start">
-              <nb-form-field class="mr-2">
-                <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
-                  [status]="(weightingForm.get('type').errors && this.weightingForm.get('type').touched) ? 'danger' : 'basic'"
-                  formControlName="type" [matAutocomplete]="type">
-
-                <div nbSuffix class="status-input">
-                  <nb-icon
-                    *ngIf="this.weightingForm.get('type').errors  && this.weightingForm.get('type').touched"
-                    [icon]="'alert-triangle'" status="danger" pack="eva"
-                    nbTooltip="กรุณาใส่ประเภทการชั่ง" nbTooltipPlacement="right"
-                    nbTooltipStatus="danger">
-                  </nb-icon>
-                </div>
-
-              </nb-form-field>
-
-              <!-- <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
-                (optionSelected)="onSelectWeightingType($event.option.value)">
-                <mat-option *ngFor="let type of filteredWeightingTypes | async ; index as i"
-                  [value]="type.th">
-                  {{type.id}} - {{type.th }}
-                </mat-option>
-              </mat-autocomplete> -->
-
-              <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
-                (optionSelected)="onSelectWeightingType($event.option.value)">
-                <mat-option *ngFor="let type of ( weightingState$ | async).weightingTypes"
-                  [value]="type">
-                  {{type.id}} - {{type.th }}
-                </mat-option>
-              </mat-autocomplete>
-
-            </div>
-          </div>
-
-          <div class="form-group row align-items-baseline ">
             <label for="car" class="label col-sm-3 col-form-label">ทะเบียนรถ</label>
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
@@ -119,6 +81,36 @@
                 (optionSelected)="onSelectCar($event.option.value)">
                 <mat-option *ngFor="let car of filteredCars | async" [value]="car">
                   {{car.plateLCN }} {{car.plateLCP}}
+                </mat-option>
+              </mat-autocomplete>
+
+            </div>
+          </div>
+
+          <div class="form-group row align-items-baseline ">
+            <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
+            <div class="col-sm-9 d-inline-flex justify-content-start">
+              <nb-form-field class="mr-2">
+                <input type="text" nbInput id="type" name="type" placeholder="ประเภท"
+                  [status]="(weightingForm.get('type').errors && this.weightingForm.get('type').touched) ? 'danger' : 'basic'"
+                  formControlName="type" [matAutocomplete]="type">
+
+                <div nbSuffix class="status-input">
+                  <nb-icon
+                    *ngIf="this.weightingForm.get('type').errors  && this.weightingForm.get('type').touched"
+                    [icon]="'alert-triangle'" status="danger" pack="eva"
+                    nbTooltip="กรุณาใส่ประเภทการชั่ง" nbTooltipPlacement="right"
+                    nbTooltipStatus="danger">
+                  </nb-icon>
+                </div>
+
+              </nb-form-field>
+
+              <mat-autocomplete autoActiveFirstOption #type="matAutocomplete"
+                (optionSelected)="onSelectWeightingType($event.option.value)">
+                <mat-option *ngFor="let type of filteredWeightingTypes | async ; index as i"
+                  [value]="type">
+                  {{type.id}} - {{type.th }}
                 </mat-option>
               </mat-autocomplete>
 
@@ -174,7 +166,6 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="product" name="product" placeholder="สินค้า"
-                  (blur)="checkSelectedProduct()"
                   [status]="(weightingForm.get('product').errors && this.weightingForm.get('product').touched) ? 'danger' : 'basic'"
                   formControlName="product" [matAutocomplete]="product">
 
@@ -385,10 +376,14 @@
     </nb-card-body>
 
     <nb-card-footer>
+      <ul>
+        <li>xxx</li>
+      </ul>
       <div class="d-flex justify-content-end">
         <button type="submit" class="mr-2" nbButton status="primary">บันทึก</button>
         <button type="button" nbButton status="danger"
           (click)="onResetWeightSheet()">รีเซ็ต</button>
+        <button type="button" nbButton status="danger" (click)="onTest()">ทดสอบ</button>
       </div>
     </nb-card-footer>
 

@@ -1,3 +1,8 @@
+import { IProduct } from "src/app/shared/models/product.model";
+import {
+	ProductState,
+	ProductStateModel,
+} from "./../../shared/state/product/product.state";
 import { WeightingState, WeightingStateModel } from "./state/weighting.state";
 import { Injectable } from "@angular/core";
 import { Select } from "@ngxs/store";
@@ -13,6 +18,7 @@ import { IWeightingType } from "src/app/shared/models/weighting.model";
 @Injectable()
 export class WeightingValidator {
 	@Select(WeightingState) weighting$: Observable<WeightingStateModel>;
+	@Select(ProductState) product$: Observable<ProductStateModel>;
 
 	weightingTypeAsyncValidator(findInProperties?: string): AsyncValidatorFn {
 		return (control: AbstractControl): Observable<ValidationErrors | null> => {
@@ -26,7 +32,26 @@ export class WeightingValidator {
 						const result = types.filter(
 							(obj) => obj[findInProperties] === control.value
 						).length;
-						return result ? null : { typeExist: true };
+						return result ? null : { exist: true };
+					})
+				);
+			}
+		};
+	}
+
+	productAsyncValidator(findInProperties?: string): AsyncValidatorFn {
+		return (control: AbstractControl): Observable<ValidationErrors | null> => {
+			if (!control.value) {
+				return of(null);
+			} else {
+				return this.product$.pipe(
+					take(1),
+					map((stateModel) => {
+						const products: IProduct[] = stateModel.products;
+						const result = products.filter(
+							(obj) => obj[findInProperties] === control.value
+						).length;
+						return result ? null : { exist: true };
 					})
 				);
 			}
