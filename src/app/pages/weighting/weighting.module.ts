@@ -37,6 +37,7 @@ import { CarInfoComponent } from "./car-info/car-info.component";
 import { WeightStorageComponent } from "./weight-storage/weight-storage.component";
 import { NgxsModule } from "@ngxs/store";
 import { ContactInfoComponent } from "./contact-info/contact-info.component";
+import { WeightingValidator } from "./weighting.validator";
 
 const routes: Routes = [
 	{
@@ -91,6 +92,6 @@ const routes: Routes = [
 		AvatarModule,
 	],
 	exports: [],
-	providers: [WeightingService],
+	providers: [WeightingService, WeightingValidator],
 })
 export class WeightingModule {}
