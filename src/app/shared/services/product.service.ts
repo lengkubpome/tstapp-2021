@@ -16,9 +16,7 @@ export class ProductService extends ProductData {
 	// }
 
 	getProducts(): Observable<IProduct[]> {
-		const productCollection = this.afs.collection<IProduct>("products", (ref) =>
-			ref.where("currentPrice", ">", 0).orderBy("currentPrice")
-		);
+		const productCollection = this.afs.collection<IProduct>("products");
 		return productCollection.valueChanges();
 	}
 }
