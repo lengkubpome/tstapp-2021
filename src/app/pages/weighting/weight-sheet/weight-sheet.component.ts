@@ -22,6 +22,7 @@ import {
 	takeUntil,
 	debounceTime,
 	mergeMap,
+	take,
 } from "rxjs/operators";
 import { Observable, Subject, timer } from "rxjs";
 import {
@@ -45,7 +46,6 @@ import { WeightingValidator } from "../weighting.validator";
 	selector: "app-weight-sheet",
 	templateUrl: "./weight-sheet.component.html",
 	styleUrls: ["./weight-sheet.component.scss"],
-	// encapsulation: ViewEncapsulation.None,
 })
 export class WeightSheetComponent implements OnInit, OnDestroy {
 	@ViewChild("wForm") wForm: ElementRef;
@@ -57,7 +57,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	clock = new Date();
 	weightSheet: IWeighting = { status: "success" };
-	stateSheet = { newCar: false };
+	newCar = false;
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
@@ -67,8 +67,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	@Select(ProductState) products$: Observable<ProductStateModel>;
 	filteredProducts: Observable<IProduct[]>;
-	cars: ICar[];
-	// @Select(CarState) cars$: Observable<CarStateModel>;
+
+	@Select(CarState) cars$: Observable<CarStateModel>;
 	filteredCars: Observable<ICar[]>;
 
 	contacts: IContact[];
@@ -105,12 +105,11 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.contacts =
 			this.store.selectSnapshot<ContactStateModel>(ContactState).contacts;
 
-		this.cars = this.store.selectSnapshot<CarStateModel>(CarState).cars;
-
 		this.setWeightSheet();
 
 		this.setupFormbuilder();
 
+		this.eventControls();
 		this.filterControls();
 	}
 
@@ -198,24 +197,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSelectCar(selectCar: ICar): void {
-		const car = this.cars.find((c) => c.id === selectCar.id);
-		this.weightingForm.get("car").setValue(car.plateLCN);
-		this.weightSheet.car = car;
-		this.stateSheet.newCar = false;
-	}
-
-	checkSelectedCar(): void {
-		const val = this.weightingForm.get("car").value;
-		if (val !== "") {
-			const car = this.cars.find((c) => c.plateLCN === val);
-			if (car !== undefined) {
-				this.weightSheet.car = car;
-				this.stateSheet.newCar = false;
-			} else {
-				this.stateSheet.newCar = true;
-				// this.openCarInfo(true);
-			}
-		}
+		this.weightingForm.get("car").setValue(selectCar.plateLCN);
+		this.weightSheet.car = selectCar;
+		this.newCar = false;
 	}
 
 	onSelectContact(selectContact: IContact): void {
@@ -312,67 +296,87 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	// -----------------------------------------------------------------------------------------------------
-	// @ Private Func Dialog methods
-	// -----------------------------------------------------------------------------------------------------
+	private eventControls(): void {
+		this.weightingForm
+			.get("car")
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(""),
+				debounceTime(300),
+				map((inputValue) => {
+					// เช็คการเปลี่ยนแปลง Input
+					// if (typeof this.weightSheet.car !== "undefined") {
+					// 	if (this.weightSheet.car.plateLCN !== inputValue) {
+					// 		delete this.weightSheet.car;
+					// 	}
+					// }
 
-	openCarInfo(isNew?: boolean): void {
-		let car: ICar;
-		if (isNew) {
-			car = { id: "NEW", plateLCN: this.weightingForm.get("car").value };
-		} else {
-			car = this.weightSheet.car;
-		}
+					return inputValue;
+				}),
+				mergeMap((inputValue): Observable<ICar[]> => {
+					return this.cars$.pipe(
+						map((stateModel) => {
+							const cars = stateModel.cars;
+							const res = cars.find((car) => car.plateLCN === inputValue);
+							// ตรวจสอบว่าเป็นข้อมูลใหม่หรือเก่า
+							if (typeof res !== "undefined") {
+								this.newCar = false; // มีข้อมูล
+								return [res];
+							} else {
+								this.newCar = true; // ข้อมูลใหม่
+								if (typeof this.weightSheet.car !== "undefined") {
+									if (this.weightSheet.car.plateLCN === inputValue) {
+										return [this.weightSheet.car];
+									}
+								} else {
+									return [{ id: "-", plateLCN: inputValue }];
+								}
 
-		this.dialogService
-			.open(CarInfoComponent, {
-				context: { title: "ข้อมูลทะเบียนรถ", car },
-				closeOnBackdropClick: false,
-			})
-			.onClose.subscribe((res: ICar) => {
-				if (res !== null) {
-					this.weightSheet.car = res;
-					this.weightingForm.get("car").setValue(res.plateLCN);
+								return [];
+								// if (this.weightSheet.car.plateLCN === inputValue) {
+								// 	return [this.weightSheet.car];
+								// } else {
+								// 	return [{ id: "-", plateLCN: inputValue }];
+								// }
+							}
+						})
+					);
+				})
+			)
+			.subscribe((cars): void => {
+				console.log(cars[0]);
+
+				if (cars.length > 1) {
+					console.error("ข้อมูล car.plateLCN ซ้ำกัน");
+				} else {
+					this.weightSheet.car = cars[0];
 				}
 			});
 	}
-
-	openContactInfo(): void {
-		this.dialogService
-			.open(ContactInfoComponent, {
-				context: {
-					title: "ข้อมูลผู้ติดต่อ",
-					contact: this.weightSheet.contact,
-				},
-				closeOnBackdropClick: false,
-				hasScroll: true,
-			})
-			.onClose.subscribe((res: IContact) => {
-				if (res !== null) {
-					// this.weightSheet.contactId = res;
-					// this.weightingForm.get('car').setValue(res.plateLCN);
-				}
-			});
-	}
-
-	// -----------------------------------------------------------------------------------------------------
-	// @ Private Func Filter methods
-	// -----------------------------------------------------------------------------------------------------
 
 	private filterControls(): void {
 		this.filteredCars = this.weightingForm.get("car").valueChanges.pipe(
-			takeUntil(this.unsubscribeAll),
 			startWith(""),
-			debounceTime(300),
-			map((inputValue) =>
-				inputValue ? this._filterCar(inputValue) : this.cars.slice()
-			)
+			debounceTime(200),
+			mergeMap((inputValue): Observable<ICar[]> => {
+				return this.cars$.pipe(
+					map((stateModel): ICar[] => {
+						const cars = stateModel.cars;
+						return inputValue
+							? cars.filter((car) =>
+									this._normalizeValue(car.plateLCN).includes(
+										this._normalizeValue(inputValue)
+									)
+							  )
+							: cars;
+					})
+				);
+			})
 		);
 
 		this.filteredContacts = this.weightingForm.get("contact").valueChanges.pipe(
-			takeUntil(this.unsubscribeAll),
 			startWith(""),
-			debounceTime(300),
+			debounceTime(200),
 			map((inputValue) =>
 				inputValue ? this._filterContact(inputValue) : this.contacts.slice()
 			)
@@ -380,7 +384,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 		this.filteredProducts = this.weightingForm.get("product").valueChanges.pipe(
 			startWith(""),
-			debounceTime(300),
+			debounceTime(200),
 			mergeMap((inputValue) => {
 				return this.products$.pipe(
 					map((stateModel) => {
@@ -402,7 +406,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			.valueChanges.pipe(
 				// takeUntil(this.unsubscribeAll),
 				startWith(""),
-				debounceTime(300),
+				debounceTime(200),
 				// ผสม Observable อื่น
 				mergeMap((inputValue) => {
 					return this.weightingState$.pipe(
@@ -421,13 +425,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			);
 	}
 
-	private _filterCar(value: string): ICar[] {
-		const filterValue = this._normalizeValue(value);
-		return this.cars.filter((car) =>
-			this._normalizeValue(car.plateLCN + car.plateLCP).includes(filterValue)
-		);
-	}
-
 	private _filterContact(value: string): IContact[] {
 		const filterValue = this._normalizeValue(value);
 		return this.contacts.filter((contact) =>
@@ -439,5 +436,53 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	private _normalizeValue(value: string): string {
 		return value.toLowerCase().replace(/\s/g, "");
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Private Func Dialog methods
+	// -----------------------------------------------------------------------------------------------------
+
+	openCarInfo(): void {
+		// let car: ICar;
+		// if (isNew) {
+		// 	car = { id: "NEW", plateLCN: this.weightingForm.get("car").value };
+		// } else {
+		// 	car = this.weightSheet.car;
+		// }
+
+		this.dialogService
+			.open(CarInfoComponent, {
+				context: {
+					title: "ข้อมูลทะเบียนรถ",
+					car: this.weightSheet.car,
+					newCar: this.newCar,
+				},
+				closeOnBackdropClick: false,
+			})
+			.onClose.subscribe((res: ICar) => {
+				if (res !== null) {
+					this.weightSheet.car = res;
+					this.weightingForm.get("car").setValue(res.plateLCN);
+					console.log(res);
+				}
+			});
+	}
+
+	openContactInfo(): void {
+		this.dialogService
+			.open(ContactInfoComponent, {
+				context: {
+					title: "ข้อมูลผู้ติดต่อ",
+					contact: this.weightSheet.contact,
+				},
+				closeOnBackdropClick: false,
+				hasScroll: true,
+			})
+			.onClose.subscribe((res: IContact) => {
+				if (res !== null) {
+					// this.weightSheet.contactId = res;
+					// this.weightingForm.get('car').setValue(res.plateLCN);
+				}
+			});
 	}
 }

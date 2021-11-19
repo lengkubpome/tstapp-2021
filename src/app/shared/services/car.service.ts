@@ -31,7 +31,9 @@ export class CarService extends CarData {
 	}
 
 	getCarTypes(): Observable<ICarType[]> {
-		const carTypeCollection = this.afs.collection<ICarType>("carTypes");
+		const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
+			ref.orderBy("id")
+		);
 		return carTypeCollection.valueChanges();
 	}
 }

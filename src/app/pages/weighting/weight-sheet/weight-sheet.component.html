@@ -49,20 +49,20 @@
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
                   [status]="(weightingForm.get('car').errors && this.weightingForm.get('car').touched) ? 'danger' : 'basic'"
-                  (blur)="checkSelectedCar()" formControlName="car" [matAutocomplete]="car">
+                  formControlName="car" [matAutocomplete]="car">
 
                 <div nbSuffix class="status-input">
                   <button nbSuffix nbButton ghost type="button"
-                    *ngIf="!stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
+                    *ngIf="!newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').touched && this.weightingForm.get('car').value !== ''"
                     nbTooltip="แสดงข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
                     nbTooltipStatus="primary" (click)="openCarInfo()">
                     <nb-icon [icon]="'alert-circle'" status="primary"></nb-icon>
                   </button>
 
                   <button nbSuffix nbButton ghost type="button"
-                    *ngIf="stateSheet.newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
+                    *ngIf="newCar && !this.weightingForm.get('car').errors && this.weightingForm.get('car').value !== ('' || null)"
                     nbTooltip="เพิ่มเติมข้อมูลทะเบียนรถ" nbTooltipPlacement="right"
-                    nbTooltipStatus="warning" (click)="openCarInfo(true)"
+                    nbTooltipStatus="warning" (click)="openCarInfo()"
                     [icon]="'question-mark-circle'">
                     <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
                   </button>
@@ -134,7 +134,7 @@
                   </button>
 
                   <!-- <button nbSuffix nbButton ghost type="button"
-                    *ngIf="stateSheet.newCar && !this.weightingForm.get('contact').errors && this.weightingForm.get('contact').value !== ('' || null)"
+                    *ngIf="newCar && !this.weightingForm.get('contact').errors && this.weightingForm.get('contact').value !== ('' || null)"
                     [icon]="'question-mark-circle'" status="warning">
                     <nb-icon [icon]="'alert-circle'" status="warning"></nb-icon>
                   </button> -->
