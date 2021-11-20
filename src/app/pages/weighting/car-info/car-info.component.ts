@@ -1,3 +1,4 @@
+import { ProvinceStateModel } from "./../../../shared/state/province/province.state";
 import { UniversalValidator } from "../../../shared/validators/universal.validator";
 import {
 	takeUntil,
@@ -30,13 +31,21 @@ export class CarInfoComponent implements OnInit {
 	@Input() newCar: boolean;
 
 	@Select(CarState) car$: Observable<CarStateModel>;
-	@Select(ProvinceState.provinceOnly) province$: Observable<string[]>;
+	@Select(ProvinceState.provinceSymbol) province$: Observable<
+		{ province: string; symbol: string }[]
+	>;
+
+	provinceSymbols: { province: string; symbol: string }[];
 
 	filteredCarTypes: Observable<ICarType[]>;
 
 	filteredProvinces: Observable<string[]>;
 
-	stateEdit: boolean;
+	stateCarInfo = {
+		edit: false,
+		prefixId: "",
+		suffixId: "",
+	};
 
 	carInfoForm: FormGroup;
 
@@ -51,8 +60,16 @@ export class CarInfoComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.provinceSymbols = this.store.selectSnapshot<any>(
+			ProvinceState.provinceSymbol
+		);
+
+		this.stateCarInfo.edit = this.newCar;
+
+		// this.stateCarInfo.prefixId = this.car.plateLCN;
+		// this.stateCarInfo.suffixId = this.car.plateLCP;
+
 		this.carInfoForm = this.setupForm(this.car);
-		this.stateEdit = this.newCar;
 		this.eventControls();
 		this.filterControls();
 	}
@@ -78,6 +95,16 @@ export class CarInfoComponent implements OnInit {
 		});
 	}
 
+	generateID(): void {
+		const prefix = this.car.plateLCN;
+		const suffix = this.provinceSymbols.filter(
+			(p) => p.province === this.car.plateLCP
+		)[0].symbol;
+		const id = prefix + suffix;
+		this.car.id = id;
+		this.carInfoForm.get("id").setValue(id);
+	}
+
 	isDuplicateCar(): boolean {
 		// 	var x = this.car$.pipe(
 		// 		map((stateModel) => {
@@ -100,6 +127,8 @@ export class CarInfoComponent implements OnInit {
 
 	onSubmitCarInfo(): void {
 		if (this.carInfoForm.valid) {
+			console.log(this.car);
+
 			this.ref.close(this.car);
 		}
 	}
@@ -115,22 +144,35 @@ export class CarInfoComponent implements OnInit {
 
 	private eventControls(): void {
 		this.carInfoForm
+			.get("plateLCN")
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(""),
+				debounceTime(300)
+			)
+			.subscribe((result) => {
+				if (result) {
+					// this.stateCarInfo.prefixId = result;
+					this.car.plateLCN = result;
+					this.generateID();
+				}
+			});
+
+		this.carInfoForm
 			.get("plateLCP")
 			.valueChanges.pipe(
 				takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(300),
-				mergeMap((input) => {
-					return this.province$.pipe(
-						map((provinces) => {
-							return provinces.filter((province) => province === input);
-						})
-					);
+				map((input) => {
+					return this.provinceSymbols.filter((p) => p.province === input);
 				})
 			)
 			.subscribe((result) => {
 				if (result.length) {
-					this.car.plateLCP = result[0];
+					this.car.plateLCP = result[0].province;
+					// this.stateCarInfo.suffixId = result[0].symbol;
+					this.generateID();
 				}
 			});
 
@@ -161,18 +203,15 @@ export class CarInfoComponent implements OnInit {
 		this.filteredProvinces = this.carInfoForm.get("plateLCP").valueChanges.pipe(
 			startWith(""),
 			debounceTime(100),
-			mergeMap((inputValue) => {
-				return this.province$.pipe(
-					map((provinces) => {
-						return inputValue
-							? provinces.filter((province) =>
-									this._normalizeValue(province).includes(
-										this._normalizeValue(inputValue)
-									)
-							  )
-							: provinces;
-					})
-				);
+			map((input) => {
+				const provinces = this.provinceSymbols.map((p) => p.province); // ดึงเฉพาะ province
+				return input
+					? provinces.filter((province) =>
+							this._normalizeValue(province).includes(
+								this._normalizeValue(input)
+							)
+					  )
+					: provinces;
 			})
 		);
 

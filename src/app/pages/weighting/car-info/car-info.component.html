@@ -7,7 +7,7 @@
         <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
           <h5>{{title}}</h5>
           <div class="pl-2">
-            <nb-icon *ngIf="stateEdit" [icon]="'edit-2'" status="warning" pack="eva">
+            <nb-icon *ngIf="stateCarInfo.edit" [icon]="'edit-2'" status="warning" pack="eva">
             </nb-icon>
           </div>
         </div>
@@ -27,9 +27,9 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCN" name="plateLCN" placeholder="ทะเบียนรถ"
-              [status]="!stateEdit ? 'primary' :
+              [status]="!stateCarInfo.edit ? 'primary' :
                 (carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched)? 'danger':'warning' "
-              formControlName="plateLCN" [readonly]="!stateEdit">
+              formControlName="plateLCN" [readonly]="!stateCarInfo.edit">
           </nb-form-field>
 
           <div class="status-input">
@@ -49,9 +49,9 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCP" name="plateLCP" placeholder="ทะเบียนจังหวัด"
-              [status]="!stateEdit ? 'primary' :
+              [status]="!stateCarInfo.edit ? 'primary' :
             (carInfoForm.get('plateLCP').errors)? 'danger':'warning' " formControlName="plateLCP"
-              [matAutocomplete]="province" [readonly]="!stateEdit">
+              [matAutocomplete]="province" [readonly]="!stateCarInfo.edit">
           </nb-form-field>
 
           <mat-autocomplete autoActiveFirstOption #province="matAutocomplete">
@@ -74,9 +74,9 @@
         <label for="type" class="label col-sm-3 col-form-label">ประเภท</label>
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
-            <input type="text" nbInput id="type" name="type" placeholder="ประเภท" [status]="!stateEdit ? 'primary' :
+            <input type="text" nbInput id="type" name="type" placeholder="ประเภท" [status]="!stateCarInfo.edit ? 'primary' :
             (carInfoForm.get('type').errors)? 'danger':'warning' " formControlName="type"
-              [matAutocomplete]="carType" [readonly]="!stateEdit">
+              [matAutocomplete]="carType" [readonly]="!stateCarInfo.edit">
           </nb-form-field>
 
           <mat-autocomplete autoActiveFirstOption #carType="matAutocomplete"
@@ -104,12 +104,13 @@
           <button type="button" nbButton (click)="onClose()">ปิด</button>
         </div>
         <div>
-          <button *ngIf="!stateEdit" type="button" class="ml-2" nbButton
+          <button *ngIf="!stateCarInfo.edit" type="button" class="ml-2" nbButton
             [disabled]="this.carInfoForm.invalid" [status]="'primary'">
             <nb-icon icon="link-2"></nb-icon>
           </button>
-          <button *ngIf="stateEdit" type="button" class="ml-2" nbButton (click)="onSubmitCarInfo()"
-            [disabled]="this.carInfoForm.invalid" [status]="'warning'">บันทึก</button>
+          <button *ngIf="stateCarInfo.edit" type="button" class="ml-2" nbButton
+            (click)="onSubmitCarInfo()" [disabled]="this.carInfoForm.invalid"
+            [status]="'warning'">บันทึก</button>
         </div>
 
       </div>

@@ -416,24 +416,18 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		const title = "ข้อมูลทะเบียนรถ";
 		const newCar = this.newCar;
 		const inputCar = this.weightingForm.get("car").value;
-		let car: ICar;
+		let car: ICar = {
+			id: inputCar,
+			plateLCN: inputCar,
+			plateLCP: "",
+		};
 
 		if (this.newCar) {
-			if (!this.weightSheet.hasOwnProperty("car")) {
-				car = {
-					id: "-",
-					plateLCN: inputCar,
-					plateLCP: "ขอนแก่น",
-				};
-			} else if (this.weightSheet.car.plateLCN === inputCar) {
-				console.log("Check Car1: ", this.weightSheet.car);
+			if (
+				this.weightSheet.hasOwnProperty("car") &&
+				this.weightSheet.car.plateLCN === inputCar
+			) {
 				car = this.weightSheet.car;
-			} else {
-				car = {
-					id: "-",
-					plateLCN: inputCar,
-					plateLCP: "ขอนแก่น",
-				};
 			}
 		} else {
 			car = this.weightSheet.car;
@@ -452,6 +446,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			})
 			.onClose.subscribe((value) => {
 				if (value !== undefined) {
+					console.log(value);
+
 					this.weightSheet.car = value;
 					this.weightingForm.get("car").setValue(value.plateLCN);
 				}

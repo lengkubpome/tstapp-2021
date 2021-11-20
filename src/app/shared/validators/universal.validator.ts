@@ -23,7 +23,7 @@ import { ProductStateModel } from "../state/product/product.state";
 })
 export class UniversalValidator {
 	@Select(CarState) car$: Observable<CarStateModel>;
-	@Select(ProvinceState.provinceOnly) province$: Observable<string[]>;
+	@Select(ProvinceState.province) province$: Observable<string[]>;
 
 	provinceAsyncValidator(): AsyncValidatorFn {
 		return (control: AbstractControl): Observable<ValidationErrors | null> => {

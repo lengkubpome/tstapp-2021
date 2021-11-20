@@ -20,7 +20,7 @@ export class ProvinceState implements NgxsOnInit {
 	constructor(private http: HttpClient) {}
 
 	@Selector()
-	static provinceOnly(state: ProvinceStateModel): string[] {
+	static province(state: ProvinceStateModel): string[] {
 		const vaulesAlreadySeen = [];
 		for (const p of state.province) {
 			const value = p;
@@ -28,18 +28,35 @@ export class ProvinceState implements NgxsOnInit {
 				vaulesAlreadySeen.push(value.province);
 			}
 		}
-		console.log(vaulesAlreadySeen);
-
 		return vaulesAlreadySeen;
+	}
+
+	@Selector()
+	static provinceSymbol(
+		state: ProvinceStateModel
+	): { province: string; symbol: string }[] {
+		const vaulesAlreadySeen = [];
+		const result = [];
+		for (const province of state.province) {
+			const value = { province: province.province, symbol: province.symbol };
+			if (vaulesAlreadySeen.indexOf(value.province) === -1) {
+				vaulesAlreadySeen.push(value.province);
+				result.push(value);
+			}
+		}
+
+		return result;
 	}
 
 	ngxsOnInit(ctx: StateContext<ProvinceStateModel>): void {
 		console.log("State initialized, now getting province");
-		ctx.dispatch(new ProvinceAction.GetProvince());
+		ctx.dispatch(new ProvinceAction.FetchProvinces());
 	}
 
-	@Action(ProvinceAction.GetProvince)
-	getProvince(ctx: StateContext<ProvinceStateModel>): Observable<IProvince[]> {
+	@Action(ProvinceAction.FetchProvinces)
+	fetchProvinces(
+		ctx: StateContext<ProvinceStateModel>
+	): Observable<IProvince[]> {
 		return this.http.get<IProvince[]>("assets/data/province.json").pipe(
 			tap((result) => {
 				const state = ctx.getState();
@@ -52,7 +69,3 @@ export class ProvinceState implements NgxsOnInit {
 		);
 	}
 }
-
-// ไม่ได้ใช้แล้ว แต่เป็นตัวอย่างการใช้ Selector
-
-// @Select(ProvinceState.provinceOnly) province$: Observable<string[]>;
