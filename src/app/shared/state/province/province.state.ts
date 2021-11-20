@@ -28,6 +28,8 @@ export class ProvinceState implements NgxsOnInit {
 				vaulesAlreadySeen.push(value.province);
 			}
 		}
+		console.log(vaulesAlreadySeen);
+
 		return vaulesAlreadySeen;
 	}
 

@@ -60,7 +60,7 @@ export class CarInfoComponent implements OnInit {
 	setupForm(car: ICar): FormGroup {
 		return this.formBuilder.group({
 			id: [car.id],
-			plateLCN: [car.plateLCN, Validators.required],
+			plateLCN: [car.plateLCN, { validators: Validators.required }],
 			plateLCP: [
 				car.plateLCP,
 				{
@@ -78,13 +78,28 @@ export class CarInfoComponent implements OnInit {
 		});
 	}
 
+	isDuplicateCar(): boolean {
+		// 	var x = this.car$.pipe(
+		// 		map((stateModel) => {
+		// 			const types = stateModel.cars;
+		// 			return inputValue
+		// 				? types.filter((type) =>
+		// 						this._normalizeValue(type.id + type.th).includes(
+		// 							this._normalizeValue(inputValue)
+		// 						)
+		// 				  )
+		// 				: types;
+		// 		})
+		// 	);
+		return false;
+	}
+
 	// -----------------------------------------------------------------------------------------------------
 	// @ Func Set Control Input Event methods
 	// -----------------------------------------------------------------------------------------------------
 
 	onSubmitCarInfo(): void {
 		if (this.carInfoForm.valid) {
-			// console.log("Submit: ", this.car);
 			this.ref.close(this.car);
 		}
 	}
@@ -119,6 +134,7 @@ export class CarInfoComponent implements OnInit {
 				}
 			});
 
+		// ป้องกันกรณีผู้ใช้ พิมพ์ชื่อเต็มๆโดยไม่ผ่าน Autocomplete
 		this.carInfoForm
 			.get("type")
 			.valueChanges.pipe(
