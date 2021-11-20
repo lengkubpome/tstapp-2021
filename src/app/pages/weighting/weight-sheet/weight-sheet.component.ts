@@ -57,6 +57,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	clock = new Date();
 	weightSheet: IWeighting = { status: "success" };
+	// stateCarInfo: null | "exist" | "new";
 	newCar = false;
 
 	// Make up
@@ -303,55 +304,25 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(300),
-				map((inputValue) => {
-					// เช็คการเปลี่ยนแปลง Input
-					// if (typeof this.weightSheet.car !== "undefined") {
-					// 	if (this.weightSheet.car.plateLCN !== inputValue) {
-					// 		delete this.weightSheet.car;
-					// 	}
-					// }
-
-					return inputValue;
-				}),
 				mergeMap((inputValue): Observable<ICar[]> => {
 					return this.cars$.pipe(
 						map((stateModel) => {
 							const cars = stateModel.cars;
-							const res = cars.find((car) => car.plateLCN === inputValue);
+							const res = cars.filter((car) => car.plateLCN === inputValue);
+
 							// ตรวจสอบว่าเป็นข้อมูลใหม่หรือเก่า
-							if (typeof res !== "undefined") {
+							if (res.length) {
 								this.newCar = false; // มีข้อมูล
-								return [res];
+								return res;
 							} else {
 								this.newCar = true; // ข้อมูลใหม่
-								if (typeof this.weightSheet.car !== "undefined") {
-									if (this.weightSheet.car.plateLCN === inputValue) {
-										return [this.weightSheet.car];
-									}
-								} else {
-									return [{ id: "-", plateLCN: inputValue }];
-								}
-
 								return [];
-								// if (this.weightSheet.car.plateLCN === inputValue) {
-								// 	return [this.weightSheet.car];
-								// } else {
-								// 	return [{ id: "-", plateLCN: inputValue }];
-								// }
 							}
 						})
 					);
 				})
 			)
-			.subscribe((cars): void => {
-				console.log(cars[0]);
-
-				if (cars.length > 1) {
-					console.error("ข้อมูล car.plateLCN ซ้ำกัน");
-				} else {
-					this.weightSheet.car = cars[0];
-				}
-			});
+			.subscribe();
 	}
 
 	private filterControls(): void {
@@ -404,7 +375,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.filteredWeightingTypes = this.weightingForm
 			.get("type")
 			.valueChanges.pipe(
-				// takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(200),
 				// ผสม Observable อื่น
@@ -443,27 +413,47 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	// -----------------------------------------------------------------------------------------------------
 
 	openCarInfo(): void {
-		// let car: ICar;
-		// if (isNew) {
-		// 	car = { id: "NEW", plateLCN: this.weightingForm.get("car").value };
-		// } else {
-		// 	car = this.weightSheet.car;
-		// }
+		const title = "ข้อมูลทะเบียนรถ";
+		const newCar = this.newCar;
+		const inputCar = this.weightingForm.get("car").value;
+		let car: ICar;
+
+		if (this.newCar) {
+			if (!this.weightSheet.hasOwnProperty("car")) {
+				car = {
+					id: "-",
+					plateLCN: inputCar,
+					plateLCP: "ขอนแก่น",
+				};
+			} else if (this.weightSheet.car.plateLCN === inputCar) {
+				console.log("Check Car1: ", this.weightSheet.car);
+				car = this.weightSheet.car;
+			} else {
+				car = {
+					id: "-",
+					plateLCN: inputCar,
+					plateLCP: "ขอนแก่น",
+				};
+			}
+		} else {
+			car = this.weightSheet.car;
+		}
+
+		// console.log("OpenDialog: ", car);
 
 		this.dialogService
 			.open(CarInfoComponent, {
 				context: {
-					title: "ข้อมูลทะเบียนรถ",
-					car: this.weightSheet.car,
-					newCar: this.newCar,
+					title,
+					car,
+					newCar,
 				},
 				closeOnBackdropClick: false,
 			})
-			.onClose.subscribe((res: ICar) => {
-				if (res !== null) {
-					this.weightSheet.car = res;
-					this.weightingForm.get("car").setValue(res.plateLCN);
-					console.log(res);
+			.onClose.subscribe((value) => {
+				if (value !== undefined) {
+					this.weightSheet.car = value;
+					this.weightingForm.get("car").setValue(value.plateLCN);
 				}
 			});
 	}

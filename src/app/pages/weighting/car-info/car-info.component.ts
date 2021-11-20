@@ -5,6 +5,7 @@ import {
 	debounceTime,
 	map,
 	mergeMap,
+	take,
 } from "rxjs/operators";
 import { ProvinceState } from "src/app/shared/state/province/province.state";
 import { CarStateModel } from "src/app/shared/state/car/car.state";
@@ -52,10 +53,7 @@ export class CarInfoComponent implements OnInit {
 	ngOnInit(): void {
 		this.carInfoForm = this.setupForm(this.car);
 		this.stateEdit = this.newCar;
-
-		console.log(this.car);
-		console.log(this.newCar);
-
+		this.eventControls();
 		this.filterControls();
 	}
 
@@ -70,7 +68,7 @@ export class CarInfoComponent implements OnInit {
 				},
 			],
 			type: [
-				car.type.th,
+				car.hasOwnProperty("type") ? car.type.th : null,
 				{
 					asyncValidators: [
 						this.universalValidator.carTypeAsyncValidator("th"),
@@ -80,19 +78,67 @@ export class CarInfoComponent implements OnInit {
 		});
 	}
 
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func Set Control Input Event methods
+	// -----------------------------------------------------------------------------------------------------
+
 	onSubmitCarInfo(): void {
 		if (this.carInfoForm.valid) {
+			// console.log("Submit: ", this.car);
 			this.ref.close(this.car);
 		}
 	}
 
 	onClose(): void {
-		this.ref.close(null);
+		this.ref.close();
 	}
 
 	onSelectCarType(selectCarType: ICarType): void {
 		this.carInfoForm.get("type").setValue(selectCarType.th);
 		this.car.type = selectCarType;
+	}
+
+	private eventControls(): void {
+		this.carInfoForm
+			.get("plateLCP")
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(""),
+				debounceTime(300),
+				mergeMap((input) => {
+					return this.province$.pipe(
+						map((provinces) => {
+							return provinces.filter((province) => province === input);
+						})
+					);
+				})
+			)
+			.subscribe((result) => {
+				if (result.length) {
+					this.car.plateLCP = result[0];
+				}
+			});
+
+		this.carInfoForm
+			.get("type")
+			.valueChanges.pipe(
+				takeUntil(this.unsubscribeAll),
+				startWith(""),
+				debounceTime(300),
+				mergeMap((input) => {
+					return this.car$.pipe(
+						map((stateModel) => {
+							const types = stateModel.carTypes;
+							return types.filter((type) => type.th === input);
+						})
+					);
+				})
+			)
+			.subscribe((result) => {
+				if (result.length) {
+					this.car.type = result[0];
+				}
+			});
 	}
 
 	private filterControls(): void {
