@@ -1,5 +1,3 @@
-import { inList } from "src/app/shared/validators/in-list.validator";
-import { map } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IWeightingType } from "src/app/shared/models/weighting.model";
 import { Observable, of } from "rxjs";

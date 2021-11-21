@@ -18,7 +18,6 @@ import { IWeightingType } from "src/app/shared/models/weighting.model";
 @Injectable()
 export class WeightingValidator {
 	@Select(WeightingState) weighting$: Observable<WeightingStateModel>;
-	@Select(ProductState) product$: Observable<ProductStateModel>;
 
 	weightingTypeAsyncValidator(findInProperties?: string): AsyncValidatorFn {
 		return (control: AbstractControl): Observable<ValidationErrors | null> => {
@@ -30,25 +29,6 @@ export class WeightingValidator {
 					map((stateModel) => {
 						const types: IWeightingType[] = stateModel.weightingTypes;
 						const result = types.filter(
-							(obj) => obj[findInProperties] === control.value
-						).length;
-						return result ? null : { exist: true };
-					})
-				);
-			}
-		};
-	}
-
-	productAsyncValidator(findInProperties?: string): AsyncValidatorFn {
-		return (control: AbstractControl): Observable<ValidationErrors | null> => {
-			if (!control.value) {
-				return of(null);
-			} else {
-				return this.product$.pipe(
-					take(1),
-					map((stateModel) => {
-						const products: IProduct[] = stateModel.products;
-						const result = products.filter(
 							(obj) => obj[findInProperties] === control.value
 						).length;
 						return result ? null : { exist: true };

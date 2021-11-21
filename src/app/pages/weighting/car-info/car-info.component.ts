@@ -1,5 +1,4 @@
-import { ProvinceStateModel } from "./../../../shared/state/province/province.state";
-import { UniversalValidator } from "../../../shared/validators/universal.validator";
+import { UtilityValidator } from "../../../shared/validators/utility.validator";
 import {
 	takeUntil,
 	startWith,
@@ -9,16 +8,14 @@ import {
 	take,
 } from "rxjs/operators";
 import { ProvinceState } from "src/app/shared/state/province/province.state";
-import { CarStateModel } from "src/app/shared/state/car/car.state";
 import { Observable, Subject } from "rxjs";
 
-import { Select, Store } from "@ngxs/store";
+import { Store } from "@ngxs/store";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ICar, ICarType } from "src/app/shared/models/car.model";
 import { Component, Input, OnInit } from "@angular/core";
 import { NbDialogRef } from "@nebular/theme";
 import { CarState } from "src/app/shared/state/car/car.state";
-import { inList } from "src/app/shared/validators/in-list.validator";
 
 @Component({
 	selector: "app-car-info",
@@ -30,12 +27,8 @@ export class CarInfoComponent implements OnInit {
 	@Input() car: ICar;
 	@Input() newCar: boolean;
 
-	@Select(CarState) car$: Observable<CarStateModel>;
-	@Select(ProvinceState.provinceSymbol) province$: Observable<
-		{ province: string; symbol: string }[]
-	>;
-
 	provinceSymbols: { province: string; symbol: string }[];
+	carTypes: ICarType[];
 
 	filteredCarTypes: Observable<ICarType[]>;
 
@@ -43,8 +36,6 @@ export class CarInfoComponent implements OnInit {
 
 	stateCarInfo = {
 		edit: false,
-		prefixId: "",
-		suffixId: "",
 	};
 
 	carInfoForm: FormGroup;
@@ -56,18 +47,17 @@ export class CarInfoComponent implements OnInit {
 		protected ref: NbDialogRef<CarInfoComponent>,
 		private formBuilder: FormBuilder,
 		private store: Store,
-		private universalValidator: UniversalValidator
-	) {}
-
-	ngOnInit(): void {
+		private utilityValidator: UtilityValidator
+	) {
 		this.provinceSymbols = this.store.selectSnapshot<any>(
 			ProvinceState.provinceSymbol
 		);
 
-		this.stateCarInfo.edit = this.newCar;
+		this.carTypes = this.store.selectSnapshot<ICarType[]>(CarState.carType);
+	}
 
-		// this.stateCarInfo.prefixId = this.car.plateLCN;
-		// this.stateCarInfo.suffixId = this.car.plateLCP;
+	ngOnInit(): void {
+		this.stateCarInfo.edit = this.newCar;
 
 		this.carInfoForm = this.setupForm(this.car);
 		this.eventControls();
@@ -81,15 +71,18 @@ export class CarInfoComponent implements OnInit {
 			plateLCP: [
 				car.plateLCP,
 				{
-					asyncValidators: [this.universalValidator.provinceAsyncValidator()],
+					validators: [
+						this.utilityValidator.inList(
+							this.provinceSymbols.map((p) => p.province)
+						),
+					],
+					// asyncValidators: [this.universalValidator.provinceAsyncValidator()],
 				},
 			],
 			type: [
 				car.hasOwnProperty("type") ? car.type.th : null,
 				{
-					asyncValidators: [
-						this.universalValidator.carTypeAsyncValidator("th"),
-					],
+					asyncValidators: [this.utilityValidator.carTypeAsyncValidator("th")],
 				},
 			],
 		});
@@ -152,7 +145,6 @@ export class CarInfoComponent implements OnInit {
 			)
 			.subscribe((result) => {
 				if (result) {
-					// this.stateCarInfo.prefixId = result;
 					this.car.plateLCN = result;
 					this.generateID();
 				}
@@ -171,7 +163,6 @@ export class CarInfoComponent implements OnInit {
 			.subscribe((result) => {
 				if (result.length) {
 					this.car.plateLCP = result[0].province;
-					// this.stateCarInfo.suffixId = result[0].symbol;
 					this.generateID();
 				}
 			});
@@ -183,13 +174,8 @@ export class CarInfoComponent implements OnInit {
 				takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(300),
-				mergeMap((input) => {
-					return this.car$.pipe(
-						map((stateModel) => {
-							const types = stateModel.carTypes;
-							return types.filter((type) => type.th === input);
-						})
-					);
+				map((input) => {
+					return this.carTypes.filter((type) => type.th === input);
 				})
 			)
 			.subscribe((result) => {
@@ -218,19 +204,14 @@ export class CarInfoComponent implements OnInit {
 		this.filteredCarTypes = this.carInfoForm.get("type").valueChanges.pipe(
 			startWith(""),
 			debounceTime(100),
-			mergeMap((inputValue) => {
-				return this.car$.pipe(
-					map((stateModel) => {
-						const types = stateModel.carTypes;
-						return inputValue
-							? types.filter((type) =>
-									this._normalizeValue(type.id + type.th).includes(
-										this._normalizeValue(inputValue)
-									)
-							  )
-							: types;
-					})
-				);
+			map((input) => {
+				return input
+					? this.carTypes.filter((type) =>
+							this._normalizeValue(type.id + type.th).includes(
+								this._normalizeValue(input)
+							)
+					  )
+					: this.carTypes;
 			})
 		);
 	}

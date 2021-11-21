@@ -1,3 +1,4 @@
+import { UtilityValidator } from "./../../../shared/validators/utility.validator";
 import { WeightingState } from "./../state/weighting.state";
 import { IWeightingType } from "./../../../shared/models/weighting.model";
 import { ContactInfoComponent } from "../contact-info/contact-info.component";
@@ -38,7 +39,6 @@ import { Select, Selector, Store } from "@ngxs/store";
 import { CarAction } from "src/app/shared/state/car/car.action";
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import { NbDialogService } from "@nebular/theme";
-import { inList } from "src/app/shared/validators/in-list.validator";
 import { WeightingStateModel } from "../state/weighting.state";
 import { WeightingValidator } from "../weighting.validator";
 
@@ -99,7 +99,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private interactivityChecker: InteractivityChecker,
 		private dialogService: NbDialogService,
 		private weightingService: WeightingService,
-		private weightingValidators: WeightingValidator
+		private weightingValidators: WeightingValidator,
+		private utilityValidator: UtilityValidator
 	) {}
 
 	ngOnInit(): void {
@@ -135,14 +136,16 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			car: [null, Validators.compose([Validators.required])],
 			contact: [
 				null,
-				Validators.compose([inList(this.contacts, ["displayName"])]),
+				Validators.compose([
+					this.utilityValidator.inList(this.contacts, ["displayName"]),
+				]),
 			],
 			product: [
 				null,
 				{
 					validators: Validators.compose([Validators.required]),
 					asyncValidators: [
-						this.weightingValidators.productAsyncValidator("name"),
+						this.utilityValidator.productAsyncValidator("name"),
 					],
 				},
 			],
