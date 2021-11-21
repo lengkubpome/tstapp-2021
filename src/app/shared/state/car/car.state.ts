@@ -7,12 +7,6 @@ import { CarAction } from "./car.action";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-const cars: ICar[] = [
-	{ id: "กอ9555ขก", plateLCN: "กอ-9555", plateLCP: "ขอนแก่น" },
-	{ id: "844922ขก", plateLCN: "84-4922", plateLCP: "ขอนแก่น" },
-	{ id: "ขง2367ขก", plateLCN: "ขง-2367", plateLCP: "ขอนแก่น" },
-];
-
 export interface CarStateModel {
 	cars: ICar[];
 	carTypes: ICarType[];
@@ -28,23 +22,37 @@ export class CarState implements NgxsOnInit {
 	constructor(private carService: CarService) {}
 
 	@Selector()
+	static car(state: CarStateModel): ICar[] {
+		return state.cars;
+	}
+
+	@Selector()
 	static carType(state: CarStateModel): ICarType[] {
 		return state.carTypes;
 	}
 
 	ngxsOnInit(ctx: StateContext<CarStateModel>): void {
 		console.log("State initialized, now getting cars");
-		ctx.dispatch(new CarAction.FetchAll());
+		ctx.dispatch(new CarAction.FetchCars());
 		ctx.dispatch(new CarAction.FetchCarTypes());
 	}
 
-	@Action(CarAction.FetchAll)
-	fetchAll(ctx: StateContext<CarStateModel>): void {
-		const state = ctx.getState();
-		ctx.setState({
-			...state,
-			cars: [...state.cars, ...cars],
-		});
+	// -----------------------------------------------------------------------------------------------------
+	// @ Car Action
+	// -----------------------------------------------------------------------------------------------------
+
+	@Action(CarAction.FetchCars)
+	fetchCars(ctx: StateContext<CarStateModel>): any {
+		return this.carService.getCars().pipe(
+			tap((res) => {
+				const state = ctx.getState();
+				ctx.setState({
+					...state,
+					cars: res,
+					isLoaded: true,
+				});
+			})
+		);
 	}
 
 	@Action(CarAction.Add)
@@ -56,8 +64,12 @@ export class CarState implements NgxsOnInit {
 		});
 	}
 
+	// -----------------------------------------------------------------------------------------------------
+	// @ CarType Action
+	// -----------------------------------------------------------------------------------------------------
+
 	@Action(CarAction.FetchCarTypes)
-	fetchCarTypes(ctx: StateContext<CarStateModel>): Observable<ICarType[]> {
+	fetchCarTypes(ctx: StateContext<CarStateModel>): any {
 		return this.carService.getCarTypes().pipe(
 			tap((result) => {
 				const state = ctx.getState();

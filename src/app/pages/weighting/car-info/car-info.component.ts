@@ -1,21 +1,14 @@
 import { UtilityValidator } from "../../../shared/validators/utility.validator";
-import {
-	takeUntil,
-	startWith,
-	debounceTime,
-	map,
-	mergeMap,
-	take,
-} from "rxjs/operators";
+import { takeUntil, startWith, debounceTime, map } from "rxjs/operators";
 import { ProvinceState } from "src/app/shared/state/province/province.state";
 import { Observable, Subject } from "rxjs";
 
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ICar, ICarType } from "src/app/shared/models/car.model";
 import { Component, Input, OnInit } from "@angular/core";
 import { NbDialogRef } from "@nebular/theme";
-import { CarState } from "src/app/shared/state/car/car.state";
+import { CarState, CarStateModel } from "src/app/shared/state/car/car.state";
 
 @Component({
 	selector: "app-car-info",
@@ -27,8 +20,11 @@ export class CarInfoComponent implements OnInit {
 	@Input() car: ICar;
 	@Input() newCar: boolean;
 
-	provinceSymbols: { province: string; symbol: string }[];
-	carTypes: ICarType[];
+	@Select(CarState) cars$: Observable<CarStateModel>;
+
+	cars: ICar[] = [];
+	carTypes: ICarType[] = [];
+	provinceSymbols: { province: string; symbol: string }[] = [];
 
 	filteredCarTypes: Observable<ICarType[]>;
 
@@ -36,6 +32,7 @@ export class CarInfoComponent implements OnInit {
 
 	stateCarInfo = {
 		edit: false,
+		dulpicate: false,
 	};
 
 	carInfoForm: FormGroup;
@@ -49,11 +46,11 @@ export class CarInfoComponent implements OnInit {
 		private store: Store,
 		private utilityValidator: UtilityValidator
 	) {
+		this.cars = this.store.selectSnapshot<ICar[]>(CarState.car);
+		this.carTypes = this.store.selectSnapshot<ICarType[]>(CarState.carType);
 		this.provinceSymbols = this.store.selectSnapshot<any>(
 			ProvinceState.provinceSymbol
 		);
-
-		this.carTypes = this.store.selectSnapshot<ICarType[]>(CarState.carType);
 	}
 
 	ngOnInit(): void {
@@ -76,7 +73,6 @@ export class CarInfoComponent implements OnInit {
 							this.provinceSymbols.map((p) => p.province)
 						),
 					],
-					// asyncValidators: [this.universalValidator.provinceAsyncValidator()],
 				},
 			],
 			type: [
@@ -90,28 +86,25 @@ export class CarInfoComponent implements OnInit {
 
 	generateID(): void {
 		const prefix = this.car.plateLCN;
-		const suffix = this.provinceSymbols.filter(
-			(p) => p.province === this.car.plateLCP
-		)[0].symbol;
+		const suffix = this.car.plateLCP
+			? this.provinceSymbols.filter((p) => p.province === this.car.plateLCP)[0]
+					.symbol
+			: "";
 		const id = prefix + suffix;
 		this.car.id = id;
 		this.carInfoForm.get("id").setValue(id);
+		this.isDuplicateCar();
 	}
 
-	isDuplicateCar(): boolean {
-		// 	var x = this.car$.pipe(
-		// 		map((stateModel) => {
-		// 			const types = stateModel.cars;
-		// 			return inputValue
-		// 				? types.filter((type) =>
-		// 						this._normalizeValue(type.id + type.th).includes(
-		// 							this._normalizeValue(inputValue)
-		// 						)
-		// 				  )
-		// 				: types;
-		// 		})
-		// 	);
-		return false;
+	isDuplicateCar(): void {
+		const dulpicateCarId = this.cars.filter(
+			(car) => car.plateLCN === this.car.plateLCN
+		);
+		if (dulpicateCarId.length) {
+			this.stateCarInfo.dulpicate = true;
+		} else {
+			this.stateCarInfo.dulpicate = false;
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -119,9 +112,8 @@ export class CarInfoComponent implements OnInit {
 	// -----------------------------------------------------------------------------------------------------
 
 	onSubmitCarInfo(): void {
-		if (this.carInfoForm.valid) {
+		if (this.carInfoForm.valid && !this.stateCarInfo.dulpicate) {
 			console.log(this.car);
-
 			this.ref.close(this.car);
 		}
 	}
@@ -141,7 +133,10 @@ export class CarInfoComponent implements OnInit {
 			.valueChanges.pipe(
 				takeUntil(this.unsubscribeAll),
 				startWith(""),
-				debounceTime(300)
+				debounceTime(300),
+				map((input: string) => {
+					return input.trim();
+				})
 			)
 			.subscribe((result) => {
 				if (result) {
@@ -157,14 +152,15 @@ export class CarInfoComponent implements OnInit {
 				startWith(""),
 				debounceTime(300),
 				map((input) => {
+					console.log(input);
 					return this.provinceSymbols.filter((p) => p.province === input);
 				})
 			)
 			.subscribe((result) => {
 				if (result.length) {
 					this.car.plateLCP = result[0].province;
-					this.generateID();
 				}
+				this.generateID();
 			});
 
 		// ป้องกันกรณีผู้ใช้ พิมพ์ชื่อเต็มๆโดยไม่ผ่าน Autocomplete

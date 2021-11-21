@@ -2,8 +2,8 @@ import { ICar } from "./../../models/car.model";
 
 // tslint:disable-next-line:no-namespace
 export namespace CarAction {
-	export class FetchAll {
-		static readonly type = "[Car] Fetch All";
+	export class FetchCars {
+		static readonly type = "[Car] Fetch Cars";
 	}
 
 	export class Add {
@@ -28,9 +28,9 @@ export namespace CarAction {
 		static readonly type = "[Car] Get Car Types";
 	}
 
-	export class FetchOwners {
-		static readonly type = "[Car] Fetch Contact All";
+	// export class FetchOwners {
+	// 	static readonly type = "[Car] Fetch Contact All";
 
-		constructor(public payload: ICar, public id: string) {}
-	}
+	// 	constructor(public payload: ICar, public id: string) {}
+	// }
 }

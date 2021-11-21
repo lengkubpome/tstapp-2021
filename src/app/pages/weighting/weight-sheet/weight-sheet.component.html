@@ -48,6 +48,7 @@
             <div class="col-sm-9 d-inline-flex justify-content-start">
               <nb-form-field class="mr-2">
                 <input type="text" nbInput id="car" name="car" placeholder="ทะเบียนรถ"
+                  (keydown.space)="$event.preventDefault()"
                   [status]="(weightingForm.get('car').errors && this.weightingForm.get('car').touched) ? 'danger' : 'basic'"
                   formControlName="car" [matAutocomplete]="car">
 

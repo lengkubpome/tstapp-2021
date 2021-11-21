@@ -14,8 +14,10 @@
         <div>
           <nb-form-field>
             <div nbPrefix>รหัส</div>
+
             <input type="text" nbInput class="input-car-id" readonly id="id" name="id"
-              formControlName="id">
+              formControlName="id" [status]="!stateCarInfo.edit ? 'primary' :
+              this.stateCarInfo.dulpicate? 'danger':'warning' ">
           </nb-form-field>
         </div>
       </div>
@@ -27,9 +29,10 @@
         <div class="col-sm-9 d-inline-flex justify-content-start">
           <nb-form-field class="mr-2">
             <input type="text" nbInput id="plateLCN" name="plateLCN" placeholder="ทะเบียนรถ"
+              (keydown.space)="$event.preventDefault()"
               [status]="!stateCarInfo.edit ? 'primary' :
-                (carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched)? 'danger':'warning' "
-              formControlName="plateLCN" [readonly]="!stateCarInfo.edit">
+                (carInfoForm.get('plateLCN').errors  && carInfoForm.get('plateLCN').touched)? 'danger':'warning' " formControlName="plateLCN"
+              [readonly]="!stateCarInfo.edit">
           </nb-form-field>
 
           <div class="status-input">
@@ -91,6 +94,17 @@
             <nb-icon *ngIf="carInfoForm.get('type').errors" [icon]="'alert-triangle'"
               status="danger" pack="eva" nbTooltip="ใส่ประเภทรถไม่ถูกต้อง"
               nbTooltipPlacement="right" nbTooltipStatus="danger">
+            </nb-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row align-items-baseline">
+        <label for="type" class="label col-sm-3 col-form-label">แจ้งเตือน : </label>
+        <div class="col-sm-9 d-inline-flex justify-content-start">
+          <div class="status-input">
+            <nb-icon *ngIf="isDuplicateCar" [icon]="'alert-triangle'" status="danger" pack="eva"
+              nbTooltip="ข้อมูลซ้ำ" nbTooltipPlacement="right" nbTooltipStatus="danger">
             </nb-icon>
           </div>
         </div>

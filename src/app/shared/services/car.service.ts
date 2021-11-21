@@ -9,9 +9,9 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 })
 export class CarService extends CarData {
 	private cars: ICar[] = [
-		{ id: "กอ9555ขก", plateLCN: "กอ-9555", plateLCP: "ขอนแก่น" },
-		{ id: "844922ขก", plateLCN: "84-4922", plateLCP: "ขอนแก่น" },
-		{ id: "ขง2367ขก", plateLCN: "ขง-2367", plateLCP: "ขอนแก่น" },
+		{ id: "กอ-9555ขก", plateLCN: "กอ-9555", plateLCP: "ขอนแก่น" },
+		{ id: "84-4922ขก", plateLCN: "84-4922", plateLCP: "ขอนแก่น" },
+		{ id: "ขง-2367ขก", plateLCN: "ขง-2367", plateLCP: "ขอนแก่น" },
 	];
 
 	constructor(private afs: AngularFirestore, private http: HttpClient) {

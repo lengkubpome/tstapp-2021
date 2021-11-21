@@ -49,6 +49,7 @@ import { AngularFireModule } from "@angular/fire/compat";
 		NbToastrModule.forRoot(),
 		CoreModule.forRoot(),
 		ThemeModule.forRoot(),
+		// Directives
 		// NGXS
 		NgxsModule.forRoot([...stateList], {
 			developmentMode: !environment.production,

@@ -41,6 +41,7 @@ import { InteractivityChecker } from "@angular/cdk/a11y";
 import { NbDialogService } from "@nebular/theme";
 import { WeightingStateModel } from "../state/weighting.state";
 import { WeightingValidator } from "../weighting.validator";
+import { ProvinceState } from "src/app/shared/state/province/province.state";
 
 @Component({
 	selector: "app-weight-sheet",
@@ -50,19 +51,6 @@ import { WeightingValidator } from "../weighting.validator";
 export class WeightSheetComponent implements OnInit, OnDestroy {
 	@ViewChild("wForm") wForm: ElementRef;
 
-	// Private
-	private unsubscribeAll: Subject<any> = new Subject();
-
-	weightingForm: FormGroup;
-
-	clock = new Date();
-	weightSheet: IWeighting = { status: "success" };
-	// stateCarInfo: null | "exist" | "new";
-	newCar = false;
-
-	// Make up
-	menuItems = [{ title: "Profile" }, { title: "Logout" }];
-
 	@Select(WeightingState) weightingState$: Observable<WeightingStateModel>;
 	filteredWeightingTypes: Observable<IWeightingType[]>;
 
@@ -71,6 +59,23 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	@Select(CarState) cars$: Observable<CarStateModel>;
 	filteredCars: Observable<ICar[]>;
+
+	// Private
+	private unsubscribeAll: Subject<any> = new Subject();
+
+	weightingForm: FormGroup;
+
+	clock = new Date();
+
+	provinceSymbols: { province: string; symbol: string }[] = [];
+
+	weightSheet: IWeighting = { status: "success" };
+
+	selectCar: ICar;
+	newCar = false;
+
+	// Make up
+	menuItems = [{ title: "Profile" }, { title: "Logout" }];
 
 	contacts: IContact[];
 	// @Select(ContactState) contacts$: Observable<ContactStateModel>;
@@ -101,12 +106,16 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private weightingService: WeightingService,
 		private weightingValidators: WeightingValidator,
 		private utilityValidator: UtilityValidator
-	) {}
-
-	ngOnInit(): void {
+	) {
 		this.contacts =
 			this.store.selectSnapshot<ContactStateModel>(ContactState).contacts;
 
+		this.provinceSymbols = this.store.selectSnapshot<any>(
+			ProvinceState.provinceSymbol
+		);
+	}
+
+	ngOnInit(): void {
 		this.setWeightSheet();
 
 		this.setupFormbuilder();
@@ -307,11 +316,11 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				takeUntil(this.unsubscribeAll),
 				startWith(""),
 				debounceTime(300),
-				mergeMap((inputValue): Observable<ICar[]> => {
+				mergeMap((input): Observable<ICar[]> => {
 					return this.cars$.pipe(
 						map((stateModel) => {
 							const cars = stateModel.cars;
-							const res = cars.filter((car) => car.plateLCN === inputValue);
+							const res = cars.filter((car) => car.plateLCN === input);
 
 							// ตรวจสอบว่าเป็นข้อมูลใหม่หรือเก่า
 							if (res.length) {
@@ -332,14 +341,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.filteredCars = this.weightingForm.get("car").valueChanges.pipe(
 			startWith(""),
 			debounceTime(200),
-			mergeMap((inputValue): Observable<ICar[]> => {
+			mergeMap((input): Observable<ICar[]> => {
 				return this.cars$.pipe(
 					map((stateModel): ICar[] => {
 						const cars = stateModel.cars;
-						return inputValue
+						return input
 							? cars.filter((car) =>
 									this._normalizeValue(car.plateLCN).includes(
-										this._normalizeValue(inputValue)
+										this._normalizeValue(input)
 									)
 							  )
 							: cars;
@@ -436,8 +445,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			car = this.weightSheet.car;
 		}
 
-		// console.log("OpenDialog: ", car);
-
 		this.dialogService
 			.open(CarInfoComponent, {
 				context: {
@@ -449,8 +456,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			})
 			.onClose.subscribe((value) => {
 				if (value !== undefined) {
-					console.log(value);
-
 					this.weightSheet.car = value;
 					this.weightingForm.get("car").setValue(value.plateLCN);
 				}
