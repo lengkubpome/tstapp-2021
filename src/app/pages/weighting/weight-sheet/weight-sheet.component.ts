@@ -67,12 +67,12 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	clock = new Date();
 
-	provinceSymbols: { province: string; symbol: string }[] = [];
-
 	weightSheet: IWeighting = { status: "success" };
 
-	selectCar: ICar;
-	newCar = false;
+	stateCar: { value: ICar; isNew: boolean } = {
+		value: null,
+		isNew: false,
+	};
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
@@ -109,10 +109,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	) {
 		this.contacts =
 			this.store.selectSnapshot<ContactStateModel>(ContactState).contacts;
-
-		this.provinceSymbols = this.store.selectSnapshot<any>(
-			ProvinceState.provinceSymbol
-		);
 	}
 
 	ngOnInit(): void {
@@ -212,7 +208,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	onSelectCar(selectCar: ICar): void {
 		this.weightingForm.get("car").setValue(selectCar.plateLCN);
 		this.weightSheet.car = selectCar;
-		this.newCar = false;
+
+		this.stateCar.isNew = false;
+		this.stateCar.value = selectCar;
 	}
 
 	onSelectContact(selectContact: IContact): void {
@@ -266,6 +264,17 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 					this.weightingForm.get(name).markAsTouched();
 				}
 			}
+		} else {
+			this.addCarAfterCheckIn();
+		}
+	}
+
+	// การเพิ่มข้อมูลรถใหม่ โดยระบบจะทำการบันทึกข้อมูลเพิ่ม หลังจากมีการสร้างรายการบันทึกรถเข้าหรือออก
+	addCarAfterCheckIn(): void {
+		const input = this.weightingForm.get("car").value;
+		if (this.stateCar.value.plateLCN === input) {
+			this.weightSheet.car = this.stateCar.value;
+			// TODO: เชื่อมต่อ api ในการเพิ่มข้อมูลรถ
 		}
 	}
 
@@ -324,10 +333,16 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 							// ตรวจสอบว่าเป็นข้อมูลใหม่หรือเก่า
 							if (res.length) {
-								this.newCar = false; // มีข้อมูล
+								this.stateCar.isNew = false;
+								this.weightSheet.car = res[0];
 								return res;
 							} else {
-								this.newCar = true; // ข้อมูลใหม่
+								this.stateCar.isNew = true;
+								this.weightSheet.car = {
+									id: "null",
+									plateLCN: input,
+									plateLCP: "",
+								};
 								return [];
 							}
 						})
@@ -426,23 +441,20 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	openCarInfo(): void {
 		const title = "ข้อมูลทะเบียนรถ";
-		const newCar = this.newCar;
-		const inputCar = this.weightingForm.get("car").value;
+		// const newCar = this.newCar;
+		const input = this.weightingForm.get("car").value;
 		let car: ICar = {
-			id: inputCar,
-			plateLCN: inputCar,
+			id: "null",
+			plateLCN: input,
 			plateLCP: "",
 		};
 
-		if (this.newCar) {
-			if (
-				this.weightSheet.hasOwnProperty("car") &&
-				this.weightSheet.car.plateLCN === inputCar
-			) {
-				car = this.weightSheet.car;
+		if (this.stateCar.isNew) {
+			if (this.stateCar.value && this.stateCar.value.plateLCN === input) {
+				car = this.stateCar.value;
 			}
 		} else {
-			car = this.weightSheet.car;
+			car = this.stateCar.value;
 		}
 
 		this.dialogService
@@ -450,13 +462,13 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 				context: {
 					title,
 					car,
-					newCar,
+					newCar: this.stateCar.isNew,
 				},
 				closeOnBackdropClick: false,
 			})
 			.onClose.subscribe((value) => {
 				if (value !== undefined) {
-					this.weightSheet.car = value;
+					this.stateCar.value = value;
 					this.weightingForm.get("car").setValue(value.plateLCN);
 				}
 			});
