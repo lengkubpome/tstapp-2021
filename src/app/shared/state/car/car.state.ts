@@ -43,11 +43,8 @@ export class CarState implements NgxsOnInit {
 
 	@Action(CarAction.FetchCars)
 	fetchCars(ctx: StateContext<CarStateModel>): any {
-		return this.carService.getCars2().pipe(
+		return this.carService.getCars().pipe(
 			tap((res) => {
-				console.log("xxxxxxxxx");
-				console.log(res);
-
 				const state = ctx.getState();
 				ctx.setState({
 					...state,

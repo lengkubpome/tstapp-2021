@@ -55,13 +55,20 @@ export class CarInfoComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.stateCarInfo.edit = this.newCar;
-
 		this.carInfoForm = this.setupForm(this.car);
 		this.eventControls();
 		this.filterControls();
 	}
 
 	setupForm(car: ICar): FormGroup {
+		// เช็คค่า carType ก่อนส่งเข้า FormBuilder
+		if (this.car.hasOwnProperty("type")) {
+			const t = this.carTypes.filter((type) => type.id === this.car.type.id);
+			this.car.type = t.length ? t[0] : { id: null, name: null };
+		} else {
+			this.car.type = { id: null, name: null };
+		}
+
 		return this.formBuilder.group({
 			id: [car.id],
 			plateLCN: [car.plateLCN, { validators: Validators.required }],
@@ -76,9 +83,9 @@ export class CarInfoComponent implements OnInit {
 				},
 			],
 			type: [
-				car.hasOwnProperty("type") ? car.type.th : null,
+				car.type.name,
 				{
-					asyncValidators: [this.utilityValidator.carTypeAsyncValidator("th")],
+					asyncValidators: [this.utilityValidator.carTypeAsyncValidator()],
 				},
 			],
 		});
@@ -123,7 +130,7 @@ export class CarInfoComponent implements OnInit {
 	}
 
 	onSelectCarType(selectCarType: ICarType): void {
-		this.carInfoForm.get("type").setValue(selectCarType.th);
+		this.carInfoForm.get("type").setValue(selectCarType.name);
 		this.car.type = selectCarType;
 	}
 
@@ -170,7 +177,8 @@ export class CarInfoComponent implements OnInit {
 				startWith(""),
 				debounceTime(300),
 				map((input) => {
-					return this.carTypes.filter((type) => type.th === input);
+					return this.carTypes.filter((type) => type.name === input);
+					// return this.carTypes.filter((type) => type.name === input);
 				})
 			)
 			.subscribe((result) => {
@@ -202,7 +210,7 @@ export class CarInfoComponent implements OnInit {
 			map((input) => {
 				return input
 					? this.carTypes.filter((type) =>
-							this._normalizeValue(type.id + type.th).includes(
+							this._normalizeValue(type.name).includes(
 								this._normalizeValue(input)
 							)
 					  )

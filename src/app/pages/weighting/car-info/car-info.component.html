@@ -92,7 +92,7 @@
           <mat-autocomplete autoActiveFirstOption #carType="matAutocomplete"
             (optionSelected)="onSelectCarType($event.option.value)">
             <mat-option *ngFor="let carType of filteredCarTypes | async" [value]="carType">
-              {{ carType.id }} - {{ carType.th }}
+              {{ carType.name }}
             </mat-option>
           </mat-autocomplete>
 

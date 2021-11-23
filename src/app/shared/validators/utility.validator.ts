@@ -99,7 +99,7 @@ export class UtilityValidator {
 		};
 	}
 
-	carTypeAsyncValidator(findInProperties?: string): AsyncValidatorFn {
+	carTypeAsyncValidator(): AsyncValidatorFn {
 		return (control: AbstractControl): Observable<ValidationErrors | null> => {
 			if (!control.value) {
 				return of(null);
@@ -109,7 +109,7 @@ export class UtilityValidator {
 					map((stateModel) => {
 						const types: ICarType[] = stateModel.carTypes;
 						const result = types.filter(
-							(obj) => obj[findInProperties] === control.value
+							(obj) => obj["name"] === control.value
 						).length;
 						return result ? null : { exist: true };
 					})
