@@ -129,6 +129,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	private setupFormbuilder(): void {
 		// create form
 		this.weightingForm = this.formBuilder.group({
+			car: [null, Validators.compose([Validators.required])],
 			type: [
 				null,
 				{
@@ -138,7 +139,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 					],
 				},
 			],
-			car: [null, Validators.compose([Validators.required])],
 			contact: [
 				null,
 				Validators.compose([

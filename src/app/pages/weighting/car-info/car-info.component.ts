@@ -152,7 +152,6 @@ export class CarInfoComponent implements OnInit {
 				startWith(""),
 				debounceTime(300),
 				map((input) => {
-					console.log(input);
 					return this.provinceSymbols.filter((p) => p.province === input);
 				})
 			)

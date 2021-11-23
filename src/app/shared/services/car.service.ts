@@ -2,7 +2,11 @@ import { ICar, CarData, ICarType } from "./../models/car.model";
 import { Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import {
+	AngularFirestore,
+	DocumentReference,
+} from "@angular/fire/compat/firestore";
+import { map } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -18,9 +22,22 @@ export class CarService extends CarData {
 		super();
 	}
 
-	// getCars = (): Observable<Car[]> => this.$cars;
 	getCars(): Observable<ICar[]> {
 		return of(this.cars);
+	}
+	getCars2(): Observable<ICar[]> {
+		const carCollection = this.afs.collection<any>("cars");
+		return carCollection.valueChanges().pipe(
+			map((data) => {
+				data.forEach((car) => {
+					const typeRef: DocumentReference = car.type;
+					// const
+					// return t.type.path;
+				});
+
+				return data;
+			})
+		);
 	}
 
 	addCar(): void {
@@ -34,6 +51,14 @@ export class CarService extends CarData {
 		const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
 			ref.orderBy("id")
 		);
+		return carTypeCollection.valueChanges();
+	}
+
+	getCarTypes2(): Observable<ICarType[]> {
+		const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
+			ref.orderBy("id")
+		);
+		// const carTypes = carTypeCollection.snapshotChanges
 		return carTypeCollection.valueChanges();
 	}
 }
