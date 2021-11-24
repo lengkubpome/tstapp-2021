@@ -1,43 +1,61 @@
-import { ICar } from './car.model';
+import { ICar } from "./car.model";
 
 export interface IContact {
-	id: string;
-	type: string; // 'Individual'|'Corporate' => เลือกประเภทได้เลย;
-	displayName: string;
+	code: string;
 	taxId?: string;
-	isVendor: boolean;
-	isCustomer: boolean;
+	branch?: string;
 
-	corporateInfo?: {
-		type: string;
-		companyName?: string;
-		branchCode?: string;
-	};
-
-	personalInfo?: {
-		title?: string;
+	contactInfo: {
+		legalType: // "ordinaryPerson" | "juristisPerson";
+		"บุคคลธรรมดา" | "นิติบุคคล";
+		type: // | "human"
+		// | "ordinaryPartnership"
+		// | "shop"
+		// | "bodyOfPersons"
+		// | "companyLimited"
+		// | "publicCompanyLimited"
+		// | "limitedPartnership"
+		// | "foundation"
+		// | "association"
+		// | "jointVenture"
+		// | "other";
+		| "บุคคลธรรมดา"
+			| "ห้างหุ้นส่วนสามัญ"
+			| "ร้านค้า"
+			| "คณะบุคคล"
+			| "บริษัทจำกัด"
+			| "บริษัทมหาชนจำกัด"
+			| "ห้างหุ้นส่วนจำกัด"
+			| "มูลนิธิ"
+			| "สมาคม"
+			| "กิจการร่วมค้า"
+			| "อื่นๆ";
+		name?: string;
+		prefix?: string;
 		firstName?: string;
 		lastName?: string;
 	};
 
+	isVendor: boolean;
+	isCustomer: boolean;
+
 	address?: IAddress;
 
-	shippingAddress?: {
-		address?: IAddress;
-		isSameAddress: boolean;
+	communicateInfo?: {
+		phone: string; // 'phone' | 'email' | 'line' | 'Web'
+		telephone?: string;
+		line?: {
+			displayName: string;
+			userId: string;
+		};
+		email?: string;
 	};
 
-	communicateInfo?: {
-		phone1: string; // 'phone' | 'email' | 'line' | 'Web'
-		phone2?: string;
-		line1?: {
-			displayName: string;
-			userId: string;
-		};
-		line2?: {
-			displayName: string;
-			userId: string;
-		};
+	contactPerson?: {
+		prefix?: string;
+		firstName: string;
+		lastName?: string;
+		phone?: string;
 		email?: string;
 	};
 
@@ -52,9 +70,9 @@ export interface IContact {
 }
 
 export interface IBankAccount {
-	accountType: string;
-	accountName: string;
-	accountNumber: number;
+	type: "ออมทรัพย์" | "กระแสรายวัน";
+	name: string;
+	number: number;
 	bankName: string;
 }
 

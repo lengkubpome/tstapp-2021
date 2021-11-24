@@ -1,0 +1,22 @@
+legalType : ประเภทบุคคล{
+  ordinaryPerson : บุคคลธรรมดา{
+    1. human: บุคคลธรรมดา  {
+      1.1 prefix : คำนำหน้า
+      1.2 firstName
+      1.3 lastName
+    }
+    2. ordinaryPartnership : ห้างหุ้นส่วนสามัญ
+    3. shop : ร้านค้า
+    4. bodyOfPersons : คณะบุคคล
+
+  }
+  juristisPerson : นิติบุคคล{
+    1. companyLimited : บริษัทจำกัด
+    2. publicCompanyLimited : บริษัทมหาชนจำกัด
+    3. limitedPartnership : ห้างหุ้นส่วนจำกัด
+    4. foundation : มูลนิธิ
+    5. association : สมาคม
+    6. jointVenture : กิจการร่วมค้า
+    7. other : อื่นๆ
+  }
+}

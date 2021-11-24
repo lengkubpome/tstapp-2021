@@ -153,7 +153,7 @@
                 (optionSelected)="onSelectContact($event.option.value)">
                 <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact">
                   <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
-                  <span>{{contact.id}} - {{contact.displayName}}</span> &nbsp;
+                  <span>{{contact.code}} - {{contact.contactInfo.name}}</span> &nbsp;
                   <!-- <span>{{contact.lastName}}</span> -->
                   <!-- <small>Population: {{state.population}}</small> -->
                 </mat-option>

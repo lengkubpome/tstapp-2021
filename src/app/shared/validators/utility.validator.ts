@@ -1,3 +1,8 @@
+import { IContact } from "src/app/shared/models/contact.model";
+import {
+	ContactState,
+	ContactStateModel,
+} from "./../state/contact/contact.state";
 import { ICarType } from "../models/car.model";
 import { IProvince } from "../models/province.model";
 import {
@@ -28,6 +33,7 @@ import {
 })
 export class UtilityValidator {
 	@Select(CarState) car$: Observable<CarStateModel>;
+	@Select(ContactState) contact$: Observable<ContactStateModel>;
 	@Select(ProductState) product$: Observable<ProductStateModel>;
 	// ไม่ใช้ รอลบทิ้ง
 	// @Select(ProvinceState.province) province$: Observable<string[]>;
@@ -110,6 +116,24 @@ export class UtilityValidator {
 						const types: ICarType[] = stateModel.carTypes;
 						const result = types.filter(
 							(obj) => obj["name"] === control.value
+						).length;
+						return result ? null : { exist: true };
+					})
+				);
+			}
+		};
+	}
+	contactAsyncValidator(): AsyncValidatorFn {
+		return (control: AbstractControl): Observable<ValidationErrors | null> => {
+			if (!control.value) {
+				return of(null);
+			} else {
+				return this.contact$.pipe(
+					take(1),
+					map((stateModel) => {
+						const contacts: IContact[] = stateModel.contacts;
+						const result = contacts.filter(
+							(contact) => contact.contactInfo.name === control.value
 						).length;
 						return result ? null : { exist: true };
 					})

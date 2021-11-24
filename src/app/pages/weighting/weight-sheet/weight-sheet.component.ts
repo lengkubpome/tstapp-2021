@@ -60,6 +60,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	@Select(CarState) cars$: Observable<CarStateModel>;
 	filteredCars: Observable<ICar[]>;
 
+	@Select(ContactState) contacts$: Observable<ContactStateModel>;
+	filteredContacts: Observable<IContact[]>;
+
 	// Private
 	private unsubscribeAll: Subject<any> = new Subject();
 
@@ -76,10 +79,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
-
-	contacts: IContact[];
-	// @Select(ContactState) contacts$: Observable<ContactStateModel>;
-	filteredContacts: Observable<IContact[]>;
 
 	@HostListener("keyup", ["$event"])
 	keyevent(event): void {
@@ -106,10 +105,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private weightingService: WeightingService,
 		private weightingValidators: WeightingValidator,
 		private utilityValidator: UtilityValidator
-	) {
-		this.contacts =
-			this.store.selectSnapshot<ContactStateModel>(ContactState).contacts;
-	}
+	) {}
 
 	ngOnInit(): void {
 		this.setWeightSheet();
@@ -141,9 +137,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			],
 			contact: [
 				null,
-				Validators.compose([
-					this.utilityValidator.inList(this.contacts, ["displayName"]),
-				]),
+				{
+					asyncValidators: [this.utilityValidator.contactAsyncValidator()],
+				},
 			],
 			product: [
 				null,
@@ -214,14 +210,14 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	onSelectContact(selectContact: IContact): void {
-		const contact = this.contacts.find((c) => c === selectContact);
-		const showInput = contact.displayName;
+		// const contact = this.contacts.find((c) => c === selectContact);
+		// const showInput = contact.contactInfo.name;
 		// if (contact.lastName !== undefined) {
 		// 	showInput = showInput + ' ' + contact.lastName;
 		// }
 
-		this.weightingForm.get("contact").setValue(showInput);
-		this.weightSheet.contact = contact;
+		this.weightingForm.get("contact").setValue(selectContact.contactInfo.name);
+		this.weightSheet.contact = selectContact;
 	}
 
 	onSelectProduct(selectProduct: IProduct): void {
@@ -375,9 +371,20 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		this.filteredContacts = this.weightingForm.get("contact").valueChanges.pipe(
 			startWith(""),
 			debounceTime(200),
-			map((inputValue) =>
-				inputValue ? this._filterContact(inputValue) : this.contacts.slice()
-			)
+			mergeMap((input): Observable<IContact[]> => {
+				return this.contacts$.pipe(
+					map((stateModel): IContact[] => {
+						const contacts = stateModel.contacts;
+						return input
+							? contacts.filter((contact) =>
+									this._normalizeValue(
+										contact.contactInfo.name + contact.code
+									).includes(this._normalizeValue(input))
+							  )
+							: contacts;
+					})
+				);
+			})
 		);
 
 		this.filteredProducts = this.weightingForm.get("product").valueChanges.pipe(
@@ -420,15 +427,6 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 					);
 				})
 			);
-	}
-
-	private _filterContact(value: string): IContact[] {
-		const filterValue = this._normalizeValue(value);
-		return this.contacts.filter((contact) =>
-			this._normalizeValue(contact.id + contact.displayName).includes(
-				filterValue
-			)
-		);
 	}
 
 	private _normalizeValue(value: string): string {

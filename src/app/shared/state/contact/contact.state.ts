@@ -1,10 +1,10 @@
-import { IContact } from 'src/app/shared/models/contact.model';
-import { tap } from 'rxjs/operators';
-import { ContactService } from './../../services/contact.service';
-import { Injectable } from '@angular/core';
-import { NgxsOnInit, Selector, State, StateContext, Action } from '@ngxs/store';
-import { ContactAction } from './contact.action';
-import { Observable } from 'rxjs';
+import { IContact } from "src/app/shared/models/contact.model";
+import { tap } from "rxjs/operators";
+import { ContactService } from "./../../services/contact.service";
+import { Injectable } from "@angular/core";
+import { NgxsOnInit, Selector, State, StateContext, Action } from "@ngxs/store";
+import { ContactAction } from "./contact.action";
+import { Observable } from "rxjs";
 
 export interface ContactStateModel {
 	contacts: IContact[];
@@ -12,8 +12,8 @@ export interface ContactStateModel {
 }
 
 @State<ContactStateModel>({
-	name: 'contact',
-	defaults: { contacts: [], isLoaded: false }
+	name: "contact",
+	defaults: { contacts: [], isLoaded: false },
 })
 @Injectable()
 export class ContactState implements NgxsOnInit {
@@ -23,7 +23,7 @@ export class ContactState implements NgxsOnInit {
 	// 	return state.contacts.filter((s) => s.id === 'c1002');
 	// }
 	ngxsOnInit(ctx: StateContext<ContactStateModel>): void {
-		console.log('State initialized, now getting contact');
+		console.log("State initialized, now getting contact");
 		ctx.dispatch(new ContactAction.FetchAll());
 	}
 
@@ -31,11 +31,13 @@ export class ContactState implements NgxsOnInit {
 	fetchAll(ctx: StateContext<ContactStateModel>): Observable<IContact[]> {
 		return this.contactService.getContacts().pipe(
 			tap((result) => {
+				console.log(result);
+
 				const state = ctx.getState();
 				ctx.setState({
 					...state,
 					contacts: result,
-					isLoaded: true
+					isLoaded: true,
 				});
 			})
 		);
@@ -49,7 +51,7 @@ export class ContactState implements NgxsOnInit {
 		const state = ctx.getState();
 		ctx.setState({
 			...state,
-			contacts: [ ...state.contacts, payload ]
+			contacts: [...state.contacts, payload],
 		});
 	}
 }
