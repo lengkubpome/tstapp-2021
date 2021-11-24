@@ -1,4 +1,4 @@
-import { tap } from "rxjs/operators";
+import { map, mergeMap, tap } from "rxjs/operators";
 import { CarService } from "./../../services/car.service";
 import { ICar, ICarType } from "./../../models/car.model";
 import { Injectable } from "@angular/core";
@@ -33,8 +33,8 @@ export class CarState implements NgxsOnInit {
 
 	ngxsOnInit(ctx: StateContext<CarStateModel>): void {
 		console.log("State initialized, now getting cars");
-		ctx.dispatch(new CarAction.FetchCars());
 		ctx.dispatch(new CarAction.FetchCarTypes());
+		ctx.dispatch(new CarAction.FetchCars());
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -44,11 +44,15 @@ export class CarState implements NgxsOnInit {
 	@Action(CarAction.FetchCars)
 	fetchCars(ctx: StateContext<CarStateModel>): any {
 		return this.carService.getCars().pipe(
-			tap((res) => {
+			tap((actions) => {
+				const carType = ctx.getState().carTypes;
+				actions.map((c) => {
+					c.type = carType.filter((t) => t.id === c.type.id)[0];
+				});
 				const state = ctx.getState();
 				ctx.setState({
 					...state,
-					cars: res,
+					cars: actions,
 					isLoaded: true,
 				});
 			})

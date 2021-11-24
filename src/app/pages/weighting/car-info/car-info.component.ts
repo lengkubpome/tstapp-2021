@@ -61,14 +61,6 @@ export class CarInfoComponent implements OnInit {
 	}
 
 	setupForm(car: ICar): FormGroup {
-		// เช็คค่า carType ก่อนส่งเข้า FormBuilder
-		if (this.car.hasOwnProperty("type")) {
-			const t = this.carTypes.filter((type) => type.id === this.car.type.id);
-			this.car.type = t.length ? t[0] : { id: null, name: null };
-		} else {
-			this.car.type = { id: null, name: null };
-		}
-
 		return this.formBuilder.group({
 			id: [car.id],
 			plateLCN: [car.plateLCN, { validators: Validators.required }],
@@ -83,7 +75,7 @@ export class CarInfoComponent implements OnInit {
 				},
 			],
 			type: [
-				car.type.name,
+				this.car.hasOwnProperty("type") ? car.type.name : null,
 				{
 					asyncValidators: [this.utilityValidator.carTypeAsyncValidator()],
 				},

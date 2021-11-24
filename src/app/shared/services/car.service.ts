@@ -5,8 +5,9 @@ import { HttpClient } from "@angular/common/http";
 import {
 	AngularFirestore,
 	DocumentReference,
+	CollectionReference,
 } from "@angular/fire/compat/firestore";
-import { map } from "rxjs/operators";
+import { map, mergeMap, switchMap } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -23,19 +24,10 @@ export class CarService {
 	// getCars(): Observable<ICar[]> {
 	// 	return of(this.cars);
 	// }
+
 	getCars(): Observable<ICar[]> {
 		const carCollection = this.afs.collection<any>("cars");
-		return carCollection.valueChanges({ idField: "customID" }).pipe(
-			map((actions) => {
-				actions.map((data) => {
-					const typeRef = data.type.id; // DocumentReference<CarType>
-					data.type = { id: typeRef, name: null } as ICarType;
-					return data;
-				});
-
-				return actions;
-			})
-		);
+		return carCollection.valueChanges({ idField: "customID" });
 	}
 
 	addCar(): void {
@@ -45,27 +37,25 @@ export class CarService {
 		// ];
 	}
 
-	getCarTypes(): Observable<ICarType[]> {
-		const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
-			ref.orderBy("name")
-		);
-		return carTypeCollection.valueChanges({ idField: "id" });
-	}
-
 	// getCarTypes(): Observable<ICarType[]> {
-	// 	const carTypeCollection = this.afs
-	// 		.collection<ICarType>("carTypes", (ref) => ref.orderBy("name"))
-	// 		.snapshotChanges()
-	// 		.pipe(
-	// 			map((actions) =>
-	// 				actions.map((a) => {
-	// 					const data = a.payload.doc.data() as ICarType;
-	// 					const id = a.payload.doc.id;
-	// 					return { ...data, id };
-	// 				})
-	// 			)
-	// 		);
-
-	// 	return carTypeCollection;
+	// 	const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
+	// 		ref.orderBy("name")
+	// 	);
+	// 	return carTypeCollection.valueChanges({ idField: "id" });
 	// }
+
+	getCarTypes(): Observable<ICarType[]> {
+		return this.afs
+			.collection<ICarType>("carTypes", (ref) => ref.orderBy("name"))
+			.snapshotChanges()
+			.pipe(
+				map((actions) =>
+					actions.map((a) => {
+						const data = a.payload.doc.data() as ICarType;
+						const id = a.payload.doc.id;
+						return { ...data, id };
+					})
+				)
+			);
+	}
 }
