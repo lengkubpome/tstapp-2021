@@ -9,6 +9,7 @@ const routes: Routes = [
 			import('./pages/pages.module').then((m) => m.PagesModule)
 	},
 	{ path: '', redirectTo: 'pages', pathMatch: 'full' },
+	{ path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule) },
 	{ path: '**', redirectTo: 'pages' }
 ];
 

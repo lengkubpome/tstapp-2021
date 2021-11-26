@@ -5,8 +5,16 @@ import { Component, OnInit } from "@angular/core";
 
 @Component({
 	selector: "app-weighting",
-	templateUrl: "./weighting.component.html",
-	styleUrls: ["./weighting.component.scss"],
+	template: `
+		<div class="row">
+			<div class="col-lg-8">
+				<app-weight-sheet></app-weight-sheet>
+			</div>
+			<div class="col-lg-4">
+				<app-weight-storage></app-weight-storage>
+			</div>
+		</div>
+	`,
 })
 export class WeightingComponent implements OnInit {
 	weightingTypes: IWeightingType[];

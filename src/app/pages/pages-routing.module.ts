@@ -1,12 +1,12 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from "@angular/core";
 
-import { PagesComponent } from './pages.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { PagesComponent } from "./pages.component";
+import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 
 const routes: Routes = [
 	{
-		path: '',
+		path: "",
 		component: PagesComponent,
 		children: [
 			// {
@@ -18,9 +18,14 @@ const routes: Routes = [
 			// 	component: DashboardComponent
 			// },
 			{
-				path: 'weighting',
+				path: "weighting",
 				loadChildren: () =>
-					import('./weighting/weighting.module').then((m) => m.WeightingModule)
+					import("./weighting/weighting.module").then((m) => m.WeightingModule),
+			},
+			{
+				path: "contact",
+				loadChildren: () =>
+					import("./contact/contact.module").then((m) => m.ContactModule),
 			},
 			// {
 			// 	path: 'forms',
@@ -69,27 +74,27 @@ const routes: Routes = [
 			// 		import('./tables/tables.module').then((m) => m.TablesModule)
 			// },
 			{
-				path: 'miscellaneous',
+				path: "miscellaneous",
 				loadChildren: () =>
-					import('./miscellaneous/miscellaneous.module').then(
+					import("./miscellaneous/miscellaneous.module").then(
 						(m) => m.MiscellaneousModule
-					)
+					),
 			},
 			{
-				path: '',
-				redirectTo: 'weighting',
-				pathMatch: 'full'
+				path: "",
+				redirectTo: "weighting",
+				pathMatch: "full",
 			},
 			{
-				path: '**',
-				component: NotFoundComponent
-			}
-		]
-	}
+				path: "**",
+				component: NotFoundComponent,
+			},
+		],
+	},
 ];
 
 @NgModule({
-	imports: [ RouterModule.forChild(routes) ],
-	exports: [ RouterModule ]
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule],
 })
 export class PagesRoutingModule {}
