@@ -1,3 +1,4 @@
+import { MatSortModule } from "@angular/material/sort";
 import { ContactListComponent } from "./contact-list/contact-list.component";
 import { ContactRoutes } from "./contact.routing";
 import { NgModule } from "@angular/core";
@@ -6,18 +7,26 @@ import { ContactComponent } from "./contact.component";
 import {
 	NbButtonModule,
 	NbCardModule,
+	NbFormFieldModule,
 	NbIconModule,
 	NbInputModule,
 	NbLayoutModule,
+	NbMenuModule,
 	NbSidebarModule,
 	NbUserModule,
 } from "@nebular/theme";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 const COMPONENTS = [ContactComponent, ContactListComponent];
 const MODULES = [
 	ContactRoutes,
-	NbSidebarModule,
 	MatTableModule,
+	MatPaginatorModule,
+	MatSortModule,
+	NbMenuModule,
+	NbFormFieldModule,
+	NbSidebarModule,
+
 	NbCardModule,
 	NbIconModule,
 	NbInputModule,

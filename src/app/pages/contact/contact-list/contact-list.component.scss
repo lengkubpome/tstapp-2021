@@ -4,6 +4,31 @@
 
 @include nb-install-component() {
   .menu-sidebar ::ng-deep .scrollable {
-    padding-top: nb-theme(layout-padding-top);
+    box-shadow:none;
+  }
+  nb-layout-header{
+    height: 4.65rem; //แก้ไขขอบ scrollbar ด้านขวา
+    border-bottom: 1px solid #edf1f7;
+  }
+
+  nb-sidebar {
+    border-right: 1px solid #edf1f7;
+
+  }
+
+  nb-layout-column{
+    background-color: #fff;
+  }
+
+  table {
+    box-shadow:none;
+    width: 100%;
+  }
+  .mat-row .mat-cell {
+    cursor: pointer;
+  }
+
+  .mat-row:hover .mat-cell {
+    background: whitesmoke;
   }
 }
