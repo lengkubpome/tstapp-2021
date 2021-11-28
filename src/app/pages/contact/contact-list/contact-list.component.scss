@@ -3,22 +3,36 @@
 @import '~@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
-  .menu-sidebar ::ng-deep .scrollable {
-    box-shadow:none;
-  }
-  nb-layout-header{
-    height: 4.65rem; //แก้ไขขอบ scrollbar ด้านขวา
-    border-bottom: 1px solid #edf1f7;
-  }
+  // .menu-sidebar ::ng-deep .scrollable {
+  //   box-shadow:none;
+  // }
+  // nb-layout-header{
+  //   height: 4.65rem; //แก้ไขขอบ scrollbar ด้านขวา
+  //   border-bottom: 1px solid #edf1f7;
+  // }
 
-  nb-sidebar {
-    border-right: 1px solid #edf1f7;
+  // nb-sidebar {
+  //   border-right: 1px solid #edf1f7;
 
-  }
+  // }
 
-  nb-layout-column{
-    background-color: #fff;
-  }
+  // nb-layout-column{
+  //   background-color: #fff;
+  // }
+
+  // .nav-menu{
+  //   padding: 0 0.5rem 0.5rem 0.5rem;
+  //   color: nb-theme(text-hint-color);
+  //   font-size: nb-theme(text-caption-line-height);
+  //   display: flex;
+  //   justify-content: start;
+  //   align-items: center;
+  //   a{
+  //     text-decoration:none;
+  //     padding: 0.5rem ;
+
+  //   }
+  // }
 
   table {
     box-shadow:none;
@@ -26,9 +40,26 @@
   }
   .mat-row .mat-cell {
     cursor: pointer;
+    border-bottom: 1px solid rgba($color: whitesmoke, $alpha: 0.9);
+    // border-top: 1px solid transparent;
   }
 
   .mat-row:hover .mat-cell {
     background: whitesmoke;
   }
+
+  .mat-column-select{
+    width: 10% !important;
+  }
+
+  .mat-column-code{
+    width: 10% !important;
+  }
+
+  .mat-column-action{
+    width: 10% !important;
+    // text-align: right;
+    // justify-content: flex-end;
+  }
+
 }

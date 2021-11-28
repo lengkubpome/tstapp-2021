@@ -2,12 +2,15 @@ import { ICar } from "./car.model";
 
 export interface IContact {
 	code: string;
-	taxId?: string;
-	branch?: string;
 
-	contactInfo: {
-		legalType: // "ordinaryPerson" | "juristisPerson";
-		"บุคคลธรรมดา" | "นิติบุคคล";
+	name: string;
+	prefix?: string;
+	firstName?: string;
+	lastName?: string;
+
+	businessInfo: {
+		// legalType: // "ordinaryPerson" | "juristisPerson";
+		// "บุคคลธรรมดา" | "นิติบุคคล";
 		type: // | "human"
 		// | "ordinaryPartnership"
 		// | "shop"
@@ -30,14 +33,13 @@ export interface IContact {
 			| "สมาคม"
 			| "กิจการร่วมค้า"
 			| "อื่นๆ";
-		name?: string;
-		prefix?: string;
-		firstName?: string;
-		lastName?: string;
+		taxId?: string;
+		branch?: string;
 	};
-
-	isVendor: boolean;
-	isCustomer: boolean;
+	group: {
+		vendor: boolean;
+		customer: boolean;
+	};
 
 	address?: IAddress;
 

@@ -6,6 +6,13 @@ import { Component, OnInit } from "@angular/core";
 @Component({
 	selector: "app-weighting",
 	template: `
+		<div class="nav-menu">
+			<span>
+				<nb-icon nbPrefix icon="car" pack="eva"></nb-icon>
+				ชั่งน้ำหนัก
+			</span>
+		</div>
+
 		<div class="row">
 			<div class="col-lg-8">
 				<app-weight-sheet></app-weight-sheet>

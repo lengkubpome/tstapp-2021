@@ -63,3 +63,18 @@ body {
 	height: 100%;
 }
 // body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.nav-menu{
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  color: nb-theme(text-hint-color);
+  font-size: nb-theme(text-caption-line-height);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  >*{
+    padding: 0.5rem 0.5rem 0.5rem 0 ;
+  }
+  a{
+    text-decoration:none;
+  }
+}

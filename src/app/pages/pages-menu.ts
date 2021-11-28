@@ -7,6 +7,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
 		link: "/pages/weighting",
 		home: true,
 	},
+
+	{
+		title: "ผู้ติดต่อ",
+		icon: "people-outline",
+		link: "/pages/contact",
+	},
+	{
+		title: "สินค้า",
+		icon: "browser-outline",
+	},
 	// {
 	// 	title: 'FEATURES',
 	// 	group: true
@@ -38,15 +48,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
 				link: "/pages/forms/layouts",
 			},
 		],
-	},
-	{
-		title: "ผู้ติดต่อ",
-		icon: "people-outline",
-		link: "/pages/contact",
-	},
-	{
-		title: "สินค้า",
-		icon: "browser-outline",
 	},
 	{
 		title: "ตั้งค่า",
