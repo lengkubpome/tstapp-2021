@@ -1,8 +1,53 @@
 
-	nb-tabset {
+	@import '../../../@theme/styles/themes';
+  @import '~bootstrap/scss/mixins/breakpoints';
+  @import '~@nebular/theme/styles/global/breakpoints';
+
+
+  @include nb-install-component() {
+  nb-tabset {
 		// padding: 0.5rem;
 		// background-color: nb-theme(background-basic-color-2);
     nb-tab {
       padding: 1rem 0;
     }
 	}
+
+  .container-info-items{
+    margin: 0;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .info-item{
+    flex-basis: 0;
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    flex: 0 0 100%;
+    max-width: 100%;
+
+    .info-item-header{
+      font-size: 1.125rem;
+      font-weight: 700;
+      line-height: 1.5rem;
+      padding: 0.5rem 0;
+      margin: 0.8rem 0;
+      border-bottom: 1px solid nb-theme(color-basic-500);;
+    }
+    .info-item-detail{
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      .row > *{
+        padding: 0.5rem 0;
+      }
+    }
+
+  }
+
+  }

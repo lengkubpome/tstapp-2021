@@ -20,6 +20,7 @@ import {
 	NbUserModule,
 } from "@nebular/theme";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatListModule } from "@angular/material/list";
 import { ContactDetailComponent } from "./contact-detail/contact-detail.component";
 import { AvatarModule } from "ngx-avatar";
 
@@ -33,6 +34,7 @@ const MODULES = [
 	MatTableModule,
 	MatPaginatorModule,
 	MatSortModule,
+	MatListModule,
 	NbMenuModule,
 	NbContextMenuModule,
 	NbFormFieldModule,
