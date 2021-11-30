@@ -14,13 +14,24 @@
     <div class="d-flex flex-row justify-content-between">
       <div class="main-detail d-flex justify-content-center">
         <ngx-avatar src="assets/images/alan.png" size="80" [round]="true" cornerRadius="5"
-          class="pr-3">
+          class="pt-2 pr-3">
         </ngx-avatar>
         <div class="d-flex align-items-start flex-column bd-highlight">
           <div class="p-2">
-            <p class="my-1"><strong>C0001 - ไทยสุทัศน์</strong> &nbsp;( Tax ID : 0303042903029 )
+            <p class="my-2"><strong>C0001 - ไทยสุทัศน์</strong> &nbsp;( Tax ID : 0303042903029 )
             </p>
-            <p class="mt-2">เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000</p>
+            <p class="my-2">เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000</p>
+            <div>
+              <button nbButton shape="round" size="small" status="warning">
+                <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>Round Small
+              </button>
+              <button nbButton shape="round" size="small" status="success">ผู้ขาย
+              </button>
+              <button nbButton shape="round" size="small" status="info">ลูกค้า
+              </button>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -72,49 +83,78 @@
 
             <div class="info-item">
               <div class="info-item-header">
-                <nb-icon nbPrefix icon="briefcase" pack="eva"></nb-icon>
-                ข้อมูลจดทะเบียนบริษัท
+                <nb-icon nbPrefix icon="radio" pack="eva"></nb-icon>
+                ข้อมูลติดต่อ
               </div>
               <div class="info-item-detail">
                 <div class="row">
                   <div class="col-4">
-                    ประเภทกิจการ :
+                    เบอร์โทรศัพท์ :
                   </div>
                   <div class="col-8">
-                    ห้างหุ้นส่วนจำกัด
+                    085-399-4193, 094-340-5355
                   </div>
                   <div class="col-4">
-                    เลขทะเบียนนิติบุคคล :
+                    อีเมลกลาง :
                   </div>
                   <div class="col-8">
-                    0403537001866
+                    thaisuthat.recycle@gmail.com
                   </div>
                   <div class="col-4">
-                    เลขที่สาขา :
+                    ที่อยู่ส่งเอกสาร :
                   </div>
                   <div class="col-8">
-                    ( 00000 ) ( สำนักงานใหญ่ )
+                    เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000
                   </div>
                   <div class="col-4">
-                    ที่อยู่จดทะเบียน :
+                    เว็บไซต์ :
                   </div>
                   <div class="col-8">
-                    เลขที่ 126/1 หมู่ 3 ถนนมิตรภาพ แขวง/ตำบล ศิลา เขต/อำเภอ เมืองขอนแก่น จังหวัด
-                    ขอนแก่น ไทย 40000
+                    -
                   </div>
+                  <div class="col-4">
+                    ไลน์ไอดี :
+                  </div>
+                  <div class="col-8">
+                    -
+                  </div>
+
                 </div>
               </div>
             </div>
+
+            <div class="info-item">
+              <div class="info-item-header ">
+                <mat-icon>account_balance</mat-icon>
+                <span>ข้อมูลธนาคาร</span>
+              </div>
+              <div class="info-item-detail">
+                <div class="row">
+                  <div class="col-4">
+                    บัญชีที่ 1 : หจก.ไทยสุทัศน์
+                  </div>
+                  <div class="col-8">
+                    <p>กสิกรไทย 240-2-04904-4 </p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </nb-tab>
 
       <nb-tab tabTitle="ข้อมูลซื้อ-ขาย">
-        <p>List of <strong>orders</strong>.</p>
+        <p>ฟีเจอร์ในอนาคต</p>
+        <p>1. ข้อมูลซื้อขายของผู้ติดต่อ</p>
+        <p>2. ข้อมูลรถ</p>
       </nb-tab>
-      <nb-tab tabTitle="ข้อมูลรถ">
-        <p>List of <strong>orders</strong>.</p>
+      <nb-tab tabTitle="ข้อมูลทางบัญชี">
+        <p>ฟีเจอร์ในอนาคต</p>
+        <p>1. การบันทึกทางบัญชี (เร็วๆนี้)</p>
       </nb-tab>
+
 
     </nb-tabset>
   </nb-card-body>

@@ -44,12 +44,12 @@ export interface IContact {
 	address?: IAddress;
 
 	communicateInfo?: {
-		phone: string; // 'phone' | 'email' | 'line' | 'Web'
-		telephone?: string;
+		phone?: string[]; // 'phone' | 'email' | 'line' | 'Web'
 		line?: {
 			displayName: string;
 			userId: string;
 		};
+		website?: string;
 		email?: string;
 	};
 

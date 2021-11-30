@@ -17,12 +17,14 @@ import {
 	NbMenuModule,
 	NbSidebarModule,
 	NbTabsetModule,
+	NbTagModule,
 	NbUserModule,
 } from "@nebular/theme";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatListModule } from "@angular/material/list";
 import { ContactDetailComponent } from "./contact-detail/contact-detail.component";
 import { AvatarModule } from "ngx-avatar";
+import { MatIconModule } from "@angular/material/icon";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -47,7 +49,9 @@ const MODULES = [
 	NbUserModule,
 	NbLayoutModule,
 	NbTabsetModule,
-
+	NbTagModule,
+	// Material
+	MatIconModule,
 	// Avatar
 	AvatarModule,
 ];
