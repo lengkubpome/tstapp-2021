@@ -11,19 +11,24 @@
 
 <nb-card>
   <nb-card-header>
-    <div class="d-flex flex-row justify-content-between">
-      <div class="main-detail d-flex justify-content-center">
-        <ngx-avatar src="assets/images/alan.png" size="80" [round]="true" cornerRadius="5"
-          class="pt-2 pr-3">
+    <div class="container-main-info">
+      <div class="main-info">
+        <ngx-avatar class="profile-image" src="assets/images/alan.png" size="80" [round]="true"
+          cornerRadius="5">
         </ngx-avatar>
-        <div class="d-flex align-items-start flex-column bd-highlight">
-          <div class="p-2">
-            <p class="my-2"><strong>C0001 - ไทยสุทัศน์</strong> &nbsp;( Tax ID : 0303042903029 )
+        <div class="main-info-detail">
+          <div>
+            <p>
+              <strong>C0001 - ไทยสุทัศน์</strong>
+              <span>( Tax ID : 0303042903029 )</span>
             </p>
-            <p class="my-2">เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000</p>
-            <div>
+            <p>
+              <span> เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000</span>
+            </p>
+            <div class="type-list">
+
               <button nbButton shape="round" size="small" status="warning">
-                <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>Round Small
+                <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>ไทยสุทัศน์
               </button>
               <button nbButton shape="round" size="small" status="success">ผู้ขาย
               </button>
@@ -35,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="action">
+      <div class="main-action">
         <nb-icon icon="menu"></nb-icon>
       </div>
     </div>
@@ -45,6 +50,7 @@
       <nb-tab tabTitle="ข้อมูลธุรกิจ">
         <div class="container-info-items">
           <div class="row">
+            <!-- ข้อมูลจดทะเบียนบริษัท -->
             <div class="info-item">
               <div class="info-item-header">
                 <nb-icon nbPrefix icon="briefcase" pack="eva"></nb-icon>
@@ -58,18 +64,24 @@
                   <div class="col-8">
                     ห้างหุ้นส่วนจำกัด
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     เลขทะเบียนนิติบุคคล :
                   </div>
                   <div class="col-8">
                     0403537001866
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     เลขที่สาขา :
                   </div>
                   <div class="col-8">
                     ( 00000 ) ( สำนักงานใหญ่ )
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     ที่อยู่จดทะเบียน :
                   </div>
@@ -80,7 +92,7 @@
                 </div>
               </div>
             </div>
-
+            <!-- ข้อมูลติดต่อ -->
             <div class="info-item">
               <div class="info-item-header">
                 <nb-icon nbPrefix icon="radio" pack="eva"></nb-icon>
@@ -94,23 +106,90 @@
                   <div class="col-8">
                     085-399-4193, 094-340-5355
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     อีเมลกลาง :
                   </div>
                   <div class="col-8">
                     thaisuthat.recycle@gmail.com
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     ที่อยู่ส่งเอกสาร :
                   </div>
                   <div class="col-8">
                     เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-4">
                     เว็บไซต์ :
                   </div>
                   <div class="col-8">
                     -
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                    ไลน์ไอดี :
+                  </div>
+                  <div class="col-8">
+                    -
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- ข้อมูลธนาคาร -->
+            <div class="info-item">
+              <div class="info-item-header ">
+                <mat-icon>account_balance</mat-icon>
+                <span>ข้อมูลธนาคาร</span>
+              </div>
+              <div class="info-item-detail">
+                <div class="row">
+                  <div class="col-4">
+                    บัญชีหลัก :
+                  </div>
+                  <div class="col-8">
+                    <p>นาย เกียรติพงศ์ แซ่ตั้ง </p>
+                    <p>กสิกรไทย 240-2-04904-4 </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                    บัญชีสำรอง 1 :
+                  </div>
+                  <div class="col-8">
+                    <p>กสิกรไทย 240-2-04904-4 </p>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+            <!-- ผู้ติดต่อ -->
+            <div class="info-item">
+              <div class="info-item-header">
+                <mat-icon>group</mat-icon>
+                สมาชิก
+              </div>
+              <div class="info-item-detail">
+                <div class="row">
+                  <div class="col-4">
+                    เบอร์โทรศัพท์ :
+                  </div>
+                  <div class="col-8">
+                    085-399-4193, 094-340-5355
+                  </div>
+                  <div class="col-4">
+                    อีเมล :
+                  </div>
+                  <div class="col-8">
+                    thaisuthat.recycle@gmail.com
                   </div>
                   <div class="col-4">
                     ไลน์ไอดี :
@@ -123,33 +202,17 @@
               </div>
             </div>
 
-            <div class="info-item">
-              <div class="info-item-header ">
-                <mat-icon>account_balance</mat-icon>
-                <span>ข้อมูลธนาคาร</span>
-              </div>
-              <div class="info-item-detail">
-                <div class="row">
-                  <div class="col-4">
-                    บัญชีที่ 1 : หจก.ไทยสุทัศน์
-                  </div>
-                  <div class="col-8">
-                    <p>กสิกรไทย 240-2-04904-4 </p>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </nb-tab>
 
       <nb-tab tabTitle="ข้อมูลซื้อ-ขาย">
         <p>ฟีเจอร์ในอนาคต</p>
-        <p>1. ข้อมูลซื้อขายของผู้ติดต่อ</p>
-        <p>2. ข้อมูลรถ</p>
+        <p>1. ระดับสมาชิก</p>
+        <p>2. ข้อมูลซื้อขาย</p>
+        <p>3. ข้อมูลรถ</p>
       </nb-tab>
+
       <nb-tab tabTitle="ข้อมูลทางบัญชี">
         <p>ฟีเจอร์ในอนาคต</p>
         <p>1. การบันทึกทางบัญชี (เร็วๆนี้)</p>

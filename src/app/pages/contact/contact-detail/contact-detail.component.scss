@@ -18,6 +18,48 @@
 
   }
 
+  .container-main-info{
+    display: flex ;
+    flex-direction: row ;
+    justify-content: space-between ;
+
+    .main-info{
+      display: flex;
+      justify-content: center;
+
+      .profile-image{
+        padding: 0.5rem 1rem 0 0;
+      }
+
+      .main-info-detail{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        > div{
+          p{
+            margin: 0.5rem 0;
+
+            strong{
+              padding-right: 8px;
+            }
+          }
+          .type-list{
+            padding-top: 0.3rem;
+            button{
+              margin-right: 0.5rem;
+            }
+          }
+        }
+
+      }
+    }
+    .main-action{
+
+    }
+  }
+
+
+
   .container-info-items{
     margin: 0;
     max-width: 100%;
@@ -55,7 +97,10 @@
       margin-right: auto;
       margin-left: auto;
       .row > *{
-        padding: 0.5rem 0;
+        padding: 0.5rem;
+      }
+      .row:hover{
+        background: whitesmoke;
       }
     }
 

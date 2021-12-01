@@ -7,11 +7,16 @@ export interface IContact {
 	prefix?: string;
 	firstName?: string;
 	lastName?: string;
-
+	type: {
+		vendor: boolean;
+		customer: boolean;
+		store: boolean;
+	};
+	storeContactId?: string; // เชื่อมกับร้านค้า
 	businessInfo: {
 		// legalType: // "ordinaryPerson" | "juristisPerson";
 		// "บุคคลธรรมดา" | "นิติบุคคล";
-		type: // | "human"
+		legalType: // | "human"
 		// | "ordinaryPartnership"
 		// | "shop"
 		// | "bodyOfPersons"
@@ -36,10 +41,6 @@ export interface IContact {
 		taxId?: string;
 		branch?: string;
 	};
-	group: {
-		vendor: boolean;
-		customer: boolean;
-	};
 
 	address?: IAddress;
 
@@ -63,7 +64,6 @@ export interface IContact {
 
 	bankAccounts?: IBankAccount[];
 
-	linkContactId?: string; // เชื่อมกับร้านค้า
 	memberClassId?: string;
 
 	locationGoogle?: { lat: number; lng: number };
@@ -72,7 +72,7 @@ export interface IContact {
 }
 
 export interface IBankAccount {
-	type: "ออมทรัพย์" | "กระแสรายวัน";
+	type?: "ออมทรัพย์" | "กระแสรายวัน";
 	name: string;
 	number: number;
 	bankName: string;
