@@ -153,21 +153,26 @@
                   <div class="col-4">
                     บัญชีหลัก :
                   </div>
-                  <div class="col-8">
-                    <p>นาย เกียรติพงศ์ แซ่ตั้ง </p>
-                    <p>กสิกรไทย 240-2-04904-4 </p>
+                  <div class="col-8 d-flex align-items-center">
+                    <i class="bank xxxxl mr-2" [class]="'bank-kbank'"></i>
+                    <div class="d-flex flex-column justify-content-between">
+                      <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
+                      <span>กสิกรไทย 240-2-04904-4 </span>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-4">
-                    บัญชีสำรอง 1 :
+                    บัญชีสำรอง :
                   </div>
-                  <div class="col-8">
-                    <p>กสิกรไทย 240-2-04904-4 </p>
+                  <div class="col-8 d-flex align-items-center">
+                    <i class="bank xxxxl mr-2" [class]="'bank-ttb'"></i>
+                    <div class="d-flex flex-column justify-content-between">
+                      <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
+                      <span>กสิกรไทย 240-2-04904-4 </span>
+                    </div>
                   </div>
                 </div>
-
-
 
               </div>
             </div>
@@ -175,29 +180,44 @@
             <div class="info-item">
               <div class="info-item-header">
                 <mat-icon>group</mat-icon>
-                สมาชิก
+                ผู้ติดต่อ
               </div>
               <div class="info-item-detail">
                 <div class="row">
                   <div class="col-4">
-                    เบอร์โทรศัพท์ :
+                    บุคคลที่ 1 :
                   </div>
-                  <div class="col-8">
-                    085-399-4193, 094-340-5355
-                  </div>
-                  <div class="col-4">
-                    อีเมล :
-                  </div>
-                  <div class="col-8">
-                    thaisuthat.recycle@gmail.com
-                  </div>
-                  <div class="col-4">
-                    ไลน์ไอดี :
-                  </div>
-                  <div class="col-8">
-                    -
-                  </div>
+                  <div class="col d-flex">
+                    <div>
+                      <ngx-avatar class="profile-image" src="assets/images/alan.png" size="60"
+                        [round]="true" cornerRadius="5"></ngx-avatar>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-items-center">
+                        <strong>นาย เกียรติพงศ์ แซ่ตั้ง - C0001</strong>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <mat-icon>assignment_ind</mat-icon>
+                        <span class="">ประธานบริษัท</span>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <nb-icon nbPrefix icon="phone" pack="eva"></nb-icon>
+                        <span class="">(085)-495-1894</span>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <nb-icon nbPrefix icon="email" pack="eva"></nb-icon>
+                        <span class="">thaisuthat.recycle@gmail.com</span>
+                      </div>
 
+                    </div>
+
+
+
+
+                  </div>
+                  <div class="d-inline-flex">
+                    <nb-icon nbPrefix icon="more-horizontal" pack="eva"></nb-icon>
+                  </div>
                 </div>
               </div>
             </div>

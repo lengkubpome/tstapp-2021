@@ -1,0 +1,68 @@
+i.social {
+	display: inline-block;
+	border-radius: 100%;
+	/* background-color: transparent; */
+	vertical-align: middle;
+	width: 14px;
+	height: 14px;
+	padding: 0.1em;
+	background-repeat: no-repeat;
+	/* background-size: 75%; */
+	background-position: center;
+	background-origin: content-box;
+	overflow: hidden;
+	vertical-align: -0.23em;
+}
+i.social.round {
+	border-radius: 50%;
+}
+i.social.shadow {
+	box-shadow: 0px 0px 5px grey;
+}
+i.social.huge {
+	width: 64px;
+	height: 64px;
+}
+i.social.xxxxl {
+	width: 40px;
+	height: 40px;
+}
+h1 > i.social,
+i.social.xxxl {
+	width: 32px;
+	height: 32px;
+}
+h2 > i.social,
+i.social.xxl {
+	width: 22px;
+	height: 22px;
+}
+h3 > i.social,
+i.social.xl {
+	width: 18px;
+	height: 18px;
+}
+h4 > i.social,
+i.social.l {
+	width: 16px;
+	height: 16px;
+}
+h5 > i.social,
+i.social.s {
+	width: 12px;
+	height: 12px;
+}
+h6 > i.social,
+i.social.xs {
+	width: 10px;
+	height: 10px;
+}
+
+i.social.social-facebook {
+	background-color: #ffffff;
+	background-image: url("../images/social_media/facebook.svg");
+}
+i.social.social-line {
+	background-color: #ffffff;
+	background-image: url("../../assets/images/social_media/line.svg");
+}

@@ -56,11 +56,14 @@ export interface IContact {
 
 	contactPerson?: {
 		prefix?: string;
-		firstName: string;
+		firstName?: string;
 		lastName?: string;
+		position?: string;
 		phone?: string;
 		email?: string;
-	};
+		status?: string; // 'active' | 'inactive'
+		linkContactId?: IContact;
+	}[];
 
 	bankAccounts?: IBankAccount[];
 
