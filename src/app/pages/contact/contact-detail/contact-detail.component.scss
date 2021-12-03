@@ -27,8 +27,14 @@
       display: flex;
       justify-content: center;
 
-      .profile-image{
+      .main-info-profile-image{
         padding: 0.5rem 1rem 0 0;
+        >ngx-avatar{
+          display: block;
+          padding: 2px;
+          background-color: nb-theme(color-basic-500);
+
+        }
       }
 
       .main-info-detail{
@@ -88,8 +94,8 @@
       >:first-child{
         margin-right: 0.25rem;
       }
-
     }
+
     .info-item-detail{
       width: 100%;
       padding-right: 15px;
@@ -103,7 +109,57 @@
         background: whitesmoke;
       }
     }
-
   }
+
+  .info-item-detail-bank{
+    > div:nth-child(2){
+      display: flex;
+      align-items: center;
+      >i{
+        margin-right: 1rem;
+      }
+      >div{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .info-item-detail-person{
+    > div:nth-child(2){
+      display: flex;
+      >*:first-child{
+        margin: 0 0.5rem 0.5rem 0;
+      }
+      >*:nth-child(2){
+        display: flex;
+        flex-direction: column;
+        >div{
+          display: flex;
+          align-items: center;
+          height: 28px;
+          padding-bottom: 0.25rem;
+          color: nb-theme(color-basic-700);
+          >nb-icon, mat-icon{
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+  .contact-profile-image{
+    // display: inline-block;
+    // background-color: nb-theme(color-basic-700);
+    // padding: 2px;
+  }
+
+  .person-profile-image{
+    display: inline-block;
+    background-color: nb-theme(color-basic-500);
+    padding: 2px;
+  }
+
+
 
   }

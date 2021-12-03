@@ -1,10 +1,41 @@
-[
-	{ "id": "1", "en": "pickup-truck", "th": "กระบะ" },
-	{ "id": "2", "en": "mini-truck", "th": "รถบรรทุกเล็ก" },
-	{ "id": "3", "en": "truck", "th": "รถบรรทุก (6 - 12 ล้อ)" },
-	{ "id": "4", "en": "tractor", "th": "รถแทรกเตอร์ (หัวลาก)" },
-	{ "id": "5", "en": "trailer", "th": "พ่วงคอก (หาง)" },
-	{ "id": "6", "en": "flatbed-trailer", "th": "พ่วงพื้นเรียบ (หาง)" },
-	{ "id": "7", "en": "motorcycle-truck", "th": "มอเตอร์ไซค์พ่วง" },
-	{ "id": "0", "en": "etc", "th": "อื่นๆ" }
+[{
+    "id": "1",
+    "en_name": "pickup-truck",
+    "th_name": "กระบะ"
+  },
+  {
+    "id": "2",
+    "en_name": "mini-truck",
+    "th_name": "รถบรรทุกเล็ก"
+  },
+  {
+    "id": "3",
+    "en_name": "truck",
+    "th_name": "รถบรรทุก (6 - 12 ล้อ)"
+  },
+  {
+    "id": "4",
+    "en_name": "tractor",
+    "th_name": "รถแทรกเตอร์ (หัวลาก)"
+  },
+  {
+    "id": "5",
+    "en_name": "trailer",
+    "th_name": "พ่วงคอก (หาง)"
+  },
+  {
+    "id": "6",
+    "en_name": "flatbed-trailer",
+    "th_name": "พ่วงพื้นเรียบ (หาง)"
+  },
+  {
+    "id": "7",
+    "en_name": "motorcycle-truck",
+    "th_name": "มอเตอร์ไซค์พ่วง"
+  },
+  {
+    "id": "0",
+    "en_name": "etc",
+    "th_name": "อื่นๆ"
+  }
 ]

@@ -4,6 +4,7 @@ import { ContactListComponent } from "./contact-list/contact-list.component";
 import { ContactRoutes } from "./contact.routing";
 import { NgModule } from "@angular/core";
 import { MatTableModule } from "@angular/material/table";
+import { MatButtonModule } from "@angular/material/button";
 import { ContactComponent } from "./contact.component";
 import {
 	NbButtonModule,
@@ -37,6 +38,7 @@ const MODULES = [
 	MatPaginatorModule,
 	MatSortModule,
 	MatListModule,
+	MatButtonModule,
 	NbMenuModule,
 	NbContextMenuModule,
 	NbFormFieldModule,

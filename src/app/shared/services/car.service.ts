@@ -7,7 +7,7 @@ import {
 	DocumentReference,
 	CollectionReference,
 } from "@angular/fire/compat/firestore";
-import { map, mergeMap, switchMap } from "rxjs/operators";
+import { map, mergeMap, switchMap, tap } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -37,25 +37,32 @@ export class CarService {
 		// ];
 	}
 
-	// getCarTypes(): Observable<ICarType[]> {
-	// 	const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
-	// 		ref.orderBy("name")
-	// 	);
-	// 	return carTypeCollection.valueChanges({ idField: "id" });
-	// }
-
 	getCarTypes(): Observable<ICarType[]> {
-		return this.afs
-			.collection<ICarType>("carTypes", (ref) => ref.orderBy("name"))
-			.snapshotChanges()
-			.pipe(
-				map((actions) =>
-					actions.map((a) => {
-						const data = a.payload.doc.data() as ICarType;
-						const id = a.payload.doc.id;
-						return { ...data, id };
-					})
-				)
-			);
+		return this.http.get<any[]>("assets/data/car-type.json").pipe(
+			map((data) => {
+				const result = data.map((t) => ({ id: t.id, name: t.th_name }));
+				return result;
+			})
+		);
 	}
+
+	// getCarTypes(): Observable<ICarType[]> {
+	// 	return this.afs
+	// 		.collection<ICarType>("carTypes", (ref) => ref.orderBy("name"))
+	// 		.snapshotChanges()
+	// 		.pipe(
+	// 			map((actions) =>
+	// 				actions.map((a) => {
+	// 					const data = a.payload.doc.data() as ICarType;
+	// 					const id = a.payload.doc.id;
+	// 					return { ...data, id };
+	// 				})
+	// 			)
+	// 		);
+	// 	// แบบที่ 2
+	// 	//   const carTypeCollection = this.afs.collection<ICarType>("carTypes", (ref) =>
+	// 	// 	ref.orderBy("name")
+	// 	// );
+	// 	// return carTypeCollection.valueChanges({ idField: "id" });
+	// }
 }

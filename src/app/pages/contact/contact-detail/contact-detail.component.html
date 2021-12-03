@@ -13,9 +13,12 @@
   <nb-card-header>
     <div class="container-main-info">
       <div class="main-info">
-        <ngx-avatar class="profile-image" src="assets/images/alan.png" size="80" [round]="true"
-          cornerRadius="5">
-        </ngx-avatar>
+        <div class="main-info-profile-image">
+          <ngx-avatar class="" src="assets/images/alan.png" size="80" [round]="true"
+            cornerRadius="5">
+          </ngx-avatar>
+        </div>
+
         <div class="main-info-detail">
           <div>
             <p>
@@ -41,7 +44,9 @@
         </div>
       </div>
       <div class="main-action">
-        <nb-icon icon="menu"></nb-icon>
+        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
       </div>
     </div>
   </nb-card-header>
@@ -149,25 +154,25 @@
                 <span>ข้อมูลธนาคาร</span>
               </div>
               <div class="info-item-detail">
-                <div class="row">
+                <div class="row info-item-detail-bank">
                   <div class="col-4">
                     บัญชีหลัก :
                   </div>
-                  <div class="col-8 d-flex align-items-center">
-                    <i class="bank xxxxl mr-2" [class]="'bank-kbank'"></i>
-                    <div class="d-flex flex-column justify-content-between">
+                  <div class="col-8">
+                    <i class="bank xxxxl " [class]="'bank-kbank'"></i>
+                    <div>
                       <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
                       <span>กสิกรไทย 240-2-04904-4 </span>
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row info-item-detail-bank">
                   <div class="col-4">
                     บัญชีสำรอง :
                   </div>
-                  <div class="col-8 d-flex align-items-center">
-                    <i class="bank xxxxl mr-2" [class]="'bank-ttb'"></i>
-                    <div class="d-flex flex-column justify-content-between">
+                  <div class="col-8">
+                    <i class="bank xxxxl" [class]="'bank-ttb'"></i>
+                    <div>
                       <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
                       <span>กสิกรไทย 240-2-04904-4 </span>
                     </div>
@@ -183,40 +188,33 @@
                 ผู้ติดต่อ
               </div>
               <div class="info-item-detail">
-                <div class="row">
+                <div class="row info-item-detail-person">
                   <div class="col-4">
                     บุคคลที่ 1 :
                   </div>
-                  <div class="col d-flex">
+                  <div class="col-8">
                     <div>
-                      <ngx-avatar class="profile-image" src="assets/images/alan.png" size="60"
-                        [round]="true" cornerRadius="5"></ngx-avatar>
+                      <ngx-avatar class="person-profile-image" src="assets/images/alan.png"
+                        size="60" [round]="true" cornerRadius="5"></ngx-avatar>
                     </div>
-                    <div class="d-flex flex-column">
-                      <div class="d-flex align-items-center">
+                    <div>
+                      <div>
                         <strong>นาย เกียรติพงศ์ แซ่ตั้ง - C0001</strong>
                       </div>
-                      <div class="d-flex align-items-center">
+                      <div>
                         <mat-icon>assignment_ind</mat-icon>
-                        <span class="">ประธานบริษัท</span>
+                        <span>ประธานบริษัท</span>
                       </div>
-                      <div class="d-flex align-items-center">
-                        <nb-icon nbPrefix icon="phone" pack="eva"></nb-icon>
-                        <span class="">(085)-495-1894</span>
+                      <div>
+                        <mat-icon>phone</mat-icon>
+                        <span>(085)-495-1894</span>
                       </div>
-                      <div class="d-flex align-items-center">
-                        <nb-icon nbPrefix icon="email" pack="eva"></nb-icon>
-                        <span class="">thaisuthat.recycle@gmail.com</span>
+                      <div>
+                        <mat-icon>email</mat-icon>
+                        <span>thaisuthat.recycle@gmail.com</span>
                       </div>
 
                     </div>
-
-
-
-
-                  </div>
-                  <div class="d-inline-flex">
-                    <nb-icon nbPrefix icon="more-horizontal" pack="eva"></nb-icon>
                   </div>
                 </div>
               </div>
@@ -227,7 +225,7 @@
       </nb-tab>
 
       <nb-tab tabTitle="ข้อมูลซื้อ-ขาย">
-        <p>ฟีเจอร์ในอนาคต</p>
+        <p>ฟีเจอร์ในอนาคต (เร็วๆนี้)</p>
         <p>1. ระดับสมาชิก</p>
         <p>2. ข้อมูลซื้อขาย</p>
         <p>3. ข้อมูลรถ</p>
