@@ -374,7 +374,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			mergeMap((input): Observable<IContact[]> => {
 				return this.contacts$.pipe(
 					map((stateModel): IContact[] => {
-						const contacts = stateModel.contacts;
+						const contacts = stateModel.contactList;
 						return input
 							? contacts.filter((contact) =>
 									this._normalizeValue(contact.name + contact.code).includes(
@@ -393,7 +393,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 			mergeMap((inputValue) => {
 				return this.products$.pipe(
 					map((stateModel) => {
-						const products = stateModel.products;
+						const products = stateModel.productList;
 						return inputValue
 							? products.filter((product) =>
 									this._normalizeValue(product.id + product.name).includes(

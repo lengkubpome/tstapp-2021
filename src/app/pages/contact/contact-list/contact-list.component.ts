@@ -47,7 +47,7 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.contacts$.subscribe((data) => {
-			this.dataSource.data = data.contacts;
+			this.dataSource.data = data.contactList;
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
 		});

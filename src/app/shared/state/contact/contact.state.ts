@@ -4,16 +4,17 @@ import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import { NgxsOnInit, Selector, State, StateContext, Action } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
 export interface ContactStateModel {
-	contacts: IContact[];
+	contactList: IContact[];
+	selectContact: any;
 	isLoaded: boolean;
 }
 
 @State<ContactStateModel>({
 	name: "contact",
-	defaults: { contacts: [], isLoaded: false },
+	defaults: { contactList: [], selectContact: null, isLoaded: false },
 })
 @Injectable()
 export class ContactState implements NgxsOnInit {
@@ -29,15 +30,33 @@ export class ContactState implements NgxsOnInit {
 
 	@Action(ContactAction.FetchAll)
 	fetchAll(ctx: StateContext<ContactStateModel>): Observable<IContact[]> {
-		return this.contactService.getContacts().pipe(
+		return this.contactService.getContactList().pipe(
 			tap((result) => {
-				console.log(result);
-
+				// console.log(result);
 				const state = ctx.getState();
 				ctx.setState({
 					...state,
-					contacts: result,
+					contactList: result,
 					isLoaded: true,
+				});
+			})
+		);
+	}
+
+	@Action(ContactAction.SelectedContact)
+	getDetail(
+		ctx: StateContext<ContactStateModel>,
+		{ contactId }: ContactAction.SelectedContact
+	): Observable<any> {
+		const state = ctx.getState();
+		return this.contactService.getContact(contactId).pipe(
+			tap((result) => {
+				console.log("result result result result");
+				console.log(result);
+
+				ctx.setState({
+					...state,
+					selectContact: result,
 				});
 			})
 		);
@@ -51,7 +70,7 @@ export class ContactState implements NgxsOnInit {
 		const state = ctx.getState();
 		ctx.setState({
 			...state,
-			contacts: [...state.contacts, payload],
+			contactList: [...state.contactList, payload],
 		});
 	}
 }

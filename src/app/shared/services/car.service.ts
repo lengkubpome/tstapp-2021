@@ -13,17 +13,7 @@ import { map, mergeMap, switchMap, tap } from "rxjs/operators";
 	providedIn: "root",
 })
 export class CarService {
-	// private cars: ICar[] = [
-	// 	{ id: "กอ-9555ขก", plateLCN: "กอ-9555", plateLCP: "ขอนแก่น" },
-	// 	{ id: "84-4922ขก", plateLCN: "84-4922", plateLCP: "ขอนแก่น" },
-	// 	{ id: "ขง-2367ขก", plateLCN: "ขง-2367", plateLCP: "ขอนแก่น" },
-	// ];
-
 	constructor(private afs: AngularFirestore, private http: HttpClient) {}
-
-	// getCars(): Observable<ICar[]> {
-	// 	return of(this.cars);
-	// }
 
 	getCars(): Observable<ICar[]> {
 		const carCollection = this.afs.collection<any>("cars");

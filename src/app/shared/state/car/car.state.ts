@@ -47,7 +47,7 @@ export class CarState implements NgxsOnInit {
 			tap((actions) => {
 				const carType = ctx.getState().carTypes;
 				actions.map((c) => {
-					c.type = carType.filter((t) => t.id === c.type.id)[0];
+					c.type = carType.filter((t) => t.id === c.type)[0].id;
 				});
 				const state = ctx.getState();
 				ctx.setState({

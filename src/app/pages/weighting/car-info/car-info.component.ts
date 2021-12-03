@@ -75,7 +75,9 @@ export class CarInfoComponent implements OnInit {
 				},
 			],
 			type: [
-				this.car.hasOwnProperty("type") ? car.type.name : null,
+				this.carTypes.filter((t) => t.id === car.type).length > 0
+					? this.carTypes.filter((t) => t.id === car.type)[0].name
+					: null,
 				{
 					asyncValidators: [this.utilityValidator.carTypeAsyncValidator()],
 				},
@@ -123,7 +125,7 @@ export class CarInfoComponent implements OnInit {
 
 	onSelectCarType(selectCarType: ICarType): void {
 		this.carInfoForm.get("type").setValue(selectCarType.name);
-		this.car.type = selectCarType;
+		this.car.type = selectCarType.id;
 	}
 
 	private eventControls(): void {
@@ -175,7 +177,7 @@ export class CarInfoComponent implements OnInit {
 			)
 			.subscribe((result) => {
 				if (result.length) {
-					this.car.type = result[0];
+					this.car.type = result[0].id;
 				}
 			});
 	}

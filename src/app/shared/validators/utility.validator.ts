@@ -94,7 +94,7 @@ export class UtilityValidator {
 				return this.product$.pipe(
 					take(1),
 					map((stateModel) => {
-						const products: IProduct[] = stateModel.products;
+						const products: IProduct[] = stateModel.productList;
 						const result = products.filter(
 							(obj) => obj[findInProperties] === control.value
 						).length;
@@ -131,7 +131,7 @@ export class UtilityValidator {
 				return this.contact$.pipe(
 					take(1),
 					map((stateModel) => {
-						const contacts: IContact[] = stateModel.contacts;
+						const contacts: IContact[] = stateModel.contactList;
 						const result = contacts.filter(
 							(contact) => contact.name === control.value
 						).length;
