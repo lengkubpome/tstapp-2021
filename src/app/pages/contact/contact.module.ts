@@ -26,6 +26,8 @@ import { MatListModule } from "@angular/material/list";
 import { ContactDetailComponent } from "./contact-detail/contact-detail.component";
 import { AvatarModule } from "ngx-avatar";
 import { MatIconModule } from "@angular/material/icon";
+import { ReactiveFormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -33,6 +35,8 @@ const COMPONENTS = [
 	ContactDetailComponent,
 ];
 const MODULES = [
+	CommonModule,
+	ReactiveFormsModule,
 	ContactRoutes,
 	MatTableModule,
 	MatPaginatorModule,

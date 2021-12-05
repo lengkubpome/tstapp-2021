@@ -2,9 +2,17 @@ import { IContact } from "src/app/shared/models/contact.model";
 import { tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
-import { NgxsOnInit, Selector, State, StateContext, Action } from "@ngxs/store";
+import {
+	NgxsOnInit,
+	Selector,
+	State,
+	StateContext,
+	Action,
+	Store,
+} from "@ngxs/store";
 import { ContactAction } from "./contact.action";
 import { Observable, of } from "rxjs";
+import { Navigate, RouterState } from "@ngxs/router-plugin";
 
 export interface ContactStateModel {
 	contactList: IContact[];
@@ -18,7 +26,7 @@ export interface ContactStateModel {
 })
 @Injectable()
 export class ContactState implements NgxsOnInit {
-	constructor(private contactService: ContactService) {}
+	constructor(private store: Store, private contactService: ContactService) {}
 	// @Selector()
 	// static myCar(state: ContactStateModel): IContact[] {
 	// 	return state.contacts.filter((s) => s.id === 'c1002');
@@ -43,21 +51,22 @@ export class ContactState implements NgxsOnInit {
 		);
 	}
 
-	@Action(ContactAction.SelectedContact)
-	selectedContact(
+	@Action(ContactAction.SelectContact)
+	selectContact(
 		ctx: StateContext<ContactStateModel>,
-		{ contactId }: ContactAction.SelectedContact
+		{ contactId }: ContactAction.SelectContact
 	): Observable<any> {
 		const state = ctx.getState();
 		return this.contactService.getContact(contactId).pipe(
 			tap((result) => {
-				console.log("result result result result");
-				console.log(result);
-
 				ctx.setState({
 					...state,
-					selectContact: result,
+					selectContact: result[0],
 				});
+			}),
+			tap((result) => {
+				const nextUrl = "/pages/contact/" + result[0].code;
+				this.store.dispatch(new Navigate([nextUrl]));
 			})
 		);
 	}

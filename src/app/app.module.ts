@@ -29,6 +29,7 @@ import { provideFirestore, getFirestore } from "@angular/fire/firestore";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFireModule } from "@angular/fire/compat";
+import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -54,6 +55,7 @@ import { AngularFireModule } from "@angular/fire/compat";
 		NgxsModule.forRoot([...stateList], {
 			developmentMode: !environment.production,
 		}),
+		NgxsRouterPluginModule.forRoot(),
 		NgxsLoggerPluginModule.forRoot(),
 		NgxsReduxDevtoolsPluginModule.forRoot(),
 		// Firebase

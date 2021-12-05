@@ -1,40 +1,57 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { take } from "rxjs/operators";
+import {
+	ContactStateModel,
+	ContactState,
+} from "./../../shared/state/contact/contact.state";
+import { Observable, Subject } from "rxjs";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { RouterState, RouterStateModel } from "@ngxs/router-plugin";
+import { Select } from "@ngxs/store";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
 	selector: "app-contact",
 	template: `
 		<div class="nav-menu">
-			<span>
+			<span *ngIf="urlContact === null">
 				<nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
 				ผู้ติดต่อ
 			</span>
-			<a routerLink="/pages/contact">
+			<a routerLink="/pages/contact" *ngIf="urlContact !== null">
 				<nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
 				ผู้ติดต่อ
 			</a>
-			<span>
+			<span *ngIf="urlContact !== null">
 				<span class="pr-2">></span>
-				<span>customer name</span>
+				<span>{{ urlContact }}</span>
 			</span>
-
-			<a (click)="onTest()">
-				<nb-icon nbPrefix icon="store" pack="eva"></nb-icon>
-				test
-			</a>
 		</div>
 
 		<router-outlet></router-outlet>
 	`,
 })
-export class ContactComponent implements OnInit {
-	constructor(private route: ActivatedRoute, private router: Router) {}
+export class ContactComponent implements OnInit, OnDestroy {
+	private destroy$ = new Subject<void>();
+	public urlContact: string;
 
-	ngOnInit(): void {}
+	@Select(RouterState) router$: Observable<RouterStateModel>;
 
-	onTest(): void {
-		const x = this.router.url;
-		console.log(x);
+	constructor() {}
+
+	ngOnInit(): void {
+		this.router$.pipe(takeUntil(this.destroy$)).subscribe((router) => {
+			this.urlContact = null;
+			const url = router.state.url;
+			const arr = url.split("/");
+
+			if (url.split("/").length > 3) {
+				this.urlContact = arr[3];
+			}
+			console.log(arr);
+		});
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

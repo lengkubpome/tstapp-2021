@@ -10,9 +10,10 @@ import {
 	ContactState,
 	ContactStateModel,
 } from "src/app/shared/state/contact/contact.state";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { CustomPaginator } from "src/app/configuration/customPaginatorConfiguration";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ContactAction } from "src/app/shared/state/contact/contact.action";
 
 @Component({
 	selector: "app-contact-list",
@@ -32,12 +33,16 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
 
-	constructor(private router: Router, private liveAnnouncer: LiveAnnouncer) {}
+	constructor(
+		private store: Store,
+		private router: Router,
+		private liveAnnouncer: LiveAnnouncer
+	) {}
 
 	ngOnInit(): void {}
 
 	onSelectContact(contact: any): void {
-		this.router.navigate([this.router.url, contact.id]);
+		this.store.dispatch(new ContactAction.SelectContact(contact.code));
 	}
 
 	// -----------------------------------------------------------------------------------------------------

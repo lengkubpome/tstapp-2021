@@ -6,8 +6,8 @@ export namespace ContactAction {
 		static readonly type = "[Contact] Fetch All";
 	}
 
-	export class SelectedContact {
-		static readonly type = "[Contact] Selected Detail";
+	export class SelectContact {
+		static readonly type = "[Contact] Select Detail";
 		constructor(public readonly contactId: string) {}
 	}
 
