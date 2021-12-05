@@ -44,7 +44,7 @@ export class ContactState implements NgxsOnInit {
 	}
 
 	@Action(ContactAction.SelectedContact)
-	getDetail(
+	selectedContact(
 		ctx: StateContext<ContactStateModel>,
 		{ contactId }: ContactAction.SelectedContact
 	): Observable<any> {

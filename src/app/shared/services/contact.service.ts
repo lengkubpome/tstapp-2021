@@ -14,6 +14,22 @@ export class ContactService {
 	getContactList(): Observable<IContact[]> {
 		// return this.http.get<IContact[]>("assets/data/contact-dummy2.json");
 		const contactCollection = this.afs.collection<any>("contacts");
+		return contactCollection.valueChanges({ idField: "id" });
+		// return contactCollection.snapshotChanges().pipe(
+		// 	map((actions) =>
+		// 		actions.map((a) => {
+		// 			const data = a.payload.doc.data() as IContact;
+		// 			const id = a.payload.doc.id;
+		// 			return { ...data, id };
+		// 		})
+		// 	)
+		// );
+	}
+
+	getContact(code: string): Observable<any> {
+		const contactCollection = this.afs.collection<any>("contacts", (ref) =>
+			ref.where("code", "==", code)
+		);
 		return contactCollection.snapshotChanges().pipe(
 			map((actions) =>
 				actions.map((a) => {
@@ -23,13 +39,6 @@ export class ContactService {
 				})
 			)
 		);
-	}
-
-	getContact(code: string): Observable<any> {
-		const contactCollection = this.afs.collection<any>("contacts", (ref) =>
-			ref.where("code", "==", code)
-		);
-		return contactCollection.valueChanges({ idField: "id" });
 	}
 
 	// getContact(id: string): Observable<any> {}

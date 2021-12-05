@@ -36,9 +36,8 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {}
 
-	onTest(): void {
-		const id = 123;
-		this.router.navigate([this.router.url, id]);
+	onSelectContact(contact: any): void {
+		this.router.navigate([this.router.url, contact.id]);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
