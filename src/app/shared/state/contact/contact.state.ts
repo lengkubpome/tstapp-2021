@@ -27,10 +27,12 @@ export interface ContactStateModel {
 @Injectable()
 export class ContactState implements NgxsOnInit {
 	constructor(private store: Store, private contactService: ContactService) {}
-	// @Selector()
-	// static myCar(state: ContactStateModel): IContact[] {
-	// 	return state.contacts.filter((s) => s.id === 'c1002');
-	// }
+
+	@Selector()
+	static selectContact(state: ContactStateModel): IContact {
+		return state.selectContact;
+	}
+
 	ngxsOnInit(ctx: StateContext<ContactStateModel>): void {
 		console.log("State initialized, now getting contact");
 		ctx.dispatch(new ContactAction.FetchAll());

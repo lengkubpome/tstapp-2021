@@ -14,6 +14,8 @@ import { Select, Store } from "@ngxs/store";
 import { CustomPaginator } from "src/app/configuration/customPaginatorConfiguration";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
+import { Navigate } from "@ngxs/router-plugin";
+import { take } from "rxjs/operators";
 
 @Component({
 	selector: "app-contact-list",

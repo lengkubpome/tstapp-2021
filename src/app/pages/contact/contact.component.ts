@@ -5,7 +5,7 @@ import {
 import { Observable, Subject } from "rxjs";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterState, RouterStateModel } from "@ngxs/router-plugin";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -35,7 +35,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
 	@Select(RouterState) router$: Observable<RouterStateModel>;
 
-	constructor() {}
+	constructor(private store: Store) {}
 
 	ngOnInit(): void {
 		this.router$.pipe(takeUntil(this.destroy$)).subscribe((router) => {
@@ -46,7 +46,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 			if (url.split("/").length > 3) {
 				this.urlContact = arr[3];
 			}
-			console.log(arr);
 		});
 	}
 

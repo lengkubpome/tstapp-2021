@@ -11,20 +11,35 @@
         <div class="main-info-detail">
           <div>
             <p>
-              <strong>C0001 - ไทยสุทัศน์</strong>
-              <span>( Tax ID : 0303042903029 )</span>
+              <strong>{{contacts.code + " - " + contacts.name}}</strong>
+              <span>
+                {{contacts.businessInfo.taxId ? "( เลขภาษีประจำตัว : "+ contacts.businessInfo.taxId +" )" :"" }}
+              </span>
             </p>
             <p>
-              <span> เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000</span>
+              <span>
+                {{contacts.address.line ? "เลขที่ "+ contacts.address.line : ""}}
+                {{contacts.address.subDistrict ? "ตำบล"+ contacts.address.subDistrict : ""}}
+                {{contacts.address.district ? "อำเภอ"+ contacts.address.district : ""}}
+                {{contacts.address.province ? "จังหวัด"+ contacts.address.province : ""}}
+                {{contacts.address.country ? contacts.address.country : ""}}
+                {{contacts.address.postCode ? contacts.address.postCode : ""}}
+              </span>
             </p>
             <div class="type-list">
 
-              <button nbButton shape="round" size="small" status="warning" (click)="onTest()">
-                <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>ไทยสุทัศน์
+              <button nbButton shape="round" size="small" status="warning" (click)="onTest()"
+                *ngIf="contacts.storeContactId ? true : false">
+                <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>
+                {{ contacts.storeContactId }}
               </button>
-              <button nbButton shape="round" size="small" status="success">ผู้ขาย
+              <button nbButton shape="round" size="small" status="success"
+                *ngIf="contacts.type.vendor ? true : false">
+                ผู้ขาย
               </button>
-              <button nbButton shape="round" size="small" status="info">ลูกค้า
+              <button nbButton shape="round" size="small" status="info"
+                *ngIf="contacts.type.customer ? true : false">
+                ลูกค้า
               </button>
             </div>
 
@@ -56,7 +71,7 @@
                     ประเภทกิจการ :
                   </div>
                   <div class="col-8">
-                    ห้างหุ้นส่วนจำกัด
+                    {{ contacts.businessInfo.legalType }}
                   </div>
                 </div>
                 <div class="row">
@@ -64,7 +79,7 @@
                     เลขทะเบียนนิติบุคคล :
                   </div>
                   <div class="col-8">
-                    0403537001866
+                    {{ contacts.businessInfo.taxId }}
                   </div>
                 </div>
                 <div class="row">
@@ -72,7 +87,11 @@
                     เลขที่สาขา :
                   </div>
                   <div class="col-8">
-                    ( 00000 ) ( สำนักงานใหญ่ )
+                    {{
+                      !contacts.businessInfo.branch ? null :
+                      contacts.businessInfo.branch ===  "00000" ? "สำนักงานใหญ่ ( 00000 )" : contacts.businessInfo.branch
+
+                    }}
                   </div>
                 </div>
                 <div class="row">
@@ -80,8 +99,12 @@
                     ที่อยู่จดทะเบียน :
                   </div>
                   <div class="col-8">
-                    เลขที่ 126/1 หมู่ 3 ถนนมิตรภาพ แขวง/ตำบล ศิลา เขต/อำเภอ เมืองขอนแก่น จังหวัด
-                    ขอนแก่น ไทย 40000
+                    {{contacts.address.line ? "เลขที่ "+ contacts.address.line : ""}}
+                    {{contacts.address.subDistrict ? "ตำบล"+ contacts.address.subDistrict : ""}}
+                    {{contacts.address.district ? "อำเภอ"+ contacts.address.district : ""}}
+                    {{contacts.address.province ? "จังหวัด"+ contacts.address.province : ""}}
+                    {{contacts.address.country ? contacts.address.country : ""}}
+                    {{contacts.address.postCode ? contacts.address.postCode : ""}}
                   </div>
                 </div>
               </div>
@@ -106,15 +129,7 @@
                     อีเมลกลาง :
                   </div>
                   <div class="col-8">
-                    thaisuthat.recycle@gmail.com
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                    ที่อยู่ส่งเอกสาร :
-                  </div>
-                  <div class="col-8">
-                    เลขที่ 135 หมู่ที่ 7 ถ.มิตรภาพ ต.โนนท่อน อ.เมือง จ.ขอนแก่น 40000
+                    {{contacts.communicateInfo.email ? contacts.communicateInfo.email : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -122,7 +137,7 @@
                     เว็บไซต์ :
                   </div>
                   <div class="col-8">
-                    -
+                    {{contacts.communicateInfo.website ? contacts.communicateInfo.website : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -130,10 +145,26 @@
                     ไลน์ไอดี :
                   </div>
                   <div class="col-8">
-                    -
+                    {{contacts.communicateInfo.line ? contacts.communicateInfo.line : "-"}}
                   </div>
-
                 </div>
+                <div class="row">
+                  <div class="col-4">
+                    ที่อยู่ส่งเอกสาร :
+                  </div>
+                  <div class="col-8">
+                    {{
+                      !contacts.communicateInfo.officeAddress ? "-" :
+                      !contacts.communicateInfo.officeAddress.line ? "" : "เลขที่ "+ contacts.communicateInfo.officeAddress.line + " " +
+                      !contacts.communicateInfo.officeAddress.subDistrict ? "" : "ตำบล"+ contacts.communicateInfo.officeAddress.subDistrict + " " +
+                      !contacts.communicateInfo.officeAddress.district ? "" : "อำเภอ"+ contacts.communicateInfo.officeAddress.district + " " +
+                      !contacts.communicateInfo.officeAddress.province ? "" : "จังหวัด"+ contacts.communicateInfo.officeAddress.province + " " +
+                      !contacts.communicateInfo.officeAddress.country ? "" : contacts.communicateInfo.officeAddress.country + " " +
+                      !contacts.communicateInfo.officeAddress.postCode ? "" : contacts.communicateInfo.officeAddress.postCode
+                    }}
+                  </div>
+                </div>
+
               </div>
             </div>
             <!-- ข้อมูลธนาคาร -->
@@ -143,30 +174,45 @@
                 <span>ข้อมูลธนาคาร</span>
               </div>
               <div class="info-item-detail">
-                <div class="row info-item-detail-bank">
-                  <div class="col-4">
-                    บัญชีหลัก :
-                  </div>
-                  <div class="col-8">
-                    <i class="bank xxxxl " [class]="'bank-kbank'"></i>
-                    <div>
-                      <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
-                      <span>กสิกรไทย 240-2-04904-4 </span>
+                <div class="row info-item-detail-bank"
+                  *ngFor="let account of contacts.bankAccounts">
+                  <ng-container *ngIf="account.order === 1">
+                    <div class="col-4">
+                      บัญชีหลัก :
                     </div>
-                  </div>
-                </div>
-                <div class="row info-item-detail-bank">
-                  <div class="col-4">
-                    บัญชีสำรอง :
-                  </div>
-                  <div class="col-8">
-                    <i class="bank xxxxl" [class]="'bank-ttb'"></i>
-                    <div>
-                      <span>นาย เกียรติพงศ์ แซ่ตั้ง </span>
-                      <span>กสิกรไทย 240-2-04904-4 </span>
+                    <div class="col-8">
+                      <i class="bank xxxxl " [class]="'bank-' + account.bank.bankName"></i>
+                      <div>
+                        <span>{{ account.bank.name }}</span>
+                        <span>
+                          {{ account.bank.bankName + " " + account.bank.number  }}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </ng-container>
                 </div>
+
+                <ng-container *ngIf="contacts.bankAccounts.length > 1">
+                  <div class="row info-item-detail-bank"
+                    *ngFor="let account of contacts.bankAccounts">
+                    <ng-container *ngIf="account.order !== 1">
+                      <div class="col-4">
+                        {{ "บัญชีสำรอง " + (account.order - 1) +" :"}}
+                      </div>
+                      <div class="col-8">
+                        <i class="bank xxxxl " [class]="'bank-' + account.bank.bankName"></i>
+                        <div>
+                          <span>{{ account.bank.name }}</span>
+                          <span>
+                            {{ account.bank.bankName + " " + account.bank.number  }}
+                          </span>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+
 
               </div>
             </div>

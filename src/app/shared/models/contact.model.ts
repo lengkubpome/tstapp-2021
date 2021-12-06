@@ -52,6 +52,7 @@ export interface IContact {
 		};
 		website?: string;
 		email?: string;
+		officeAddress?: IAddress;
 	};
 
 	contactPerson?: {
@@ -65,7 +66,10 @@ export interface IContact {
 		linkContactId?: IContact;
 	}[];
 
-	bankAccounts?: IBankAccount[];
+	bankAccounts?: {
+		order: number;
+		bank: IBankAccount;
+	}[];
 
 	memberClassId?: string;
 
@@ -77,7 +81,7 @@ export interface IContact {
 export interface IBankAccount {
 	type?: "ออมทรัพย์" | "กระแสรายวัน";
 	name: string;
-	number: number;
+	number: string;
 	bankName: string;
 }
 
