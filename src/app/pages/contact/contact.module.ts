@@ -11,6 +11,7 @@ import {
 	NbCardModule,
 	NbCheckboxModule,
 	NbContextMenuModule,
+	NbDialogModule,
 	NbFormFieldModule,
 	NbIconModule,
 	NbInputModule,
@@ -28,11 +29,13 @@ import { AvatarModule } from "ngx-avatar";
 import { MatIconModule } from "@angular/material/icon";
 import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
+import { ContactFormComponent } from "./contact-form/contact-form.component";
 
 const COMPONENTS = [
 	ContactComponent,
 	ContactListComponent,
 	ContactDetailComponent,
+	ContactFormComponent,
 ];
 const MODULES = [
 	CommonModule,
@@ -56,6 +59,7 @@ const MODULES = [
 	NbLayoutModule,
 	NbTabsetModule,
 	NbTagModule,
+	NbDialogModule.forChild(),
 	// Material
 	MatIconModule,
 	// Avatar

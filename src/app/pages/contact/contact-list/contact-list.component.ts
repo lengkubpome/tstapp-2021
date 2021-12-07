@@ -16,6 +16,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
 import { Navigate } from "@ngxs/router-plugin";
 import { take } from "rxjs/operators";
+import { NbDialogService } from "@nebular/theme";
+import { ContactFormComponent } from "../contact-form/contact-form.component";
 
 @Component({
 	selector: "app-contact-list",
@@ -37,11 +39,20 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private store: Store,
+		private dialogService: NbDialogService,
 		private router: Router,
 		private liveAnnouncer: LiveAnnouncer
 	) {}
 
 	ngOnInit(): void {}
+
+	onCreateContact(): void {
+		this.dialogService.open(ContactFormComponent, {
+			context: {},
+			closeOnBackdropClick: false,
+			hasScroll: true,
+		});
+	}
 
 	onSelectContact(contact: any): void {
 		this.store.dispatch(new ContactAction.SelectContact(contact.code));
@@ -91,6 +102,8 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 	}
 
 	announceSortChange(sortState: Sort): void {
+		console.log(sortState);
+
 		// This example uses English messages. If your application supports
 		// multiple language, you would internationalize these strings.
 		// Furthermore, you can customize the message to add additional
