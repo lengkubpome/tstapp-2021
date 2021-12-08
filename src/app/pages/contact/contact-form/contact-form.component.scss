@@ -45,7 +45,8 @@ $screen-xl-min: 1200px;
 @include nb-install-component() {
 
   nb-card {
-    max-width: 500px;
+    max-width: 800px;
+    max-height: 44.25rem;
     margin: auto;
 
    	@media (min-width: #{$screen-sm-min}) {
@@ -70,6 +71,28 @@ $screen-xl-min: 1200px;
     ::ng-deep input{
       text-align: center;
     }
+  }
+
+  .tax-id{
+    ::ng-deep input{
+      width: 20px;
+      text-align: center;
+      padding: 0;
+      border-radius: 0;
+      line-height: 1.8rem;
+      margin-right: 0.7px;
+      border-color: nb-theme(border-basic-color-5);
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    ::ng-deep input::-webkit-outer-spin-button,
+    ::ng-deep input::-webkit-inner-spin-button{
+      -webkit-appearance: none;
+    }
+    /* Firefox */
+    ::ng-deep input[type=number] {
+      -moz-appearance:textfield; /* Firefox */
+  }
   }
 
 

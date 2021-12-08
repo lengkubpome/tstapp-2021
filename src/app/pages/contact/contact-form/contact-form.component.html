@@ -14,10 +14,39 @@
       </nb-form-field>
     </div>
   </nb-card-header>
-  <nb-card-body class="header">
-    <p>
-      contact-form works!
-    </p>
+  <nb-card-body>
+    <div class="info-item">
+      <div class="info-item-header">
+        <nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
+        <strong>ข้อมูลพื้นฐาน</strong>
+      </div>
+      <div class="info-item-detail">
+        <div class="form-group row align-items-baseline">
+          <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
+          <div class="col-sm-9 d-flex justify-content-start">
+            <nb-form-field class="tax-id" [formGroup]="taxIdForm" #taxForm>
+              <input type="number" nbInput name="taxIdChar" id="tax_1" formControlName="tax_1"
+                class="mr-2">
+              <input type="number" nbInput name="taxIdChar" id="tax_2" formControlName="tax_2">
+              <input type="number" nbInput name="taxIdChar" id="tax_3" formControlName="tax_3">
+              <input type="number" nbInput name="taxIdChar" id="tax_4" formControlName="tax_4">
+              <input type="number" nbInput name="taxIdChar" id="tax_5" formControlName="tax_5"
+                class="mr-2">
+              <input type="number" nbInput name="taxIdChar" id="tax_6" formControlName="tax_6">
+              <input type="number" nbInput name="taxIdChar" id="tax_7" formControlName="tax_7">
+              <input type="number" nbInput name="taxIdChar" id="tax_8" formControlName="tax_8">
+              <input type="number" nbInput name="taxIdChar" id="tax_9" formControlName="tax_9">
+              <input type="number" nbInput name="taxIdChar" id="tax_10" formControlName="tax_10"
+                class="mr-2">
+              <input type="number" nbInput name="taxIdChar" id="tax_11" formControlName="tax_11">
+              <input type="number" nbInput name="taxIdChar" id="tax_12" formControlName="tax_12">
+              <input type="number" nbInput name="taxIdChar" id="tax_13" formControlName="tax_13">
+            </nb-form-field>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
   </nb-card-body>
   <nb-card-footer>
