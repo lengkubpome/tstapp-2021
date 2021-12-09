@@ -41,8 +41,10 @@ export class ContactFormComponent implements OnInit {
 			}
 			// case backspace
 			if (event.keyCode === 8) {
+				console.log(event.key);
+
 				const clrlValue = this.taxIdForm.get(event.target.id).value;
-				if (!clrlValue) {
+				if (!clrlValue || clrlValue !== "Backspace") {
 					const ctrls = Object.keys(this.taxIdForm.controls);
 					const prevIndex = ctrls.indexOf(event.target.id) - 1;
 					if (prevIndex > -1) {
