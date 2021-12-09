@@ -1,11 +1,5 @@
 import { InteractivityChecker } from "@angular/cdk/a11y";
-import {
-	Component,
-	ElementRef,
-	HostListener,
-	OnInit,
-	ViewChild,
-} from "@angular/core";
+import { Component, HostListener, OnInit, Renderer2 } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
 
@@ -15,66 +9,80 @@ import { NbDialogRef } from "@nebular/theme";
 	styleUrls: ["./contact-form.component.scss"],
 })
 export class ContactFormComponent implements OnInit {
-	@ViewChild("taxForm") tFormRef: ElementRef;
-
 	taxIdForm: FormGroup;
 
-	// @HostListener("keyup", ["$event"])
-	// onKeyupHandler(event): void {
-	// 	if (
-	// 		event.target.name === "taxIdChar" &&
-	// 		((event.keyCode >= 48 && event.keyCode <= 57) ||
-	// 			(event.keyCode >= 96 && event.keyCode <= 105))
-	// 	) {
-	// 		// 0-9 only
-	// 		console.log(event.target.name);
-	// 	}
-	// }
-
-	@HostListener("keydown", ["$event"])
-	onKeydownHandler(event): void {
-		if (event.target.name === "taxIdChar") {
-			// 0-9 only
-			if (
-				(event.keyCode >= 48 && event.keyCode <= 57) ||
-				(event.keyCode >= 96 && event.keyCode <= 105)
-			) {
-				// next input
-				this.nextInputTaxIdFocus(event.target.id);
+	@HostListener("keyup", ["$event"])
+	onKeyupHandler(event): void {
+		if (
+			event.target.name === "taxIdChar" &&
+			((event.keyCode >= 48 && event.keyCode <= 57) ||
+				(event.keyCode >= 96 && event.keyCode <= 105))
+		) {
+			const ctrls = Object.keys(this.taxIdForm.controls);
+			const nextIndex = ctrls.indexOf(event.target.id) + 1;
+			// เลขประจำตัว 13 หลัก
+			if (nextIndex < 13) {
+				this.taxIdForm.get(event.target.id).setValue(event.key);
+				const nextId = "#" + ctrls[nextIndex];
+				this.renderer.selectRootElement(nextId).focus();
 			} else {
-				event.preventDefault();
+				// เลขตัวท้าย
+				this.taxIdForm.get("tax_13").setValue(event.key);
 			}
 		}
 	}
 
-	nextInputTaxIdFocus(currentId): void {
-		const ctrls = Object.keys(this.taxIdForm.controls);
-		const nextCtrl = ctrls.indexOf(currentId) + 1;
-		this.taxIdForm.get(nextCtrl).naviveElement.focut();
-		console.log(nextCtrl);
+	@HostListener("keydown", ["$event"])
+	onKeydownHandler(event): void {
+		if (event.target.name === "taxIdChar") {
+			// reject "e"
+			if (event.keyCode === 69) {
+				event.preventDefault();
+			}
+			// case backspace
+			if (event.keyCode === 8) {
+				const clrlValue = this.taxIdForm.get(event.target.id).value;
+				if (!clrlValue) {
+					const ctrls = Object.keys(this.taxIdForm.controls);
+					const prevIndex = ctrls.indexOf(event.target.id) - 1;
+					if (prevIndex > -1) {
+						const prevId = "#" + ctrls[prevIndex];
+						this.renderer.selectRootElement(prevId).focus();
+					}
+				}
+			}
+			// case <- left arrow
+			if (event.keyCode === 37) {
+				const ctrls = Object.keys(this.taxIdForm.controls);
+				const prevIndex = ctrls.indexOf(event.target.id) - 1;
+				if (prevIndex > -1) {
+					const prevId = "#" + ctrls[prevIndex];
+					this.renderer.selectRootElement(prevId).focus();
+				}
+			}
+			// case -> right arrow
+			if (event.keyCode === 39) {
+				const ctrls = Object.keys(this.taxIdForm.controls);
+				const prevIndex = ctrls.indexOf(event.target.id) + 1;
+				if (prevIndex < 13) {
+					const prevId = "#" + ctrls[prevIndex];
+					this.renderer.selectRootElement(prevId).focus();
+				}
+			}
+		}
+	}
 
-		const control = this.tFormRef.nativeElement[ctrls[nextCtrl]];
-		// console.log(control);
-
-		// const c = this.taxFormRef.nativeElement[ctrls[2]];
-		// this.interactivityChecker.isFocusable(c);
-
-		// for (let key = ctrls.indexOf(currentId) + 1; key < ctrls.length; key++) {
-		// 	// console.log(key);
-		// 	const control = this.taxFormRef.nativeElement[ctrls[key]];
-
-		// 	if (control && this.interactivityChecker.isFocusable(control)) {
-		// 		control.focus();
-		// 		control.select();
-		// 		break;
-		// 	}
-		// }
+	@HostListener("keypress", ["$event"])
+	onKeypressHandler(event): void {
+		if (event.target.name === "taxIdChar") {
+			event.preventDefault();
+		}
 	}
 
 	constructor(
 		protected ref: NbDialogRef<ContactFormComponent>,
 		private formBuilder: FormBuilder,
-		private interactivityChecker: InteractivityChecker
+		private renderer: Renderer2
 	) {}
 
 	ngOnInit(): void {

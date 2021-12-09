@@ -33,6 +33,7 @@ import {
 	HostListener,
 	ElementRef,
 	ViewChild,
+	Renderer2,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Select, Selector, Store } from "@ngxs/store";
@@ -85,11 +86,11 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		// key: enter
 		if (event.keyCode === 13) {
 			// this.setValue(event);
-			this.setNextFocus(event.target.name);
+			this.setNextFocus(event.target.id);
 		}
 		// key: escape
 		if (event.keyCode === 27) {
-			this.resetInputValue(event.target.name);
+			this.resetInputValue(event.target.id);
 		}
 
 		// if (event.keyCode === 38) {
@@ -104,7 +105,8 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		private dialogService: NbDialogService,
 		private weightingService: WeightingService,
 		private weightingValidators: WeightingValidator,
-		private utilityValidator: UtilityValidator
+		private utilityValidator: UtilityValidator,
+		private renderer: Renderer2
 	) {}
 
 	ngOnInit(): void {
@@ -289,7 +291,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		const ctrls = Object.keys(this.weightingForm.controls);
 		for (let key = ctrls.indexOf(currentId) - 1; key >= 0; key--) {
 			const control = this.wForm.nativeElement[ctrls[key]];
-			console.log(key);
+			console.log(control);
 
 			if (control && this.interactivityChecker.isFocusable(control)) {
 				control.focus();
@@ -300,11 +302,17 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 	}
 
 	setNextFocus(currentId): void {
-		const ctrls = Object.keys(this.weightingForm.controls);
-		// console.log(currentId);
 		if (currentId !== "notes") {
+			const ctrls = Object.keys(this.weightingForm.controls);
+			// const nextKeyIndex = ctrls.indexOf(currentId) + 1;
+			// if (nextKeyIndex < ctrls.length - 1) {
+			// 	this.renderer.selectRootElement("#" + ctrls[nextKeyIndex]).focus();
+			// }
+
 			for (let key = ctrls.indexOf(currentId) + 1; key < ctrls.length; key++) {
 				const control = this.wForm.nativeElement[ctrls[key]];
+				// console.log(ctrls[key]);
+
 				if (control && this.interactivityChecker.isFocusable(control)) {
 					control.focus();
 					control.select();

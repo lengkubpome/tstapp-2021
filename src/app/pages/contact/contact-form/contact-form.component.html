@@ -23,8 +23,8 @@
       <div class="info-item-detail">
         <div class="form-group row align-items-baseline">
           <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
-          <div class="col-sm-9 d-flex justify-content-start">
-            <nb-form-field class="tax-id" [formGroup]="taxIdForm" #taxForm>
+          <form class="col-sm-9 d-flex justify-content-start" [formGroup]="taxIdForm" #taxForm>
+            <nb-form-field class="tax-id">
               <input type="number" nbInput name="taxIdChar" id="tax_1" formControlName="tax_1"
                 class="mr-2">
               <input type="number" nbInput name="taxIdChar" id="tax_2" formControlName="tax_2">
@@ -43,7 +43,7 @@
               <input type="number" nbInput name="taxIdChar" id="tax_13" formControlName="tax_13">
             </nb-form-field>
 
-          </div>
+          </form>
         </div>
       </div>
     </div>
