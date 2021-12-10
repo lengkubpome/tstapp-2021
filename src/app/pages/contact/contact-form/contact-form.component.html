@@ -1,55 +1,106 @@
-<nb-card>
-  <nb-card-header>
-    <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
-      <h5>เพิ่มผู้ติดต่อ</h5>
-      <div class="pl-2">
-        <nb-icon [icon]="'edit-2'" status="warning" pack="eva">
-        </nb-icon>
-      </div>
-    </div>
-    <div>
-      <nb-form-field class="contac-code-field">
-        <div nbPrefix>รหัส</div>
-        <input type="text" nbInput code="code" name="code" [value]="'C0003'">
-      </nb-form-field>
-    </div>
-  </nb-card-header>
-  <nb-card-body>
-    <div class="info-item">
-      <div class="info-item-header">
-        <nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
-        <strong>ข้อมูลพื้นฐาน</strong>
-      </div>
-      <div class="info-item-detail">
-        <div class="form-group row align-items-baseline">
-          <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
-          <form class="col-sm-9 d-flex justify-content-start" [formGroup]="taxIdForm" #taxForm>
-            <nb-form-field class="tax-id">
-              <input type="number" nbInput name="taxIdChar" id="tax_1" formControlName="tax_1"
-                class="mr-2">
-              <input type="number" nbInput name="taxIdChar" id="tax_2" formControlName="tax_2">
-              <input type="number" nbInput name="taxIdChar" id="tax_3" formControlName="tax_3">
-              <input type="number" nbInput name="taxIdChar" id="tax_4" formControlName="tax_4">
-              <input type="number" nbInput name="taxIdChar" id="tax_5" formControlName="tax_5"
-                class="mr-2">
-              <input type="number" nbInput name="taxIdChar" id="tax_6" formControlName="tax_6">
-              <input type="number" nbInput name="taxIdChar" id="tax_7" formControlName="tax_7">
-              <input type="number" nbInput name="taxIdChar" id="tax_8" formControlName="tax_8">
-              <input type="number" nbInput name="taxIdChar" id="tax_9" formControlName="tax_9">
-              <input type="number" nbInput name="taxIdChar" id="tax_10" formControlName="tax_10"
-                class="mr-2">
-              <input type="number" nbInput name="taxIdChar" id="tax_11" formControlName="tax_11">
-              <input type="number" nbInput name="taxIdChar" id="tax_12" formControlName="tax_12">
-              <input type="number" nbInput name="taxIdChar" id="tax_13" formControlName="tax_13">
-            </nb-form-field>
-
-          </form>
+<form [formGroup]="contactForm">
+  <nb-card>
+    <nb-card-header>
+      <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
+        <h5>เพิ่มผู้ติดต่อ</h5>
+        <div class="pl-2">
+          <nb-icon [icon]="'edit-2'" status="warning" pack="eva">
+          </nb-icon>
         </div>
       </div>
-    </div>
+      <div>
+        <nb-form-field class="contac-code-field">
+          <div nbPrefix>รหัส</div>
+          <input type="text" nbInput id="code" name="code" formControlName="code">
+        </nb-form-field>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="info-item">
+        <div class="info-item-header">
+          <nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
+          <strong>ข้อมูลพื้นฐาน</strong>
+        </div>
+        <div class="info-item-detail">
+          <div class="form-group">
+            <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
+            <div class="col-sm-9">
+              <div class="d-flex align-items-end">
+                <nb-form-field class="tax-id mr-3">
+                  <form [formGroup]="taxIdForm">
+                    <input type="number" nbInput name="taxIdChar" id="tax_1" formControlName="tax_1"
+                      class="mr-2">
+                    <input type="number" nbInput name="taxIdChar" id="tax_2"
+                      formControlName="tax_2">
+                    <input type="number" nbInput name="taxIdChar" id="tax_3"
+                      formControlName="tax_3">
+                    <input type="number" nbInput name="taxIdChar" id="tax_4"
+                      formControlName="tax_4">
+                    <input type="number" nbInput name="taxIdChar" id="tax_5" formControlName="tax_5"
+                      class="mr-2">
+                    <input type="number" nbInput name="taxIdChar" id="tax_6"
+                      formControlName="tax_6">
+                    <input type="number" nbInput name="taxIdChar" id="tax_7"
+                      formControlName="tax_7">
+                    <input type="number" nbInput name="taxIdChar" id="tax_8"
+                      formControlName="tax_8">
+                    <input type="number" nbInput name="taxIdChar" id="tax_9"
+                      formControlName="tax_9">
+                    <input type="number" nbInput name="taxIdChar" id="tax_10"
+                      formControlName="tax_10" class="mr-2">
+                    <input type="number" nbInput name="taxIdChar" id="tax_11"
+                      formControlName="tax_11">
+                    <input type="number" nbInput name="taxIdChar" id="tax_12"
+                      formControlName="tax_12">
+                    <input type="number" nbInput name="taxIdChar" id="tax_13"
+                      formControlName="tax_13">
+                  </form>
+                </nb-form-field>
+                <div class="d-inline-flex">
+                  <button nbButton shape="round" size="small" status="info">
+                    <nb-icon [icon]="'search'" pack="eva">
+                    </nb-icon> ค้นหา
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  </nb-card-body>
-  <nb-card-footer>
-    footer
-  </nb-card-footer>
-</nb-card>
+          <div class="form-group">
+            <label for="branch" class="label col-sm-3 col-form-label">สาขา</label>
+            <div class="col-sm-9 ">
+              <div class="d-flex align-items-baseline">
+                <nb-radio-group class="d-flex mr-3" formControlName="branch">
+                  <nb-radio value="">ไม่ระบุ</nb-radio>
+                  <nb-radio value="00000">สำนักงานใหญ่</nb-radio>
+                  <nb-radio value="-">สาขา</nb-radio>
+                </nb-radio-group>
+
+                <form [formGroup]="branchCodeForm" class="branch-code row align-items-end">
+                  <input type="number" nbInput name="branchCode" id="branchCode_1"
+                    formControlName="branchCode_1">
+                  <input type="number" nbInput name="branchCode" id="branchCode_2"
+                    formControlName="branchCode_2">
+                  <input type="number" nbInput name="branchCode" id="branchCode_3"
+                    formControlName="branchCode_3">
+                  <input type="number" nbInput name="branchCode" id="branchCode_4"
+                    formControlName="branchCode_4">
+                  <input type="number" nbInput name="branchCode" id="branchCode_5"
+                    formControlName="branchCode_5">
+                </form>
+              </div>
+
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+    </nb-card-body>
+    <nb-card-footer>
+      footer
+    </nb-card-footer>
+  </nb-card>
+</form>

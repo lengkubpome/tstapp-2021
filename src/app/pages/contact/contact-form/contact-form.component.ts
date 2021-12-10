@@ -1,6 +1,6 @@
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import { Component, HostListener, OnInit, Renderer2 } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
 
 @Component({
@@ -9,74 +9,77 @@ import { NbDialogRef } from "@nebular/theme";
 	styleUrls: ["./contact-form.component.scss"],
 })
 export class ContactFormComponent implements OnInit {
+	contactForm: FormGroup;
 	taxIdForm: FormGroup;
+	branchCodeForm: FormGroup;
 
 	@HostListener("keyup", ["$event"])
 	onKeyupHandler(event): void {
-		if (
-			event.target.name === "taxIdChar" &&
-			((event.keyCode >= 48 && event.keyCode <= 57) ||
-				(event.keyCode >= 96 && event.keyCode <= 105))
-		) {
-			const ctrls = Object.keys(this.taxIdForm.controls);
-			const nextIndex = ctrls.indexOf(event.target.id) + 1;
-			// เลขประจำตัว 13 หลัก
-			if (nextIndex < 13) {
-				this.taxIdForm.get(event.target.id).setValue(event.key);
-				const nextId = "#" + ctrls[nextIndex];
-				this.renderer.selectRootElement(nextId).focus();
-			} else {
-				// เลขตัวท้าย
-				this.taxIdForm.get("tax_13").setValue(event.key);
+		const htmlName = event.target.name;
+		if (htmlName === "taxIdChar" || htmlName === "branchCode") {
+			// เลือก formbuilder
+			let form: FormGroup;
+			switch (htmlName) {
+				case "taxIdChar":
+					form = this.taxIdForm;
+					break;
+				case "branchCode":
+					form = this.branchCodeForm;
+					break;
 			}
-		}
-	}
 
-	@HostListener("keydown", ["$event"])
-	onKeydownHandler(event): void {
-		if (event.target.name === "taxIdChar") {
-			// reject "e"
-			if (event.keyCode === 69) {
-				event.preventDefault();
-			}
-			// case backspace
-			if (event.keyCode === 8) {
-				console.log(event.key);
+			const ctrls = Object.keys(form.controls);
 
-				const clrlValue = this.taxIdForm.get(event.target.id).value;
-				if (!clrlValue || clrlValue !== "Backspace") {
-					const ctrls = Object.keys(this.taxIdForm.controls);
-					const prevIndex = ctrls.indexOf(event.target.id) - 1;
-					if (prevIndex > -1) {
-						const prevId = "#" + ctrls[prevIndex];
-						this.renderer.selectRootElement(prevId).focus();
-					}
+			if (
+				(event.keyCode >= 48 && event.keyCode <= 57) ||
+				(event.keyCode >= 96 && event.keyCode <= 105)
+			) {
+				const nextIndex = ctrls.indexOf(event.target.id) + 1;
+				if (nextIndex < ctrls.length) {
+					form.get(event.target.id).setValue(event.key);
+					const nextId = "#" + ctrls[nextIndex];
+					this.renderer.selectRootElement(nextId).focus();
+				} else {
+					// เลขตัวท้าย
+					form.get(event.target.id).setValue(event.key);
 				}
 			}
-			// case <- left arrow
-			if (event.keyCode === 37) {
-				const ctrls = Object.keys(this.taxIdForm.controls);
+			// case backspace , <- left arrow
+			if (event.keyCode === 8 || event.keyCode === 37) {
+				form.get(event.target.id).setValue("");
 				const prevIndex = ctrls.indexOf(event.target.id) - 1;
 				if (prevIndex > -1) {
 					const prevId = "#" + ctrls[prevIndex];
 					this.renderer.selectRootElement(prevId).focus();
 				}
 			}
+
 			// case -> right arrow
 			if (event.keyCode === 39) {
-				const ctrls = Object.keys(this.taxIdForm.controls);
-				const prevIndex = ctrls.indexOf(event.target.id) + 1;
-				if (prevIndex < 13) {
-					const prevId = "#" + ctrls[prevIndex];
+				const nextIndex = ctrls.indexOf(event.target.id) + 1;
+				if (nextIndex < ctrls.length) {
+					const prevId = "#" + ctrls[nextIndex];
 					this.renderer.selectRootElement(prevId).focus();
 				}
 			}
 		}
 	}
 
+	@HostListener("keydown", ["$event"])
+	onKeydownHandler(event): void {
+		const htmlName = event.target.name;
+		if (htmlName === "taxIdChar" || htmlName === "branchCode") {
+			// reject "e"
+			if (event.keyCode === 69) {
+				event.preventDefault();
+			}
+		}
+	}
+
 	@HostListener("keypress", ["$event"])
 	onKeypressHandler(event): void {
-		if (event.target.name === "taxIdChar") {
+		const htmlName = event.target.name;
+		if (htmlName === "taxIdChar" || htmlName === "branchCode") {
 			event.preventDefault();
 		}
 	}
@@ -88,6 +91,11 @@ export class ContactFormComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.contactForm = this.formBuilder.group({
+			code: ["C0013"],
+			branch: [""],
+		});
+
 		this.taxIdForm = this.formBuilder.group({
 			tax_1: [""],
 			tax_2: [""],
@@ -102,6 +110,14 @@ export class ContactFormComponent implements OnInit {
 			tax_11: [""],
 			tax_12: [""],
 			tax_13: [""],
+		});
+
+		this.branchCodeForm = this.formBuilder.group({
+			branchCode_1: [""],
+			branchCode_2: [""],
+			branchCode_3: [""],
+			branchCode_4: [""],
+			branchCode_5: [""],
 		});
 	}
 }

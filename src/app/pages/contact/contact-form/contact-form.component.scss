@@ -73,7 +73,9 @@ $screen-xl-min: 1200px;
     }
   }
 
-  .tax-id{
+  .tax-id, .branch-code{
+    display: inline-flex;
+
     ::ng-deep input{
       width: 20px;
       text-align: center;
@@ -81,6 +83,7 @@ $screen-xl-min: 1200px;
       border-radius: 0;
       line-height: 1.8rem;
       margin-right: 0.7px;
+      margin-top: 0.5rem;
       border-color: nb-theme(border-basic-color-5);
     }
 
@@ -92,7 +95,18 @@ $screen-xl-min: 1200px;
     /* Firefox */
     ::ng-deep input[type=number] {
       -moz-appearance:textfield; /* Firefox */
+    }
   }
+
+  .info-item-detail{
+    >.form-group{
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+      align-items: baseline;
+
+    }
   }
 
 
