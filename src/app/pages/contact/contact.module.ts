@@ -18,6 +18,7 @@ import {
 	NbLayoutModule,
 	NbMenuModule,
 	NbRadioModule,
+	NbSelectModule,
 	NbSidebarModule,
 	NbTabsetModule,
 	NbTagModule,
@@ -61,6 +62,7 @@ const MODULES = [
 	NbTabsetModule,
 	NbTagModule,
 	NbRadioModule,
+	NbSelectModule,
 	NbDialogModule.forChild(),
 	// Material
 	MatIconModule,

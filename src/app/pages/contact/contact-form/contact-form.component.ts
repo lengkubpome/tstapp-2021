@@ -94,6 +94,10 @@ export class ContactFormComponent implements OnInit {
 		this.contactForm = this.formBuilder.group({
 			code: ["C0013"],
 			branch: [""],
+			name: [""],
+			prefixName: [""],
+			firstName: [""],
+			lastName: [""],
 		});
 
 		this.taxIdForm = this.formBuilder.group({
