@@ -64,11 +64,32 @@ $screen-xl-min: 1200px;
     align-items: center;
   }
 
+  nb-select.prefix-name ::ng-deep {
+    // min-width: 100px;
+
+    .select-button {
+      min-width:60px;
+    }
+  }
+
 
 
   .contac-code-field{
     width: 120px;
-    ::ng-deep input{
+    // ::ng-deep input{
+    //   text-align: center;
+    // }
+
+    nbPrefix::ng-deep{
+      width: 4rem;
+      margin-right: -4rem;
+    }
+    span{
+      margin-right: -1.1rem
+    }
+
+    input{
+      padding-left: 3rem;
       text-align: center;
     }
   }
@@ -98,6 +119,7 @@ $screen-xl-min: 1200px;
     }
   }
 
+  // nb-select
   .info-item-detail{
     >.form-group{
       display: flex;
@@ -106,6 +128,25 @@ $screen-xl-min: 1200px;
       margin-left: -15px;
       align-items: baseline;
 
+    }
+  }
+
+  // prefix input
+  // .input-prefix-text{
+  //   margin-right: 80px;
+  // }
+
+  .prefix-text-input{
+    nbPrefix::ng-deep{
+      width: 5rem;
+      margin-right: -5rem;
+    }
+    span{
+      margin-right: -1.2rem
+    }
+
+    input{
+      padding-left: 4rem;
     }
   }
 

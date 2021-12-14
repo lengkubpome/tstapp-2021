@@ -9,8 +9,8 @@
         </div>
       </div>
       <div>
-        <nb-form-field class="contac-code-field">
-          <div nbPrefix>รหัส</div>
+        <nb-form-field class="contac-code-field  ">
+          <span nbPrefix>รหัส :</span>
           <input type="text" nbInput id="code" name="code" formControlName="code">
         </nb-form-field>
       </div>
@@ -26,7 +26,7 @@
           <div class="form-group">
             <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
             <div class="col-sm-9">
-              <div class="d-flex align-items-end">
+              <div class="d-flex flex-sm-row flex-column align-items-sm-end">
                 <nb-form-field class="tax-id mr-3">
                   <form [formGroup]="taxIdForm">
                     <input type="number" nbInput name="taxIdChar" id="tax_1" formControlName="tax_1"
@@ -57,41 +57,14 @@
                       formControlName="tax_13">
                   </form>
                 </nb-form-field>
-                <div class="d-inline-flex">
+
+                <div class="d-inline-flex mt-2">
                   <button nbButton shape="round" size="small" status="info">
                     <nb-icon [icon]="'search'" pack="eva">
                     </nb-icon> ค้นหา
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="branch" class="label col-sm-3 col-form-label"></label>
-            <div class="col-sm-9 ">
-              <div class="d-flex align-items-baseline">
-                <nb-radio-group class="d-flex mr-3" formControlName="branch">
-                  <nb-radio value="">ไม่ระบุ</nb-radio>
-                  <nb-radio value="00000">สำนักงานใหญ่</nb-radio>
-                  <nb-radio value="-">สาขา</nb-radio>
-                </nb-radio-group>
-
-                <form [formGroup]="branchCodeForm" class="branch-code row align-items-end">
-                  <input type="number" nbInput name="branchCode" id="branchCode_1"
-                    formControlName="branchCode_1">
-                  <input type="number" nbInput name="branchCode" id="branchCode_2"
-                    formControlName="branchCode_2">
-                  <input type="number" nbInput name="branchCode" id="branchCode_3"
-                    formControlName="branchCode_3">
-                  <input type="number" nbInput name="branchCode" id="branchCode_4"
-                    formControlName="branchCode_4">
-                  <input type="number" nbInput name="branchCode" id="branchCode_5"
-                    formControlName="branchCode_5">
-                </form>
-              </div>
-
-
             </div>
           </div>
 
@@ -120,45 +93,121 @@
           </div>
 
           <div class="form-group">
+            <label for="branch" class="label col-sm-3 col-form-label"></label>
+            <div class="col-sm-9 ">
+              <div class="d-flex  flex-sm-row flex-column align-items-sm-end">
+                <nb-radio-group class="d-flex mr-3" formControlName="branch">
+                  <nb-radio value="">ไม่ระบุ</nb-radio>
+                  <nb-radio value="00000">สำนักงานใหญ่</nb-radio>
+                  <nb-radio value="-">สาขา</nb-radio>
+                </nb-radio-group>
+
+                <form [formGroup]="branchCodeForm" class="branch-code row align-self-end">
+                  <input type="number" nbInput name="branchCode" id="branchCode_1"
+                    formControlName="branchCode_1">
+                  <input type="number" nbInput name="branchCode" id="branchCode_2"
+                    formControlName="branchCode_2">
+                  <input type="number" nbInput name="branchCode" id="branchCode_3"
+                    formControlName="branchCode_3">
+                  <input type="number" nbInput name="branchCode" id="branchCode_4"
+                    formControlName="branchCode_4">
+                  <input type="number" nbInput name="branchCode" id="branchCode_5"
+                    formControlName="branchCode_5">
+                </form>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="type" class="label col-sm-3 col-form-label">ชื่อ</label>
             <div class="col-sm-9">
-              <div class="d-flex   align-items-baseline">
+              <div class="d-flex align-items-baseline  justify-content-between">
 
                 <!-- <nb-form-field>
-                  <input type="text" nbInput id="name" name="name" placeholder="ชื่อ"
+                  <input type="text" fullWidth nbInput id="name" name="name" placeholder="ชื่อ"
                     formControlName="name">
                 </nb-form-field> -->
-                <div class="row">
-                  <nb-select class="col-2" id="prefixName" name="prefixName" placeholder="คำนำหน้า"
-                    formControlName="prefixName">
-                    <nb-option value="">ไม่มี</nb-option>
-                    <nb-option value="">นาย</nb-option>
-                    <nb-option value="0">นาง</nb-option>
-                    <nb-option value="1">นางสาว</nb-option>
-                    <nb-option value="1">คุณ</nb-option>
-                    <nb-option value="1">อื่นๆ</nb-option>
-                  </nb-select>
+                <nb-select class="prefix-name mr-1" id="prefixName" name="prefixName"
+                  placeholder="คำนำหน้า" formControlName="prefixName">
+                  <nb-option>ไม่มี</nb-option>
+                  <nb-option value="0">นาย</nb-option>
+                  <nb-option value="1">นาง</nb-option>
+                  <nb-option value="2">นางสาว</nb-option>
+                  <nb-option value="3">คุณ</nb-option>
+                  <nb-option value="4">อื่นๆ</nb-option>
+                </nb-select>
 
-
-
-
-                  <nb-form-field class="col-5">
-                    <input type="text" nbInput id="firstName" name="firstName" placeholder="ชื่อ"
-                      formControlName="firstName">
-                  </nb-form-field>
-                  <nb-form-field class="col-5">
-                    <input type="text" nbInput id="lastName" name="lastName" placeholder="นามสกุล"
-                      formControlName="lastName">
-                  </nb-form-field>
-                </div>
+                <nb-form-field class="mr-1">
+                  <input type="text" nbInput id="firstName" name="firstName" placeholder="ชื่อ"
+                    formControlName="firstName">
+                </nb-form-field>
+                <nb-form-field class="">
+                  <input type="text" nbInput id="lastName" name="lastName" placeholder="นามสกุล"
+                    formControlName="lastName">
+                </nb-form-field>
               </div>
 
             </div>
           </div>
 
-
         </div>
       </div>
+
+      <div class="info-item">
+        <div class="info-item-header">
+          <nb-icon nbPrefix icon="person" pack="eva"></nb-icon>
+          <strong>ข้อมูลพื้นฐาน</strong>
+        </div>
+        <div class="info-item-detail">
+          <div class="form-group">
+            <label for="type" class="label col-sm-3 col-form-label">ที่อยู่</label>
+            <div class="col-sm-9">
+              <div class="row">
+
+                <nb-form-field class="col-12 prefix-text-input">
+                  <span nbPrefix>เลขที่ :</span>
+                  <input type="text" fullWidth nbInput id="name" name="name"
+                    placeholder="กรุณาระบุเลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
+                </nb-form-field>
+                <nb-form-field class="col-6 mt-2 prefix-text-input">
+                  <span nbPrefix>จังหวัด :</span>
+                  <input type="text" nbInput id="name" name="name" placeholder="ชื่อ">
+                </nb-form-field>
+                <nb-form-field class="col-6 mt-2">
+                  <input type="text" nbInput id="name" name="name" placeholder="ชื่อ">
+                </nb-form-field>
+                <nb-form-field class="col-6 mt-2">
+                  <input type="text" nbInput id="name" name="name" placeholder="ชื่อ">
+                </nb-form-field>
+                <nb-form-field class="col-6 mt-2">
+                  <input type="text" nbInput id="name" name="name" placeholder="ชื่อ">
+                </nb-form-field>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item-detail">
+          <div class="form-group">
+            <label for="type" class="label col-sm-3 col-form-label">จังหวัด</label>
+            <div class="col-sm-9">
+              <div class="row">
+
+                <nb-form-field class="col-12">
+                  <input type="text" fullWidth nbInput id="name" name="name" placeholder="ชื่อ">
+                </nb-form-field>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
 
     </nb-card-body>
     <nb-card-footer>
