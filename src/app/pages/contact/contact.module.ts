@@ -7,6 +7,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatButtonModule } from "@angular/material/button";
 import { ContactComponent } from "./contact.component";
 import {
+	NbAccordionModule,
 	NbButtonModule,
 	NbCardModule,
 	NbCheckboxModule,
@@ -32,6 +33,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ContactFormComponent } from "./contact-form/contact-form.component";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -63,9 +65,11 @@ const MODULES = [
 	NbTagModule,
 	NbRadioModule,
 	NbSelectModule,
+	NbAccordionModule,
 	NbDialogModule.forChild(),
 	// Material
 	MatIconModule,
+	MatAutocompleteModule,
 	// Avatar
 	AvatarModule,
 ];

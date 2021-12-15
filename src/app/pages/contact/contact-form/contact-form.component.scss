@@ -44,9 +44,14 @@ $screen-xl-min: 1200px;
 
 @include nb-install-component() {
 
+  mat-icon{
+    transform: scale(0.85);
+  }
+
   nb-card {
     max-width: 800px;
-    max-height: 44.25rem;
+    // max-height: 44.25rem;
+    max-height: 50.25rem;
     margin: auto;
 
    	@media (min-width: #{$screen-sm-min}) {
@@ -103,7 +108,7 @@ $screen-xl-min: 1200px;
       padding: 0;
       border-radius: 0;
       line-height: 1.8rem;
-      margin-right: 0.7px;
+      // margin-right: 0.7px;
       margin-top: 0.5rem;
       border-color: nb-theme(border-basic-color-5);
     }
@@ -116,6 +121,12 @@ $screen-xl-min: 1200px;
     /* Firefox */
     ::ng-deep input[type=number] {
       -moz-appearance:textfield; /* Firefox */
+    }
+  }
+
+  .info-item-header{
+    > *:first-child{
+      margin-right: 0.5rem;
     }
   }
 
@@ -132,21 +143,29 @@ $screen-xl-min: 1200px;
   }
 
   // prefix input
-  // .input-prefix-text{
-  //   margin-right: 80px;
-  // }
-
   .prefix-text-input{
     nbPrefix::ng-deep{
       width: 5rem;
       margin-right: -5rem;
     }
     span{
+      text-align: center;
+      margin-left: 0;
       margin-right: -1.2rem
     }
 
     input{
       padding-left: 4rem;
+    }
+  }
+
+  nb-accordion{
+    margin: -1rem -1.5rem;
+
+    > nb-accordion-item:first-child{
+      > nb-accordion-item-header{
+        color: nb-theme(text-basic-color)
+      }
     }
   }
 
