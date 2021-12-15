@@ -170,7 +170,7 @@
                     <nb-form-field class="col-12 prefix-text-input">
                       <span nbPrefix>เลขที่</span>
                       <input type="text" fullWidth nbInput id="name" name="name"
-                        placeholder="กรุณาระบุเลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
+                        placeholder="ระบุเลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
                     </nb-form-field>
 
                     <nb-form-field class="col-6 mt-2 prefix-text-input">
@@ -227,29 +227,28 @@
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" nbInput id="phone" name="phone"
-                      placeholder="กรุณาระบุเบอร์โทรศัพท์">
+                      placeholder="ระบุเบอร์โทรศัพท์">
                   </nb-form-field>
 
                 </div>
               </div>
+
               <div class="form-group">
                 <label for="phone" class="label col-sm-3 col-form-label">โทรศัพท์ (สำรอง)</label>
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" nbInput id="phone" name="phone"
-                      placeholder="กรุณาระบุเบอร์โทรศัพท์">
+                      placeholder="ระบุเบอร์โทรศัพท์">
                   </nb-form-field>
 
                 </div>
               </div>
 
-
               <div class="form-group">
                 <label for="email" class="label col-sm-3 col-form-label">อีเมลล์</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="email" name="email"
-                      placeholder="กรุณาระบุอีเมลล์">
+                    <input type="text" nbInput id="email" name="email" placeholder="ระบุอีเมลล์">
                   </nb-form-field>
                 </div>
               </div>
@@ -258,7 +257,7 @@
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" nbInput id="website" name="website"
-                      placeholder="กรุณาระบุเว็บไซต์">
+                      placeholder="ระบุเว็บไซต์">
                   </nb-form-field>
                 </div>
               </div>
@@ -273,9 +272,54 @@
             <span>ข้อมูลธนาคาร</span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases.
-            Originally, nebula was a name for any diffuse astronomical object,
-            including galaxies beyond the Milky Way.
+            <div class="info-item-detail">
+
+              <div class="form-group">
+                <label for="type" class="label col-sm-3 col-form-label">บัญชีธนาคาร</label>
+                <div class="col-sm-9">
+                  <div class="bank-detail ">
+                    <div>
+                      <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร"
+                        formControlName="prefixName">
+                        <nb-option value="0" class="d-flex align-items-baseline">
+                          <i class="bank xxxl bank-kbank"></i>
+                          <span>กสิกรไทย</span>
+                        </nb-option>
+                        <nb-option value="1">
+                          <i class="bank xxxl bank-bbl"></i>
+                          กรุงเทพ
+                        </nb-option>
+                        <nb-option value="2">
+                          <i class="bank xxxl bank-scb"></i>
+                          ไทยพาณิชย์
+                        </nb-option>
+                      </nb-select>
+
+                      <nb-form-field class="">
+                        <input type="text" nbInput id="firstName" name="firstName"
+                          placeholder="เลขบัญชี" formControlName="firstName">
+                      </nb-form-field>
+
+                      <nb-form-field class="">
+                        <input type="text" nbInput id="lastName" name="lastName"
+                          placeholder="ชื่อเจ้าของบัญชี" formControlName="lastName">
+                      </nb-form-field>
+                    </div>
+                    <div>
+                      <nb-icon [icon]="'more-horizontal-outline'" pack="eva"></nb-icon>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex mt-2 justify-content-center">
+              <button nbButton size="large" status="info">
+                <nb-icon [icon]="'plus'" pack="eva"></nb-icon>
+                <span>เพิ่มบัญชีธนาคาร</span>
+              </button>
+            </div>
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>

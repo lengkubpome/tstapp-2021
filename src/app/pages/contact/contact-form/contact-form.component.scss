@@ -135,10 +135,26 @@ $screen-xl-min: 1200px;
     >.form-group{
       display: flex;
       flex-wrap: wrap;
-      margin-right: -15px;
-      margin-left: -15px;
+      padding: 0.5rem 0;
+      margin: 0 -15px;
       align-items: baseline;
+    }
 
+    >.form-group:hover{
+        // background: whitesmoke;
+    }
+  }
+
+  .bank-detail {
+      display: flex;
+      justify-content: space-between;
+    >:first-child{
+      display: flex;
+      flex-direction: column;
+      > * {
+        margin-right: 0.5rem ;
+        margin-bottom: 0.3rem ;
+      }
     }
   }
 
