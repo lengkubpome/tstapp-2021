@@ -13,6 +13,8 @@ export class ContactFormComponent implements OnInit {
 	taxIdForm: FormGroup;
 	branchCodeForm: FormGroup;
 
+	bankOrder = 1;
+
 	@HostListener("keyup", ["$event"])
 	onKeyupHandler(event): void {
 		const htmlName = event.target.name;

@@ -148,14 +148,19 @@ $screen-xl-min: 1200px;
   .bank-detail {
       display: flex;
       justify-content: space-between;
-    >:first-child{
-      display: flex;
-      flex-direction: column;
-      > * {
+      flex-direction: row;
+      align-items: center;
+
+      > nb-select, nb-form-field{
         margin-right: 0.5rem ;
         margin-bottom: 0.3rem ;
       }
-    }
+      >nb-select::ng-deep {
+        .select-button {
+          min-width:180px;
+        }
+      }
+
   }
 
   // prefix input

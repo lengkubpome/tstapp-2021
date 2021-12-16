@@ -5,6 +5,8 @@ import { ContactRoutes } from "./contact.routing";
 import { NgModule } from "@angular/core";
 import { MatTableModule } from "@angular/material/table";
 import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 import { ContactComponent } from "./contact.component";
 import {
 	NbAccordionModule,
@@ -70,6 +72,8 @@ const MODULES = [
 	// Material
 	MatIconModule,
 	MatAutocompleteModule,
+	MatMenuModule,
+	DragDropModule,
 	// Avatar
 	AvatarModule,
 ];

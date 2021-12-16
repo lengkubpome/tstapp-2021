@@ -9,7 +9,7 @@
         </div>
       </div>
       <div>
-        <nb-form-field class="contac-code-field  ">
+        <nb-form-field class="contac-code-field">
           <span nbPrefix>รหัส :</span>
           <input type="text" nbInput id="code" name="code" formControlName="code">
         </nb-form-field>
@@ -39,31 +39,31 @@
                   <div class="d-flex flex-sm-row flex-column align-items-sm-end">
                     <nb-form-field class="tax-id mr-3">
                       <form [formGroup]="taxIdForm">
-                        <input type="number" nbInput name="taxIdChar" id="tax_1"
+                        <input type="number" nbInput name="taxIdChar" id="tax_1" placeholder="0"
                           formControlName="tax_1" class="mr-2">
-                        <input type="number" nbInput name="taxIdChar" id="tax_2"
+                        <input type="number" nbInput name="taxIdChar" id="tax_2" placeholder="0"
                           formControlName="tax_2">
-                        <input type="number" nbInput name="taxIdChar" id="tax_3"
+                        <input type="number" nbInput name="taxIdChar" id="tax_3" placeholder="0"
                           formControlName="tax_3">
-                        <input type="number" nbInput name="taxIdChar" id="tax_4"
+                        <input type="number" nbInput name="taxIdChar" id="tax_4" placeholder="0"
                           formControlName="tax_4">
-                        <input type="number" nbInput name="taxIdChar" id="tax_5"
+                        <input type="number" nbInput name="taxIdChar" id="tax_5" placeholder="0"
                           formControlName="tax_5" class="mr-2">
-                        <input type="number" nbInput name="taxIdChar" id="tax_6"
+                        <input type="number" nbInput name="taxIdChar" id="tax_6" placeholder="0"
                           formControlName="tax_6">
-                        <input type="number" nbInput name="taxIdChar" id="tax_7"
+                        <input type="number" nbInput name="taxIdChar" id="tax_7" placeholder="0"
                           formControlName="tax_7">
-                        <input type="number" nbInput name="taxIdChar" id="tax_8"
+                        <input type="number" nbInput name="taxIdChar" id="tax_8" placeholder="0"
                           formControlName="tax_8">
-                        <input type="number" nbInput name="taxIdChar" id="tax_9"
+                        <input type="number" nbInput name="taxIdChar" id="tax_9" placeholder="0"
                           formControlName="tax_9">
-                        <input type="number" nbInput name="taxIdChar" id="tax_10"
+                        <input type="number" nbInput name="taxIdChar" id="tax_10" placeholder="0"
                           formControlName="tax_10" class="mr-2">
-                        <input type="number" nbInput name="taxIdChar" id="tax_11"
+                        <input type="number" nbInput name="taxIdChar" id="tax_11" placeholder="0"
                           formControlName="tax_11">
-                        <input type="number" nbInput name="taxIdChar" id="tax_12"
+                        <input type="number" nbInput name="taxIdChar" id="tax_12" placeholder="0"
                           formControlName="tax_12">
-                        <input type="number" nbInput name="taxIdChar" id="tax_13"
+                        <input type="number" nbInput name="taxIdChar" id="tax_13" placeholder="0"
                           formControlName="tax_13">
                       </form>
                     </nb-form-field>
@@ -114,15 +114,15 @@
 
                     <form [formGroup]="branchCodeForm" class="branch-code row align-self-end">
                       <input type="number" nbInput name="branchCode" id="branchCode_1"
-                        formControlName="branchCode_1">
+                        formControlName="branchCode_1" placeholder="0">
                       <input type="number" nbInput name="branchCode" id="branchCode_2"
-                        formControlName="branchCode_2">
+                        formControlName="branchCode_2" placeholder="0">
                       <input type="number" nbInput name="branchCode" id="branchCode_3"
-                        formControlName="branchCode_3">
+                        formControlName="branchCode_3" placeholder="0">
                       <input type="number" nbInput name="branchCode" id="branchCode_4"
-                        formControlName="branchCode_4">
+                        formControlName="branchCode_4" placeholder="0">
                       <input type="number" nbInput name="branchCode" id="branchCode_5"
-                        formControlName="branchCode_5">
+                        formControlName="branchCode_5" placeholder="0">
                     </form>
                   </div>
 
@@ -141,7 +141,7 @@
                     </nb-form-field> -->
                     <nb-select class="prefix-name mr-1" id="prefixName" name="prefixName"
                       placeholder="คำนำหน้า" formControlName="prefixName">
-                      <nb-option>ไม่มี</nb-option>
+                      <nb-option>ไม่ระบุ</nb-option>
                       <nb-option value="0">นาย</nb-option>
                       <nb-option value="1">นาง</nb-option>
                       <nb-option value="2">นางสาว</nb-option>
@@ -167,27 +167,28 @@
                 <div class="col-sm-9">
                   <div class="row">
 
-                    <nb-form-field class="col-12 prefix-text-input">
-                      <span nbPrefix>เลขที่</span>
+                    <nb-form-field class="col-12">
+                      <!-- <nb-form-field class="col-12 prefix-text-input">
+                      <span nbPrefix>เลขที่</span> -->
                       <input type="text" fullWidth nbInput id="name" name="name"
-                        placeholder="ระบุเลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
+                        placeholder="เลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2 prefix-text-input">
-                      <span nbPrefix>แขวง /<br>ตำบล </span>
+                    <nb-form-field class="col-6 mt-2">
+                      <!-- <span nbPrefix>แขวง /<br>ตำบล </span> -->
                       <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="ระบุแขวง หรือตำบล">
+                        placeholder="แขวง หรือตำบล">
                     </nb-form-field>
-                    <nb-form-field class="col-6 mt-2 prefix-text-input">
-                      <span nbPrefix>เขต /<br>อำเภอ </span>
+                    <nb-form-field class="col-6 mt-2 ">
+                      <!-- <span nbPrefix>เขต /<br>อำเภอ </span> -->
                       <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="ระบุเขต หรืออำเภอ">
+                        placeholder="เขต หรืออำเภอ">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2 prefix-text-input">
-                      <span nbPrefix>จังหวัด</span>
-                      <input type="text" nbInput id="province" name="province"
-                        placeholder="ระบุจังหวัด" [matAutocomplete]="province">
+                    <nb-form-field class="col-6 mt-2 ">
+                      <!-- <span nbPrefix>จังหวัด</span> -->
+                      <input type="text" nbInput id="province" name="province" placeholder="จังหวัด"
+                        [matAutocomplete]="province">
 
                       <mat-autocomplete autoActiveFirstOption #province="matAutocomplete">
                         <mat-option>ขอนแก่น</mat-option>
@@ -199,10 +200,10 @@
                       </mat-autocomplete>
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2 prefix-text-input">
-                      <span nbPrefix class="text-break fs-6">ปณ.</span>
+                    <nb-form-field class="col-6 mt-2">
+                      <!-- <span nbPrefix class="text-break fs-6">ปณ.</span> -->
                       <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="ระบุรหัสไปรษณีย์">
+                        placeholder="รหัสไปรษณีย์">
                     </nb-form-field>
 
                   </div>
@@ -226,8 +227,7 @@
                 <label for="phone" class="label col-sm-3 col-form-label">โทรศัพท์ (หลัก)</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="phone" name="phone"
-                      placeholder="ระบุเบอร์โทรศัพท์">
+                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์">
                   </nb-form-field>
 
                 </div>
@@ -237,8 +237,7 @@
                 <label for="phone" class="label col-sm-3 col-form-label">โทรศัพท์ (สำรอง)</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="phone" name="phone"
-                      placeholder="ระบุเบอร์โทรศัพท์">
+                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์">
                   </nb-form-field>
 
                 </div>
@@ -248,7 +247,7 @@
                 <label for="email" class="label col-sm-3 col-form-label">อีเมลล์</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="email" name="email" placeholder="ระบุอีเมลล์">
+                    <input type="text" nbInput id="email" name="email" placeholder="อีเมลล์">
                   </nb-form-field>
                 </div>
               </div>
@@ -256,8 +255,7 @@
                 <label for="website" class="label col-sm-3 col-form-label">เว็บไซต์</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="website" name="website"
-                      placeholder="ระบุเว็บไซต์">
+                    <input type="text" nbInput id="website" name="website" placeholder="เว็บไซต์">
                   </nb-form-field>
                 </div>
               </div>
@@ -275,44 +273,103 @@
             <div class="info-item-detail">
 
               <div class="form-group">
-                <label for="type" class="label col-sm-3 col-form-label">บัญชีธนาคาร</label>
+                <label for="type" class="label col-sm-3 col-form-label">บัญชีธนาคาร (หลัก)</label>
                 <div class="col-sm-9">
                   <div class="bank-detail ">
-                    <div>
-                      <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร"
-                        formControlName="prefixName">
-                        <nb-option value="0" class="d-flex align-items-baseline">
-                          <i class="bank xxxl bank-kbank"></i>
-                          <span>กสิกรไทย</span>
-                        </nb-option>
-                        <nb-option value="1">
-                          <i class="bank xxxl bank-bbl"></i>
-                          กรุงเทพ
-                        </nb-option>
-                        <nb-option value="2">
-                          <i class="bank xxxl bank-scb"></i>
-                          ไทยพาณิชย์
-                        </nb-option>
-                      </nb-select>
+                    <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร"
+                      formControlName="prefixName">
+                      <nb-option value="0" class="d-flex align-items-center">
+                        <i class="bank xxxl bank-kbank mr-2"></i>
+                        <span>กสิกรไทย</span>
+                      </nb-option>
+                      <nb-option value="1">
+                        <i class="bank xxxl bank-bbl"></i>
+                        กรุงเทพ
+                      </nb-option>
+                      <nb-option value="2">
+                        <i class="bank xxxl bank-scb"></i>
+                        ไทยพาณิชย์
+                      </nb-option>
+                    </nb-select>
 
-                      <nb-form-field class="">
-                        <input type="text" nbInput id="firstName" name="firstName"
-                          placeholder="เลขบัญชี" formControlName="firstName">
-                      </nb-form-field>
+                    <nb-form-field class="">
+                      <input type="text" nbInput id="firstName" name="firstName"
+                        placeholder="เลขบัญชี" formControlName="firstName">
+                    </nb-form-field>
 
-                      <nb-form-field class="">
-                        <input type="text" nbInput id="lastName" name="lastName"
-                          placeholder="ชื่อเจ้าของบัญชี" formControlName="lastName">
-                      </nb-form-field>
-                    </div>
-                    <div>
-                      <nb-icon [icon]="'more-horizontal-outline'" pack="eva"></nb-icon>
-                    </div>
+                    <nb-form-field class="">
+                      <input type="text" nbInput id="lastName" name="lastName"
+                        placeholder="ชื่อเจ้าของบัญชี" formControlName="lastName">
+                    </nb-form-field>
+
+                    <button mat-icon-button [matMenuTriggerFor]="bankMenu"
+                      [matMenuTriggerData]="{order: 1}">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
 
                   </div>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label for="type" class="label col-sm-3 col-form-label">บัญชีธนาคาร</label>
+                <div class="col-sm-9">
+                  <div class="bank-detail ">
+                    <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร"
+                      formControlName="prefixName">
+                      <nb-option value="0" class="d-flex align-items-center">
+                        <i class="bank xxxl bank-kbank mr-2"></i>
+                        <span>กสิกรไทย</span>
+                      </nb-option>
+                      <nb-option value="1">
+                        <i class="bank xxxl bank-bbl"></i>
+                        กรุงเทพ
+                      </nb-option>
+                      <nb-option value="2">
+                        <i class="bank xxxl bank-scb"></i>
+                        ไทยพาณิชย์
+                      </nb-option>
+                    </nb-select>
+
+                    <nb-form-field class="">
+                      <input type="text" nbInput id="firstName" name="firstName"
+                        placeholder="เลขบัญชี" formControlName="firstName">
+                    </nb-form-field>
+
+                    <nb-form-field class="">
+                      <input type="text" nbInput id="lastName" name="lastName"
+                        placeholder="ชื่อเจ้าของบัญชี" formControlName="lastName">
+                    </nb-form-field>
+
+                    <button mat-icon-button [matMenuTriggerFor]="bankMenu"
+                      [matMenuTriggerData]="{order: 2}">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+
             </div>
+
+            <mat-menu #bankMenu="matMenu">
+              <ng-template matMenuContent let-order="order">
+                <button mat-menu-item [disabled]="order == 1">
+                  <mat-icon>vertical_align_top</mat-icon>
+                  <span>เลื่อนขึ้น</span>
+                </button>
+                <button mat-menu-item [disabled]="order !== 1">
+                  <mat-icon>vertical_align_bottom</mat-icon>
+                  <span>เลื่อนลง</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>delete</mat-icon>
+                  <span>ลบข้อมูล</span>
+                </button>
+              </ng-template>
+
+            </mat-menu>
 
             <div class="d-flex mt-2 justify-content-center">
               <button nbButton size="large" status="info">
