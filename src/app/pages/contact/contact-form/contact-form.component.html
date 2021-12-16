@@ -32,7 +32,7 @@
             <strong>ข้อมูลพื้นฐาน</strong>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="info-item-detail">
+            <div class="info-item-detail" formGroupName="businessInfo">
               <div class="form-group">
                 <label for="taxId" class="label col-sm-3 col-form-label">เลขทะเบียน 13 หลัก</label>
                 <div class="col-sm-9">
@@ -83,18 +83,18 @@
                 <div class="col-sm-9">
                   <div class="d-flex align-items-baseline">
 
-                    <nb-select placeholder="ประเภท">
+                    <nb-select placeholder="ประเภท" formControlName="legalType">
                       <nb-option-group title="บุคคลธรรมดา">
-                        <nb-option value="1">บุคคลธรรมดา</nb-option>
-                        <nb-option value="2">ร้านค้า</nb-option>
-                        <nb-option value="3">คณะบุคคล</nb-option>
+                        <nb-option value="บุคคลธรรมดา">บุคคลธรรมดา</nb-option>
+                        <nb-option value="ร้านค้า">ร้านค้า</nb-option>
+                        <nb-option value="คณะบุคคล">คณะบุคคล</nb-option>
                       </nb-option-group>
 
                       <nb-option-group title="นิติบุคคล">
-                        <nb-option value="21">บริษัทจำกัด</nb-option>
-                        <nb-option value="22">บริษัทมหาชนจำกัด</nb-option>
-                        <nb-option value="23">ห้างหุ้นส่วนจำกัด</nb-option>
-                        <nb-option value="24">อื่นๆ</nb-option>
+                        <nb-option value="บริษัทจำกัด">บริษัทจำกัด</nb-option>
+                        <nb-option value="บริษัทมหาชนจำกัด">บริษัทมหาชนจำกัด</nb-option>
+                        <nb-option value="ห้างหุ้นส่วนจำกัด">ห้างหุ้นส่วนจำกัด</nb-option>
+                        <nb-option value="อื่นๆ">อื่นๆ</nb-option>
                       </nb-option-group>
                     </nb-select>
                   </div>
@@ -112,7 +112,8 @@
                       <nb-radio value="-">สาขา</nb-radio>
                     </nb-radio-group>
 
-                    <form [formGroup]="branchCodeForm" class="branch-code row align-self-end">
+                    <form [formGroup]="branchCodeForm" class="branch-code row align-self-end"
+                      *ngIf="contactForm.get('businessInfo.branch').value ==='-'">
                       <input type="number" nbInput name="branchCode" id="branchCode_1"
                         formControlName="branchCode_1" placeholder="0">
                       <input type="number" nbInput name="branchCode" id="branchCode_2"
@@ -129,18 +130,23 @@
 
                 </div>
               </div>
+            </div>
 
+            <div class="info-item-detail">
               <div class="form-group">
                 <label for="type" class="label col-sm-3 col-form-label">ชื่อ</label>
                 <div class="col-sm-9">
                   <div class="d-flex align-items-baseline  justify-content-between">
 
-                    <!-- <nb-form-field>
-                      <input type="text" fullWidth nbInput id="name" name="name" placeholder="ชื่อ"
+                    <nb-form-field
+                      *ngIf="contactForm.get('businessInfo.legalType').value !=='บุคคลธรรมดา'">
+                      <input type="text" nbInput id="name" name="name" placeholder="ชื่อ"
                         formControlName="name">
-                    </nb-form-field> -->
+                    </nb-form-field>
+
                     <nb-select class="prefix-name mr-1" id="prefixName" name="prefixName"
-                      placeholder="คำนำหน้า" formControlName="prefixName">
+                      placeholder="คำนำหน้า" formControlName="prefixName"
+                      *ngIf="contactForm.get('businessInfo.legalType').value ==='บุคคลธรรมดา'">
                       <nb-option>ไม่ระบุ</nb-option>
                       <nb-option value="0">นาย</nb-option>
                       <nb-option value="1">นาง</nb-option>
@@ -149,11 +155,13 @@
                       <nb-option value="4">อื่นๆ</nb-option>
                     </nb-select>
 
-                    <nb-form-field class="mr-1">
+                    <nb-form-field class="mr-1"
+                      *ngIf="contactForm.get('businessInfo.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" nbInput id="firstName" name="firstName" placeholder="ชื่อ"
                         formControlName="firstName">
                     </nb-form-field>
-                    <nb-form-field class="">
+                    <nb-form-field class=""
+                      *ngIf="contactForm.get('businessInfo.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" nbInput id="lastName" name="lastName" placeholder="นามสกุล"
                         formControlName="lastName">
                     </nb-form-field>
@@ -162,7 +170,7 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group" formGroupName="address">
                 <label for="type" class="label col-sm-3 col-form-label">ที่อยู่</label>
                 <div class="col-sm-9">
                   <div class="row">
@@ -170,40 +178,39 @@
                     <nb-form-field class="col-12">
                       <!-- <nb-form-field class="col-12 prefix-text-input">
                       <span nbPrefix>เลขที่</span> -->
-                      <input type="text" fullWidth nbInput id="name" name="name"
+                      <input type="text" fullWidth nbInput id="line" name="line"
+                        formControlName="line"
                         placeholder="เลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
                     </nb-form-field>
 
                     <nb-form-field class="col-6 mt-2">
                       <!-- <span nbPrefix>แขวง /<br>ตำบล </span> -->
-                      <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="แขวง หรือตำบล">
+                      <input type="text" nbInput id="subDistrict" name="subDistrict"
+                        formControlName="subDistrict" placeholder="แขวง หรือตำบล">
                     </nb-form-field>
                     <nb-form-field class="col-6 mt-2 ">
                       <!-- <span nbPrefix>เขต /<br>อำเภอ </span> -->
-                      <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="เขต หรืออำเภอ">
+                      <input type="text" nbInput id="district" name="district"
+                        formControlName="district" placeholder="เขต หรืออำเภอ">
                     </nb-form-field>
 
                     <nb-form-field class="col-6 mt-2 ">
                       <!-- <span nbPrefix>จังหวัด</span> -->
                       <input type="text" nbInput id="province" name="province" placeholder="จังหวัด"
-                        [matAutocomplete]="province">
+                        formControlName="province" [matAutocomplete]="province">
 
                       <mat-autocomplete autoActiveFirstOption #province="matAutocomplete">
-                        <mat-option>ขอนแก่น</mat-option>
-                        <mat-option>ขอนแก่น2</mat-option>
-                        <mat-option>ขอนแก่น3</mat-option>
-                        <!-- <mat-option *ngFor="let province of filteredProvinces | async" [value]="province">
-                            {{ province }}
-                          </mat-option> -->
+                        <mat-option *ngFor="let province of filteredProvinces | async"
+                          [value]="province">
+                          {{ province }}
+                        </mat-option>
                       </mat-autocomplete>
                     </nb-form-field>
 
                     <nb-form-field class="col-6 mt-2">
                       <!-- <span nbPrefix class="text-break fs-6">ปณ.</span> -->
                       <input type="text" nbInput id="postCode" name="postCode"
-                        placeholder="รหัสไปรษณีย์">
+                        formControlName="postCode" placeholder="รหัสไปรษณีย์">
                     </nb-form-field>
 
                   </div>

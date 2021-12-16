@@ -1,7 +1,14 @@
+import {
+	ProvinceState,
+	ProvinceStateModel,
+} from "src/app/shared/state/province/province.state";
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import { Component, HostListener, OnInit, Renderer2 } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
+import { Select, Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { debounceTime, map, startWith } from "rxjs/operators";
 
 @Component({
 	selector: "app-contact-form",
@@ -12,6 +19,9 @@ export class ContactFormComponent implements OnInit {
 	contactForm: FormGroup;
 	taxIdForm: FormGroup;
 	branchCodeForm: FormGroup;
+
+	provinces: string[];
+	filteredProvinces: Observable<string[]>;
 
 	bankOrder = 1;
 
@@ -88,21 +98,36 @@ export class ContactFormComponent implements OnInit {
 
 	constructor(
 		protected ref: NbDialogRef<ContactFormComponent>,
-		private formBuilder: FormBuilder,
-		private renderer: Renderer2
-	) {}
+		private fb: FormBuilder,
+		private renderer: Renderer2,
+		private store: Store
+	) {
+		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
+	}
 
 	ngOnInit(): void {
-		this.contactForm = this.formBuilder.group({
+		this.contactForm = this.fb.group({
 			code: ["C0013"],
 			branch: [""],
 			name: [""],
 			prefixName: [""],
 			firstName: [""],
 			lastName: [""],
+			businessInfo: this.fb.group({
+				taxId: [""],
+				legalType: [""],
+				branch: [""],
+			}),
+			address: this.fb.group({
+				line: [""],
+				subDistrict: [""],
+				district: [""],
+				province: [""],
+				postCode: [""],
+			}),
 		});
 
-		this.taxIdForm = this.formBuilder.group({
+		this.taxIdForm = this.fb.group({
 			tax_1: [""],
 			tax_2: [""],
 			tax_3: [""],
@@ -118,12 +143,49 @@ export class ContactFormComponent implements OnInit {
 			tax_13: [""],
 		});
 
-		this.branchCodeForm = this.formBuilder.group({
+		this.branchCodeForm = this.fb.group({
 			branchCode_1: [""],
 			branchCode_2: [""],
 			branchCode_3: [""],
 			branchCode_4: [""],
 			branchCode_5: [""],
 		});
+
+		this.formBuilderAction();
+		this.filterControls();
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func FormBuilder Action
+	// -----------------------------------------------------------------------------------------------------
+	private formBuilderAction(): void {
+		this.taxIdForm.valueChanges.subscribe((data) => console.log(data));
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func Filter
+	// -----------------------------------------------------------------------------------------------------
+
+	private filterControls(): void {
+		this.filteredProvinces = this.contactForm
+			.get("address.province")
+			.valueChanges.pipe(
+				startWith(""),
+				debounceTime(100),
+				map((input) => {
+					const provinces = this.provinces; // ดึงเฉพาะ province
+					return input
+						? provinces.filter((province) =>
+								this._normalizeValue(province).includes(
+									this._normalizeValue(input)
+								)
+						  )
+						: provinces;
+				})
+			);
+	}
+
+	private _normalizeValue(value: string): string {
+		return value.toLowerCase().replace(/\s/g, "");
 	}
 }

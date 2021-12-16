@@ -4,9 +4,10 @@ export interface IContact {
 	code: string;
 
 	name: string;
-	prefix?: string;
+	prefixName?: string;
 	firstName?: string;
 	lastName?: string;
+
 	type: {
 		vendor: boolean;
 		customer: boolean;
