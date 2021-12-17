@@ -218,7 +218,7 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		// 	showInput = showInput + ' ' + contact.lastName;
 		// }
 
-		this.weightingForm.get("contact").setValue(selectContact.name);
+		this.weightingForm.get("contact").setValue(selectContact.general.name);
 		this.weightSheet.contact = selectContact;
 	}
 
@@ -385,9 +385,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 						const contacts = stateModel.contactList;
 						return input
 							? contacts.filter((contact) =>
-									this._normalizeValue(contact.name + contact.code).includes(
-										this._normalizeValue(input)
-									)
+									this._normalizeValue(
+										contact.general.name + contact.code
+									).includes(this._normalizeValue(input))
 							  )
 							: contacts;
 					})

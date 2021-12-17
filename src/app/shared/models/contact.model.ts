@@ -2,22 +2,16 @@ import { ICar } from "./car.model";
 
 export interface IContact {
 	code: string;
+	mainId?: IContact; // เชื่อมกับร้านค้า
 
-	name: string;
-	prefixName?: string;
-	firstName?: string;
-	lastName?: string;
+	general: {
+		code: string;
+		name: string;
+		prefixName?: string;
+		firstName?: string;
+		lastName?: string;
 
-	type: {
-		vendor: boolean;
-		customer: boolean;
-		store: boolean;
-	};
-	storeContactId?: string; // เชื่อมกับร้านค้า
-	businessInfo: {
-		// legalType: // "ordinaryPerson" | "juristisPerson";
-		// "บุคคลธรรมดา" | "นิติบุคคล";
-		legalType: // | "human"
+		legalType?: // | "human"
 		// | "ordinaryPartnership"
 		// | "shop"
 		// | "bodyOfPersons"
@@ -41,22 +35,28 @@ export interface IContact {
 			| "อื่นๆ";
 		taxId?: string;
 		branch?: string;
+		address?: IAddress;
 	};
 
-	address?: IAddress;
-
-	communicateInfo?: {
-		phone?: string[]; // 'phone' | 'email' | 'line' | 'Web'
+	communication?: {
+		phone?: string; // 'phone' | 'email' | 'line' | 'Web'
+		telephone?: string; // 'phone' | 'email' | 'line' | 'Web'
 		line?: {
 			displayName: string;
 			userId: string;
 		};
 		website?: string;
 		email?: string;
-		officeAddress?: IAddress;
+		address?: IAddress;
 	};
 
-	contactPerson?: {
+	attribute?: {
+		vendor: boolean;
+		customer: boolean;
+		mainContact: boolean;
+	};
+
+	persons?: {
 		prefix?: string;
 		firstName?: string;
 		lastName?: string;
@@ -69,7 +69,7 @@ export interface IContact {
 
 	bankAccounts?: {
 		order: number;
-		bank: IBankAccount;
+		account: IBankAccount;
 	}[];
 
 	memberClassId?: string;

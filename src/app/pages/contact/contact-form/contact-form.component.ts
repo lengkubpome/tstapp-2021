@@ -3,19 +3,33 @@ import {
 	ProvinceStateModel,
 } from "src/app/shared/state/province/province.state";
 import { InteractivityChecker } from "@angular/cdk/a11y";
-import { Component, HostListener, OnInit, Renderer2 } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import {
+	Component,
+	HostListener,
+	OnDestroy,
+	OnInit,
+	Renderer2,
+} from "@angular/core";
+import {
+	AbstractControl,
+	FormBuilder,
+	FormGroup,
+	Validators,
+} from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
 import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { debounceTime, map, startWith } from "rxjs/operators";
+import { Observable, Subject } from "rxjs";
+import { debounceTime, map, startWith, takeUntil } from "rxjs/operators";
 
 @Component({
 	selector: "app-contact-form",
 	templateUrl: "./contact-form.component.html",
 	styleUrls: ["./contact-form.component.scss"],
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent implements OnInit, OnDestroy {
+	// Private
+	private unsubscribeAll: Subject<any> = new Subject();
+
 	contactForm: FormGroup;
 	taxIdForm: FormGroup;
 	branchCodeForm: FormGroup;
@@ -105,61 +119,82 @@ export class ContactFormComponent implements OnInit {
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
 
+	ngOnDestroy(): void {
+		// Unsubscribe from all subscriptions
+		this.unsubscribeAll.next();
+		this.unsubscribeAll.complete();
+	}
+
 	ngOnInit(): void {
 		this.contactForm = this.fb.group({
-			code: ["C0013"],
-			branch: [""],
-			name: [""],
-			prefixName: [""],
-			firstName: [""],
-			lastName: [""],
-			businessInfo: this.fb.group({
-				taxId: [""],
-				legalType: [""],
+			code: ["C00130", Validators.required],
+			general: this.fb.group({
+				// code: ["C0013"],
+				taxId: ["", Validators.required],
+				legalType: ["", Validators.required],
 				branch: [""],
-			}),
-			address: this.fb.group({
-				line: [""],
-				subDistrict: [""],
-				district: [""],
-				province: [""],
-				postCode: [""],
+				name: ["", Validators.required],
+				prefixName: [""],
+				firstName: ["", Validators.required],
+				lastName: [""],
+
+				address: this.fb.group({
+					line: [""],
+					subDistrict: [""],
+					district: [""],
+					province: [""],
+					postCode: [""],
+				}),
 			}),
 		});
 
 		this.taxIdForm = this.fb.group({
-			tax_1: [""],
-			tax_2: [""],
-			tax_3: [""],
-			tax_4: [""],
-			tax_5: [""],
-			tax_6: [""],
-			tax_7: [""],
-			tax_8: [""],
-			tax_9: [""],
-			tax_10: [""],
-			tax_11: [""],
-			tax_12: [""],
-			tax_13: [""],
+			tax_1: ["", Validators.required],
+			tax_2: ["", Validators.required],
+			tax_3: ["", Validators.required],
+			tax_4: ["", Validators.required],
+			tax_5: ["", Validators.required],
+			tax_6: ["", Validators.required],
+			tax_7: ["", Validators.required],
+			tax_8: ["", Validators.required],
+			tax_9: ["", Validators.required],
+			tax_10: ["", Validators.required],
+			tax_11: ["", Validators.required],
+			tax_12: ["", Validators.required],
+			tax_13: ["", Validators.required],
 		});
 
 		this.branchCodeForm = this.fb.group({
-			branchCode_1: [""],
-			branchCode_2: [""],
-			branchCode_3: [""],
-			branchCode_4: [""],
-			branchCode_5: [""],
+			branchCode_1: ["", Validators.required],
+			branchCode_2: ["", Validators.required],
+			branchCode_3: ["", Validators.required],
+			branchCode_4: ["", Validators.required],
+			branchCode_5: ["", Validators.required],
 		});
 
 		this.formBuilderAction();
 		this.filterControls();
 	}
 
+	onSubmitCreateContact(form: FormGroup): void {
+		console.log(form.valid);
+	}
+
 	// -----------------------------------------------------------------------------------------------------
 	// @ Func FormBuilder Action
 	// -----------------------------------------------------------------------------------------------------
 	private formBuilderAction(): void {
-		this.taxIdForm.valueChanges.subscribe((data) => console.log(data));
+		this.taxIdForm.valueChanges
+			.pipe(takeUntil(this.unsubscribeAll))
+			.subscribe((data) => {
+				let taxId = "";
+				if (this.taxIdForm.valid) {
+					for (const key of Object.keys(data)) {
+						taxId += data[key];
+					}
+				}
+				this.contactForm.get("general.taxId").setValue(taxId);
+			});
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -168,7 +203,7 @@ export class ContactFormComponent implements OnInit {
 
 	private filterControls(): void {
 		this.filteredProvinces = this.contactForm
-			.get("address.province")
+			.get("general.address.province")
 			.valueChanges.pipe(
 				startWith(""),
 				debounceTime(100),

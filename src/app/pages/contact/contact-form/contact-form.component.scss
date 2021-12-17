@@ -132,17 +132,19 @@ $screen-xl-min: 1200px;
 
   // nb-select
   .info-item-detail{
-    >.form-group{
+    > * {
       display: flex;
       flex-wrap: wrap;
       padding: 0.5rem 0;
       margin: 0 -15px;
+    }
+    >.form-group{
       align-items: baseline;
     }
 
-    >.form-group:hover{
-        // background: whitesmoke;
-    }
+    // >.form-group:hover{
+    //     background: whitesmoke;
+    // }
   }
 
   .bank-detail {

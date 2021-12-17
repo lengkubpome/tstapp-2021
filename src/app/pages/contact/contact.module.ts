@@ -25,6 +25,7 @@ import {
 	NbSidebarModule,
 	NbTabsetModule,
 	NbTagModule,
+	NbToggleModule,
 	NbUserModule,
 } from "@nebular/theme";
 import { MatPaginatorModule } from "@angular/material/paginator";
@@ -68,6 +69,7 @@ const MODULES = [
 	NbRadioModule,
 	NbSelectModule,
 	NbAccordionModule,
+	NbToggleModule,
 	NbDialogModule.forChild(),
 	// Material
 	MatIconModule,

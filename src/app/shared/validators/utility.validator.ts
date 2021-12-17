@@ -133,7 +133,7 @@ export class UtilityValidator {
 					map((stateModel) => {
 						const contacts: IContact[] = stateModel.contactList;
 						const result = contacts.filter(
-							(contact) => contact.name === control.value
+							(contact) => contact.general.name === control.value
 						).length;
 						return result ? null : { exist: true };
 					})

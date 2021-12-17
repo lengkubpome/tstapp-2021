@@ -11,34 +11,34 @@
         <div class="main-info-detail">
           <div>
             <p>
-              <strong>{{contacts.code + " - " + contacts.name}}</strong>
+              <strong>{{contacts.general.code + " - " + contacts.general.name}}</strong>
               <span>
-                {{contacts.businessInfo.taxId ? "( เลขภาษีประจำตัว : "+ contacts.businessInfo.taxId +" )" :"" }}
+                {{contacts.general.taxId ? "( เลขภาษีประจำตัว : "+ contacts.general.taxId +" )" :"" }}
               </span>
             </p>
             <p>
               <span>
-                {{contacts.address.line ? "เลขที่ "+ contacts.address.line : ""}}
-                {{contacts.address.subDistrict ? "ตำบล"+ contacts.address.subDistrict : ""}}
-                {{contacts.address.district ? "อำเภอ"+ contacts.address.district : ""}}
-                {{contacts.address.province ? "จังหวัด"+ contacts.address.province : ""}}
-                {{contacts.address.country ? contacts.address.country : ""}}
-                {{contacts.address.postCode ? contacts.address.postCode : ""}}
+                {{contacts.general.address.line ? "เลขที่ "+ contacts.general.address.line : ""}}
+                {{contacts.general.address.subDistrict ? "ตำบล"+ contacts.general.address.subDistrict : ""}}
+                {{contacts.general.address.district ? "อำเภอ"+ contacts.general.address.district : ""}}
+                {{contacts.general.address.province ? "จังหวัด"+ contacts.general.address.province : ""}}
+                {{contacts.general.address.country ? contacts.general.address.country : ""}}
+                {{contacts.general.address.postCode ? contacts.general.address.postCode : ""}}
               </span>
             </p>
             <div class="type-list">
 
               <button nbButton shape="round" size="small" status="warning" (click)="onTest()"
-                *ngIf="contacts.storeContactId ? true : false">
+                *ngIf="contacts.mainId ? true : false">
                 <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>
-                {{ contacts.storeContactId }}
+                {{ contacts.mainId }}
               </button>
               <button nbButton shape="round" size="small" status="success"
-                *ngIf="contacts.type.vendor ? true : false">
+                *ngIf="contacts.attribute.vendor ? true : false">
                 ผู้ขาย
               </button>
               <button nbButton shape="round" size="small" status="info"
-                *ngIf="contacts.type.customer ? true : false">
+                *ngIf="contacts.attribute.customer ? true : false">
                 ลูกค้า
               </button>
             </div>
@@ -71,7 +71,7 @@
                     ประเภทกิจการ :
                   </div>
                   <div class="col-8">
-                    {{ contacts.businessInfo.legalType }}
+                    {{ contacts.general.legalType }}
                   </div>
                 </div>
                 <div class="row">
@@ -79,7 +79,7 @@
                     เลขทะเบียนนิติบุคคล :
                   </div>
                   <div class="col-8">
-                    {{ contacts.businessInfo.taxId }}
+                    {{ contacts.general.taxId }}
                   </div>
                 </div>
                 <div class="row">
@@ -88,8 +88,8 @@
                   </div>
                   <div class="col-8">
                     {{
-                      !contacts.businessInfo.branch ? null :
-                      contacts.businessInfo.branch ===  "00000" ? "สำนักงานใหญ่ ( 00000 )" : contacts.businessInfo.branch
+                      !contacts.general.branch ? null :
+                      contacts.general.branch ===  "00000" ? "สำนักงานใหญ่ ( 00000 )" : contacts.general.branch
 
                     }}
                   </div>
@@ -99,12 +99,12 @@
                     ที่อยู่จดทะเบียน :
                   </div>
                   <div class="col-8">
-                    {{contacts.address.line ? "เลขที่ "+ contacts.address.line : ""}}
-                    {{contacts.address.subDistrict ? "ตำบล"+ contacts.address.subDistrict : ""}}
-                    {{contacts.address.district ? "อำเภอ"+ contacts.address.district : ""}}
-                    {{contacts.address.province ? "จังหวัด"+ contacts.address.province : ""}}
-                    {{contacts.address.country ? contacts.address.country : ""}}
-                    {{contacts.address.postCode ? contacts.address.postCode : ""}}
+                    {{contacts.general.address.line ? "เลขที่ "+ contacts.general.address.line : ""}}
+                    {{contacts.general.address.subDistrict ? "ตำบล"+ contacts.general.address.subDistrict : ""}}
+                    {{contacts.general.address.district ? "อำเภอ"+ contacts.general.address.district : ""}}
+                    {{contacts.general.address.province ? "จังหวัด"+ contacts.general.address.province : ""}}
+                    {{contacts.general.address.country ? contacts.general.address.country : ""}}
+                    {{contacts.general.address.postCode ? contacts.general.address.postCode : ""}}
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@
                     อีเมลกลาง :
                   </div>
                   <div class="col-8">
-                    {{contacts.communicateInfo.email ? contacts.communicateInfo.email : "-"}}
+                    {{contacts.communication.email ? contacts.communication.email : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -137,7 +137,7 @@
                     เว็บไซต์ :
                   </div>
                   <div class="col-8">
-                    {{contacts.communicateInfo.website ? contacts.communicateInfo.website : "-"}}
+                    {{contacts.communication.website ? contacts.communication.website : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -145,7 +145,7 @@
                     ไลน์ไอดี :
                   </div>
                   <div class="col-8">
-                    {{contacts.communicateInfo.line ? contacts.communicateInfo.line : "-"}}
+                    {{contacts.communication.line ? contacts.communication.line : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -154,13 +154,13 @@
                   </div>
                   <div class="col-8">
                     {{
-                      !contacts.communicateInfo.officeAddress ? "-" :
-                      !contacts.communicateInfo.officeAddress.line ? "" : "เลขที่ "+ contacts.communicateInfo.officeAddress.line + " " +
-                      !contacts.communicateInfo.officeAddress.subDistrict ? "" : "ตำบล"+ contacts.communicateInfo.officeAddress.subDistrict + " " +
-                      !contacts.communicateInfo.officeAddress.district ? "" : "อำเภอ"+ contacts.communicateInfo.officeAddress.district + " " +
-                      !contacts.communicateInfo.officeAddress.province ? "" : "จังหวัด"+ contacts.communicateInfo.officeAddress.province + " " +
-                      !contacts.communicateInfo.officeAddress.country ? "" : contacts.communicateInfo.officeAddress.country + " " +
-                      !contacts.communicateInfo.officeAddress.postCode ? "" : contacts.communicateInfo.officeAddress.postCode
+                      !contacts.communication.address ? "-" :
+                      !contacts.communication.address.line ? "" : "เลขที่ "+ contacts.communication.address.line + " " +
+                      !contacts.communication.address.subDistrict ? "" : "ตำบล"+ contacts.communication.address.subDistrict + " " +
+                      !contacts.communication.address.district ? "" : "อำเภอ"+ contacts.communication.address.district + " " +
+                      !contacts.communication.address.province ? "" : "จังหวัด"+ contacts.communication.address.province + " " +
+                      !contacts.communication.address.country ? "" : contacts.communication.address.country + " " +
+                      !contacts.communication.address.postCode ? "" : contacts.communication.address.postCode
                     }}
                   </div>
                 </div>
@@ -181,11 +181,11 @@
                       บัญชีหลัก :
                     </div>
                     <div class="col-8">
-                      <i class="bank xxxxl " [class]="'bank-' + account.bank.bankName"></i>
+                      <i class="bank xxxxl " [class]="'bank-' + account.account.bankName"></i>
                       <div>
-                        <span>{{ account.bank.name }}</span>
+                        <span>{{ account.account.name }}</span>
                         <span>
-                          {{ account.bank.bankName + " " + account.bank.number  }}
+                          {{ account.account.bankName + " " + account.account.number  }}
                         </span>
                       </div>
                     </div>
@@ -202,9 +202,9 @@
                       <div class="col-8">
                         <i class="bank xxxxl " [class]="'bank-' + account.bank.bankName"></i>
                         <div>
-                          <span>{{ account.bank.name }}</span>
+                          <span>{{ account.account.name }}</span>
                           <span>
-                            {{ account.bank.bankName + " " + account.bank.number  }}
+                            {{ account.account.bankName + " " + account.account.number  }}
                           </span>
                         </div>
                       </div>
