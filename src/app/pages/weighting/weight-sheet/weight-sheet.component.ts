@@ -257,9 +257,9 @@ export class WeightSheetComponent implements OnInit, OnDestroy {
 		// find invalid controls
 		if (this.weightingForm.invalid) {
 			const controls = this.weightingForm.controls;
-			for (const name in controls) {
-				if (controls[name].invalid) {
-					this.weightingForm.get(name).markAsTouched();
+			for (const key in controls) {
+				if (controls[key].invalid) {
+					this.weightingForm.get(key).markAsTouched();
 				}
 			}
 		} else {

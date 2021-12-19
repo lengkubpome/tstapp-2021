@@ -87,10 +87,11 @@ export interface IBankAccount {
 }
 
 interface IAddress {
-	line: string;
-	subDistrict: string;
-	district: string;
-	province: string;
+	contactName?: string;
+	line?: string;
+	subDistrict?: string;
+	district?: string;
+	province?: string;
 	country?: string;
 	postCode?: string;
 }

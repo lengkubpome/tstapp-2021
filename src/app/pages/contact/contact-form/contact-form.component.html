@@ -1,4 +1,4 @@
-<form [formGroup]="contactForm" #cf="ngForm" (ngSubmit)="onSubmitCreateContact(cf.form)">
+<form [formGroup]="contactForm" (ngSubmit)="onSubmitContactForm()">
   <nb-card>
     <nb-card-header>
       <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
@@ -11,7 +11,8 @@
       <div>
         <nb-form-field class="contac-code-field">
           <span nbPrefix>รหัส :</span>
-          <input type="text" nbInput id="code" name="code" formControlName="code">
+          <input type="text" nbInput id="code" name="code" formControlName="code"
+            [status]="(contactForm.get('code').errors && contactForm.get('code').touched) ? 'danger' : 'basic' ">
         </nb-form-field>
       </div>
     </nb-card-header>
@@ -37,36 +38,49 @@
                     <nb-form-field class="tax-id mr-3">
                       <form [formGroup]="taxIdForm">
                         <input type="number" nbInput name="taxIdChar" id="tax_1" placeholder="0"
-                          formControlName="tax_1" class="mr-2">
+                          formControlName="tax_1" class="mr-2"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_2" placeholder="0"
-                          formControlName="tax_2">
+                          formControlName="tax_2"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_3" placeholder="0"
-                          formControlName="tax_3">
+                          formControlName="tax_3"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_4" placeholder="0"
-                          formControlName="tax_4">
+                          formControlName="tax_4"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_5" placeholder="0"
-                          formControlName="tax_5" class="mr-2">
+                          formControlName="tax_5" class="mr-2"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_6" placeholder="0"
-                          formControlName="tax_6">
+                          formControlName="tax_6"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_7" placeholder="0"
-                          formControlName="tax_7">
+                          formControlName="tax_7"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_8" placeholder="0"
-                          formControlName="tax_8">
+                          formControlName="tax_8"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_9" placeholder="0"
-                          formControlName="tax_9">
+                          formControlName="tax_9"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_10" placeholder="0"
-                          formControlName="tax_10" class="mr-2">
+                          formControlName="tax_10" class="mr-2"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_11" placeholder="0"
-                          formControlName="tax_11">
+                          formControlName="tax_11"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_12" placeholder="0"
-                          formControlName="tax_12">
+                          formControlName="tax_12"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                         <input type="number" nbInput name="taxIdChar" id="tax_13" placeholder="0"
-                          formControlName="tax_13">
+                          formControlName="tax_13"
+                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
                       </form>
                     </nb-form-field>
 
                     <div class="d-inline-flex mt-2">
-                      <button nbButton shape="round" size="small" status="info">
+                      <button nbButton shape="round" size="small" status="info" [disabled]="true">
                         <nb-icon [icon]="'search'" pack="eva">
                         </nb-icon> ค้นหา
                       </button>
@@ -80,7 +94,8 @@
                 <div class="col-sm-9">
                   <div class="d-flex align-items-baseline">
 
-                    <nb-select placeholder="ประเภท" formControlName="legalType">
+                    <nb-select placeholder="ประเภท" formControlName="legalType"
+                      [status]="(contactForm.get('general.legalType').errors && contactForm.get('general.legalType').touched) ? 'danger' : 'basic' ">
                       <nb-option-group title="บุคคลธรรมดา">
                         <nb-option value="บุคคลธรรมดา">บุคคลธรรมดา</nb-option>
                         <nb-option value="ร้านค้า">ร้านค้า</nb-option>
@@ -112,15 +127,20 @@
                     <form [formGroup]="branchCodeForm" class="branch-code row align-self-end"
                       *ngIf="contactForm.get('general.branch').value ==='-'">
                       <input type="number" nbInput name="branchCode" id="branchCode_1"
-                        formControlName="branchCode_1" placeholder="0">
+                        formControlName="branchCode_1" placeholder="0"
+                        [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                       <input type="number" nbInput name="branchCode" id="branchCode_2"
-                        formControlName="branchCode_2" placeholder="0">
+                        formControlName="branchCode_2" placeholder="0"
+                        [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                       <input type="number" nbInput name="branchCode" id="branchCode_3"
-                        formControlName="branchCode_3" placeholder="0">
+                        formControlName="branchCode_3" placeholder="0"
+                        [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                       <input type="number" nbInput name="branchCode" id="branchCode_4"
-                        formControlName="branchCode_4" placeholder="0">
+                        formControlName="branchCode_4" placeholder="0"
+                        [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                       <input type="number" nbInput name="branchCode" id="branchCode_5"
-                        formControlName="branchCode_5" placeholder="0">
+                        formControlName="branchCode_5" placeholder="0"
+                        [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                     </form>
                   </div>
 
@@ -138,7 +158,8 @@
                       *ngIf="contactForm.get('general.legalType').value !=='บุคคลธรรมดา'">
                       <input type="text" nbInput id="name" name="name"
                         [placeholder]="'ชื่อ'+contactForm.get('general.legalType').value"
-                        formControlName="name">
+                        formControlName="name"
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
                     </nb-form-field>
 
                     <nb-select class="prefix-name mr-1" id="prefixName" name="prefixName"
@@ -155,7 +176,8 @@
                     <nb-form-field class="mr-1"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" nbInput id="firstName" name="firstName" placeholder="ชื่อ"
-                        formControlName="firstName">
+                        formControlName="firstName"
+                        [status]="(contactForm.get('general.firstName').errors && contactForm.get('general.firstName').touched) ? 'danger' : 'basic' ">
                     </nb-form-field>
                     <nb-form-field class=""
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
@@ -219,53 +241,20 @@
         </nb-accordion-item>
 
 
-        <nb-accordion-item>
-          <nb-accordion-item-header class="info-item-header">
-            <nb-icon nbPrefix icon="radio" pack="eva"></nb-icon>
-            <strong>คุณสมบัติ</strong>
-          </nb-accordion-item-header>
-          <nb-accordion-item-body expeanded>
-            <div class="info-item-detail">
-
-              <div class="form-group-toggle">
-                <label for="type" class="label col-sm-2 col-3 col-form-label">ประเภท</label>
-                <div class="col-9 col-sm-10">
-                  <nb-toggle status="success" labelPosition="end">ผู้ขายสินค้า</nb-toggle>
-                </div>
-              </div>
-
-              <div class="form-group-toggle">
-                <label for="type" class="label col-sm-2 col-3 col-form-label"></label>
-                <div class="col-9 col-sm-10">
-                  <nb-toggle status="info" labelPosition="end">ผู้ซื้อสินค้า</nb-toggle>
-                </div>
-              </div>
-
-              <div class="form-group-toggle">
-                <label for="type" class="label col-sm-2 col-3 col-form-label">บัญชีหลัก</label>
-                <div class="col-9 col-sm-10">
-                  <nb-toggle status="success" labelPosition="end">บัญชีหลัก</nb-toggle>
-                </div>
-              </div>
-
-            </div>
-          </nb-accordion-item-body>
-        </nb-accordion-item>
-
-
-        <nb-accordion-item>
+        <nb-accordion-item [expanded]="true" [disabled]="true">
           <nb-accordion-item-header class="info-item-header">
             <nb-icon nbPrefix icon="radio" pack="eva"></nb-icon>
             <strong>ข้อมูลติดต่อ</strong>
           </nb-accordion-item-header>
           <nb-accordion-item-body expeanded>
-            <div class="info-item-detail">
+            <div class="info-item-detail" formGroupName="communication">
 
               <div class="form-group">
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (หลัก)</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์">
+                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์"
+                      formControlName="phone">
                   </nb-form-field>
 
                 </div>
@@ -275,7 +264,8 @@
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (สำรอง)</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์">
+                    <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์"
+                      formControlName="telephone">
                   </nb-form-field>
 
                 </div>
@@ -285,7 +275,8 @@
                 <label for="email" class="label col-sm-2 col-form-label">อีเมลล์</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="email" name="email" placeholder="อีเมลล์">
+                    <input type="text" nbInput id="email" name="email" placeholder="อีเมลล์"
+                      formControlName="email">
                   </nb-form-field>
                 </div>
               </div>
@@ -293,8 +284,64 @@
                 <label for="website" class="label col-sm-2 col-form-label">เว็บไซต์</label>
                 <div class="col-sm-9">
                   <nb-form-field>
-                    <input type="text" nbInput id="website" name="website" placeholder="เว็บไซต์">
+                    <input type="text" nbInput id="website" name="website" placeholder="เว็บไซต์"
+                      formControlName="website">
                   </nb-form-field>
+                </div>
+              </div>
+
+              <div class="form-group" formGroupName="address">
+                <label for="type" class="label col-sm-2 col-form-label">ที่อยู่ส่งเอกสาร</label>
+                <div class="col-sm-9">
+                  <div class="row">
+
+                    <nb-form-field class="col-12 mt-2">
+                      <!-- <nb-form-field class="col-12 prefix-text-input">
+                      <span nbPrefix>เลขที่</span> -->
+                      <input type="text" nbInput id="contactName" name="contactName"
+                        formControlName="contactName" placeholder="ชื่อผู้ติดต่อ">
+                    </nb-form-field>
+
+                    <nb-form-field class="col-12 mt-2">
+                      <!-- <nb-form-field class="col-12 prefix-text-input">
+                      <span nbPrefix>เลขที่</span> -->
+                      <input type="text" fullWidth nbInput id="line" name="line"
+                        formControlName="line"
+                        placeholder="เลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
+                    </nb-form-field>
+
+                    <nb-form-field class="col-6 mt-2">
+                      <!-- <span nbPrefix>แขวง /<br>ตำบล </span> -->
+                      <input type="text" nbInput id="subDistrict" name="subDistrict"
+                        formControlName="subDistrict" placeholder="แขวง หรือตำบล">
+                    </nb-form-field>
+                    <nb-form-field class="col-6 mt-2 ">
+                      <!-- <span nbPrefix>เขต /<br>อำเภอ </span> -->
+                      <input type="text" nbInput id="district" name="district"
+                        formControlName="district" placeholder="เขต หรืออำเภอ">
+                    </nb-form-field>
+
+                    <nb-form-field class="col-6 mt-2 ">
+                      <!-- <span nbPrefix>จังหวัด</span> -->
+                      <input type="text" nbInput id="province" name="province" placeholder="จังหวัด"
+                        formControlName="province" [matAutocomplete]="province">
+
+                      <mat-autocomplete autoActiveFirstOption #province="matAutocomplete">
+                        <mat-option *ngFor="let province of filteredProvinces | async"
+                          [value]="province">
+                          {{ province }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </nb-form-field>
+
+                    <nb-form-field class="col-6 mt-2">
+                      <!-- <span nbPrefix class="text-break fs-6">ปณ.</span> -->
+                      <input type="text" nbInput id="postCode" name="postCode"
+                        formControlName="postCode" placeholder="รหัสไปรษณีย์">
+                    </nb-form-field>
+
+                  </div>
+
                 </div>
               </div>
 
@@ -303,7 +350,51 @@
         </nb-accordion-item>
 
 
-        <nb-accordion-item>
+        <nb-accordion-item [expanded]="true" [disabled]="true" formGroupName="attribute">
+          <nb-accordion-item-header class="info-item-header">
+            <mat-icon>attribution</mat-icon>
+            <strong>คุณสมบัติ</strong>
+          </nb-accordion-item-header>
+          <nb-accordion-item-body expeanded>
+            <div class="info-item-detail">
+
+              <div class="form-group-toggle">
+                <label for="type" class="label col-sm-2 col-3 col-form-label">ประเภท</label>
+                <div class="col-9 col-sm-10">
+                  <nb-toggle status="success" labelPosition="end" formControlName="vendor">
+                    ผู้ขายสินค้า</nb-toggle>
+                </div>
+              </div>
+
+              <div class="form-group-toggle">
+                <label for="type" class="label col-sm-2 col-3 col-form-label"></label>
+                <div class="col-9 col-sm-10">
+                  <nb-toggle status="info" labelPosition="end" formControlName="customer">
+                    ผู้ซื้อสินค้า</nb-toggle>
+                </div>
+              </div>
+            </div>
+          </nb-accordion-item-body>
+          <nb-accordion-item-body expeanded>
+            <div class="info-item-detail">
+              <div class="form-group-toggle">
+                <label for="type"
+                  class="label col-sm-2 col-3 col-form-label">เชื่อมโยงผู้ติดต่อ</label>
+                <div class="col-9 col-sm-10">
+                  <nb-toggle status="warning" labelPosition="end" formControlName="mainContact">
+                    บัญชีหลัก
+                  </nb-toggle>
+                </div>
+              </div>
+
+            </div>
+
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+
+
+
+        <nb-accordion-item [expanded]="true" [disabled]="true">
           <nb-accordion-item-header class="info-item-header">
             <mat-icon>account_balance</mat-icon>
             <span>ข้อมูลธนาคาร</span>
