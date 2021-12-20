@@ -37,6 +37,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ContactFormComponent } from "./contact-form/contact-form.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { NgxTrimDirectiveModule } from "ngx-trim-directive";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -44,6 +45,9 @@ const COMPONENTS = [
 	ContactDetailComponent,
 	ContactFormComponent,
 ];
+
+const DIRECTIVES = [];
+
 const MODULES = [
 	CommonModule,
 	ReactiveFormsModule,
@@ -71,6 +75,7 @@ const MODULES = [
 	NbAccordionModule,
 	NbToggleModule,
 	NbDialogModule.forChild(),
+	NgxTrimDirectiveModule,
 	// Material
 	MatIconModule,
 	MatAutocompleteModule,
@@ -84,7 +89,7 @@ const SERVICES = [];
 @NgModule({
 	imports: [...MODULES],
 	exports: [RouterModule],
-	declarations: [...COMPONENTS],
+	declarations: [...COMPONENTS, ...DIRECTIVES],
 	providers: [...SERVICES],
 })
 export class ContactModule {}

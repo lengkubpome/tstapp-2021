@@ -51,6 +51,7 @@ import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 		CoreModule.forRoot(),
 		ThemeModule.forRoot(),
 		// Directives
+
 		// NGXS
 		NgxsModule.forRoot([...stateList], {
 			developmentMode: !environment.production,

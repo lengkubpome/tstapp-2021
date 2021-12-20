@@ -22,6 +22,7 @@ import { NbDialogRef } from "@nebular/theme";
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { debounceTime, map, startWith, takeUntil } from "rxjs/operators";
+import { ContactAction } from "src/app/shared/state/contact/contact.action";
 
 @Component({
 	selector: "app-contact-form",
@@ -32,9 +33,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	// Private
 	private unsubscribeAll: Subject<any> = new Subject();
 
-	newContact: IContact;
+	newContact: IContact = { code: "" };
 	statusFormValid = {
-		contactForm: true,
 		taxId: true,
 		branchCode: true,
 	};
@@ -65,15 +65,14 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.contactForm = this.fb.group({
-			code: ["C00130", Validators.required],
+			code: ["", Validators.required],
 			general: this.fb.group({
-				// code: ["C0013"],
 				taxId: [""],
 				legalType: ["", Validators.required],
 				branch: [""],
 				name: ["", Validators.required],
 				prefixName: [""],
-				firstName: ["", Validators.required],
+				firstName: [""],
 				lastName: [""],
 				address: this.fb.group({
 					line: [""],
@@ -130,85 +129,109 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		this.formBuilderAction();
 		this.filterControls();
+		this.newContactID();
 	}
 
 	onSubmitContactForm(): void {
+		if (this.checkContactFormValid()) {
+			this.store.dispatch(new ContactAction.Add(this.newContact));
+		}
+	}
+
+	newContactID(): void {
+		const id = "C0002";
+		this.contactForm.get("code").setValue(id);
+	}
+
+	checkContactFormValid(): boolean {
 		// check contactForm valid
-		const controls = this.contactForm.controls;
-		for (const key1 of Object.keys(controls)) {
-			if (key1 === "code") {
-				this.contactForm.get(key1).markAsTouched();
-			} else {
-				// เช็ค Sub-controls
-				const subControls = (this.contactForm.get(key1) as FormGroup).controls;
-				for (const key2 of Object.keys(subControls)) {
-					this.contactForm.get(key1 + "." + key2).markAsTouched();
+		if (this.contactForm.invalid) {
+			const controls = this.contactForm.controls;
+			for (const key1 of Object.keys(controls)) {
+				if (key1 === "code") {
+					this.contactForm.get(key1).markAsTouched();
+				} else {
+					// เช็ค Sub-controls
+					const subControls = (this.contactForm.get(key1) as FormGroup)
+						.controls;
+					for (const key2 of Object.keys(subControls)) {
+						this.contactForm.get(key1 + "." + key2).markAsTouched();
+					}
 				}
 			}
+			return false;
 		}
-
-		// TODO: แก้ไข clearValidators()
-		if (this.contactForm.get("general.legalType").value === "บุคคลธรรมดา") {
-			this.contactForm.get("general.name").clearValidators();
-			this.contactForm
-				.get("general.firsName")
-				.setValidators(Validators.required);
-		} else {
-			this.contactForm.get("general.name").setValidators(Validators.required);
-			this.contactForm.get("general.firsName").clearValidators();
-		}
-
-		console.log(this.contactForm.valid);
 
 		// check taxIdForm valid
-		const taxIdForm = this.taxIdForm.value;
 		let taxId = "";
+		const taxIdForm = this.taxIdForm.value;
 		for (const key of Object.keys(taxIdForm)) {
 			taxId += taxIdForm[key];
 		}
 
 		if (taxId !== "" && this.taxIdForm.invalid) {
 			console.log("taxIdForm is invalid");
-			this.contactForm.get("general.taxId").setValue("");
+			delete this.newContact.general.taxId;
 			this.statusFormValid.taxId = false;
+			return false;
 		} else {
-			this.contactForm.get("general.taxId").setValue(taxId);
 			this.statusFormValid.taxId = true;
 		}
 
 		// check branchCodeForm valid
-		if (this.contactForm.get("general.branch").value === "-") {
+		let branch = this.contactForm.get("general.branch").value;
+		if (branch === "-") {
 			const branchCodeForm = this.branchCodeForm.value;
-			let branchCode = "";
 			for (const key of Object.keys(branchCodeForm)) {
-				branchCode += branchCodeForm[key];
+				branch += branchCodeForm[key];
 			}
 			if (this.branchCodeForm.invalid) {
 				console.log("branchCodeForm is invalid");
-				this.newContact.general.branch = "";
+				delete this.newContact.general.branch;
 				this.statusFormValid.branchCode = false;
+				return false;
 			} else {
-				this.newContact.general.branch = branchCode;
 				this.statusFormValid.branchCode = true;
 			}
 		}
+
+		// Set Contact Value
+		this.newContact = {
+			...this.newContact,
+			...this.contactForm.value,
+			general: { ...this.contactForm.value.general, taxId, branch },
+		};
+
+		console.log(this.newContact);
+
+		return true;
 	}
 
 	// -----------------------------------------------------------------------------------------------------
 	// @ Func FormBuilder Action
 	// -----------------------------------------------------------------------------------------------------
 	private formBuilderAction(): void {
-		// this.taxIdForm.valueChanges
-		// 	.pipe(takeUntil(this.unsubscribeAll))
-		// 	.subscribe((data) => {
-		// 		let taxId = "";
-		// 		if (this.taxIdForm.valid) {
-		// 			for (const key of Object.keys(data)) {
-		// 				taxId += data[key];
-		// 			}
-		// 		}
-		// 		this.contactForm.get("general.taxId").setValue(taxId);
-		// 	});
+		this.contactForm
+			.get("general.legalType")
+			.valueChanges.pipe(takeUntil(this.unsubscribeAll))
+			.subscribe((data) => {
+				if (data === "บุคคลธรรมดา") {
+					const name = this.contactForm.get("general.name").value;
+					this.contactForm.get("general.firstName").setValue(name);
+				} else {
+					const name = this.contactForm.get("general.firstName").value;
+					this.contactForm.get("general.name").setValue(name);
+				}
+			});
+
+		this.contactForm
+			.get("general.firstName")
+			.valueChanges.pipe(takeUntil(this.unsubscribeAll))
+			.subscribe((data) => {
+				const prefix = this.contactForm.get("general.prefixName").value;
+				const lastName = this.contactForm.get("general.lastName").value;
+				this.contactForm.get("general.name").setValue(data.trim());
+			});
 	}
 
 	// -----------------------------------------------------------------------------------------------------

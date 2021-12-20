@@ -1,20 +1,21 @@
-export interface Business {
+export interface IBusiness {
+	id: string;
 	name: string;
 	address: string;
 	taxId: string;
 	phone: string;
-	payment: BusinessPaymentMethod[];
+	payment: IBusinessPaymentMethod[];
 }
 
-export interface BusinessPaymentMethod {
+export interface IBusinessPaymentMethod {
 	id: string;
-	type: 'cash' | 'bank';
+	type: "cash" | "bank";
 	name: string;
 	memo?: string;
 	balance: number;
 	bankAccount: {
 		bankName: string;
-		accountType: 'saving account' | 'current account';
+		accountType: "saving account" | "current account";
 		accountName: string;
 		accountNumber: string;
 	};

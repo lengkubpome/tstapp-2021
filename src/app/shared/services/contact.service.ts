@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { from, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { IContact } from "../models/contact.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -41,5 +41,12 @@ export class ContactService {
 		);
 	}
 
-	// getContact(id: string): Observable<any> {}
+	addContact(contact: IContact): any {
+		const contactCollection = this.afs.collection<any>("contacts");
+		return from(contactCollection.add(contact)).pipe(
+			switchMap((docRef) =>
+				contactCollection.doc<IContact>(docRef.id).valueChanges()
+			)
+		);
+	}
 }

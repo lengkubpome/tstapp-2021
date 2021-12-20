@@ -73,15 +73,27 @@ export class ContactState implements NgxsOnInit {
 		);
 	}
 
+	// @Action(ContactAction.GenerateID)
+	// generateId(ctx: StateContext<ContactStateModel>): Observable<any> {
+	//   const state = ctx.getState();
+	//   return
+	// }
+
 	@Action(ContactAction.Add)
 	add(
 		ctx: StateContext<ContactStateModel>,
 		{ payload }: ContactAction.Add
 	): void {
 		const state = ctx.getState();
-		ctx.setState({
-			...state,
-			contactList: [...state.contactList, payload],
-		});
+		return this.contactService.addContact(payload).pipe(
+			tap((result) => {
+				console.log("===== ContactAction.Add =====");
+				console.log(result);
+				ctx.setState({
+					...state,
+					contactList: [...state.contactList, payload],
+				});
+			})
+		);
 	}
 }

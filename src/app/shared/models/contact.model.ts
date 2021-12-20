@@ -4,9 +4,9 @@ export interface IContact {
 	code: string;
 	mainId?: IContact; // เชื่อมกับร้านค้า
 
-	general: {
-		code: string;
-		name: string;
+	general?: {
+		code?: string;
+		name?: string;
 		prefixName?: string;
 		firstName?: string;
 		lastName?: string;

@@ -11,7 +11,7 @@
         <div class="main-info-detail">
           <div>
             <p>
-              <strong>{{contacts.general.code + " - " + contacts.general.name}}</strong>
+              <strong>{{contacts.code + " - " + contacts.general.name}}</strong>
               <span>
                 {{contacts.general.taxId ? "( เลขภาษีประจำตัว : "+ contacts.general.taxId +" )" :"" }}
               </span>
@@ -29,9 +29,9 @@
             <div class="type-list">
 
               <button nbButton shape="round" size="small" status="warning" (click)="onTest()"
-                *ngIf="contacts.mainId ? true : false">
+                *ngIf="contacts.attribute.mainContact">
                 <nb-icon nbPrefix icon="home" pack="eva"></nb-icon>
-                {{ contacts.mainId }}
+                {{ contacts.attribute.mainContact }}
               </button>
               <button nbButton shape="round" size="small" status="success"
                 *ngIf="contacts.attribute.vendor ? true : false">
@@ -121,7 +121,15 @@
                     เบอร์โทรศัพท์ :
                   </div>
                   <div class="col-8">
-                    085-399-4193, 094-340-5355
+                    {{contacts.communication.phone ? contacts.communication.phone : "-"}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                    เบอร์โทรศัพท์ (สำรอง) :
+                  </div>
+                  <div class="col-8">
+                    {{contacts.communication.telephone ? contacts.communication.telephone : "-"}}
                   </div>
                 </div>
                 <div class="row">
@@ -173,7 +181,7 @@
                 <mat-icon>account_balance</mat-icon>
                 <span>ข้อมูลธนาคาร</span>
               </div>
-              <div class="info-item-detail">
+              <div class="info-item-detail" *ngIf="contacts.bankAccounts">
                 <div class="row info-item-detail-bank"
                   *ngFor="let account of contacts.bankAccounts">
                   <ng-container *ngIf="account.order === 1">
