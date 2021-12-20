@@ -12,7 +12,6 @@ export class ContactService {
 	constructor(private afs: AngularFirestore, private http: HttpClient) {}
 
 	getContactList(): Observable<IContact[]> {
-		// return this.http.get<IContact[]>("assets/data/contact-dummy2.json");
 		const contactCollection = this.afs.collection<any>("contacts");
 		return contactCollection.valueChanges({ idField: "id" });
 		// return contactCollection.snapshotChanges().pipe(

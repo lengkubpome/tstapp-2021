@@ -1,5 +1,5 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -11,7 +11,7 @@ import {
 	Store,
 } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
-import { Observable, of } from "rxjs";
+import { from, Observable, of } from "rxjs";
 import { Navigate, RouterState } from "@ngxs/router-plugin";
 
 export interface ContactStateModel {
@@ -73,11 +73,18 @@ export class ContactState implements NgxsOnInit {
 		);
 	}
 
-	// @Action(ContactAction.GenerateID)
-	// generateId(ctx: StateContext<ContactStateModel>): Observable<any> {
-	//   const state = ctx.getState();
-	//   return
-	// }
+	@Action(ContactAction.GenerateID)
+	generateId(ctx: StateContext<ContactStateModel>): Observable<any> {
+		const state = ctx.getState();
+		return from(state.contactList).pipe(
+			map((contacts) => {
+				const code = contacts.code;
+				const num = code.slice(1);
+				console.log("========= Contacts ========");
+				console.log(num);
+			})
+		);
+	}
 
 	@Action(ContactAction.Add)
 	add(

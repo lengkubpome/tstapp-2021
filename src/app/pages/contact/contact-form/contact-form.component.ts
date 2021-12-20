@@ -133,6 +133,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitContactForm(): void {
+		this.store.dispatch(new ContactAction.GenerateID());
+
 		if (this.checkContactFormValid()) {
 			this.store.dispatch(new ContactAction.Add(this.newContact));
 		}
@@ -202,7 +204,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			general: { ...this.contactForm.value.general, taxId, branch },
 		};
 
-		console.log(this.newContact);
+		// console.log(this.newContact);
 
 		return true;
 	}

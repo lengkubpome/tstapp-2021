@@ -1,7 +1,8 @@
-export interface ISystem {
-	generateNextId: {
-		weightSheetId: string;
-		pontactId: string;
-		contactId: string;
+export interface ISetting {
+	// documents?: {};
+	formats?: {
+		weightSheetId?: string;
+		pontactId?: string;
+		contactId?: string;
 	};
 }
