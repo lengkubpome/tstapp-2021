@@ -3,7 +3,7 @@ import { from, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { IContact } from "../models/contact.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, finalize, map, switchMap } from "rxjs/operators";
 import { Select, Store } from "@ngxs/store";
 
 @Injectable({
@@ -37,7 +37,12 @@ export class ContactService {
 					const id = a.payload.doc.id;
 					return { ...data, id };
 				})
-			)
+			),
+
+			finalize(() => {
+				console.log("==============================");
+				console.log("getContact finalize");
+			})
 		);
 	}
 

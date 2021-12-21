@@ -1,5 +1,5 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { filter, map, tap } from "rxjs/operators";
+import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -78,9 +78,9 @@ export class ContactState implements NgxsOnInit {
 					selectContact: result[0],
 				});
 			}),
-			tap((result) => {
+			mergeMap((result) => {
 				const nextUrl = "/pages/contact/" + result[0].code;
-				this.store.dispatch(new Navigate([nextUrl]));
+				return this.store.dispatch(new Navigate([nextUrl]));
 			})
 		);
 	}
@@ -92,14 +92,18 @@ export class ContactState implements NgxsOnInit {
 	): void {
 		const state = ctx.getState();
 		return this.contactService.addContact(payload).pipe(
-			tap((result) => {
+			tap((result: IContact) => {
 				console.log("===== ContactAction.Add =====");
 				console.log(result);
 				ctx.setState({
 					...state,
-					contactList: [...state.contactList, payload],
+					contactList: [...state.contactList, result],
+					nextId: this.generateId([...state.contactList, result]),
 				});
 			})
+			// mergeMap(() => {
+			// 	return this.store.dispatch(new Navigate(["/pages/contact/"]));
+			// })
 		);
 	}
 
@@ -108,19 +112,18 @@ export class ContactState implements NgxsOnInit {
 	// -----------------------------------------------------------------------------------------------------
 
 	generateId(contacts: IContact[]): string {
-		// const state = ctx.getState();
 		// เซ็ตระบบ
 		const prefixRequest = "C";
 		const rangeNumberRequest = 5;
 		// นับจำนวนทั้งหมด contact เพื่อคำนวณหาลำดับเลขล่าสุด
 		const count = contacts.length;
-		// คำนวณตัวอักษร ลำดับจำนวนต้องการ - ลำดับจำนวนเลขล่าสุด
-		const rangeNumber = rangeNumberRequest - count.toString().length;
 
 		let newCode = "";
 		// กรณี นับ code ย้อนหลัง <-
 		for (let c = count + 1; c > 0; c--) {
 			let checkCode = "";
+			// คำนวณตัวอักษร ลำดับจำนวนต้องการ - ลำดับจำนวนเลขล่าสุด
+			const rangeNumber = rangeNumberRequest - c.toString().length;
 			// ใส่เลข 0 นำหน้า
 			for (let i = 0; i < rangeNumber; i++) {
 				checkCode += "0";
@@ -144,6 +147,7 @@ export class ContactState implements NgxsOnInit {
 		if (newCode === "") {
 			for (let c = count + 2; count > 0; c++) {
 				let checkCode = "";
+				const rangeNumber = rangeNumberRequest - c.toString().length;
 				// ใส่เลข 0 นำหน้า
 				for (let i = 0; i < rangeNumber; i++) {
 					checkCode += "0";

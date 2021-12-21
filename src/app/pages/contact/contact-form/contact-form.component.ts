@@ -22,8 +22,9 @@ import {
 import { NbDialogRef } from "@nebular/theme";
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
-import { debounceTime, map, startWith, takeUntil } from "rxjs/operators";
+import { debounceTime, map, startWith, take, takeUntil } from "rxjs/operators";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
+import { Navigate } from "@ngxs/router-plugin";
 
 const contactStart: IContact = {
 	code: "",
@@ -117,11 +118,14 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmitContactForm(): void {
-		this.store.dispatch(new ContactAction.GenerateID());
-
 		if (this.checkContactFormValid()) {
 			this.store.dispatch(new ContactAction.Add(this.newContact));
+			this.ref.close();
 		}
+	}
+
+	onClose(): void {
+		this.ref.close();
 	}
 
 	setupForm(contact: IContact): void {
