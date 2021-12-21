@@ -3,13 +3,14 @@ import { from, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { IContact } from "../models/contact.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
+import { Select, Store } from "@ngxs/store";
 
 @Injectable({
 	providedIn: "root",
 })
 export class ContactService {
-	constructor(private afs: AngularFirestore, private http: HttpClient) {}
+	constructor(private afs: AngularFirestore) {}
 
 	getContactList(): Observable<IContact[]> {
 		const contactCollection = this.afs.collection<any>("contacts");

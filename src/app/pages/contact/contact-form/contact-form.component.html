@@ -253,7 +253,7 @@
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" trim nbInput id="phone" name="phone"
-                      placeholder="เบอร์โทรศัพท์" formControlName="phone">
+                      placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="phone">
                   </nb-form-field>
 
                 </div>
@@ -264,7 +264,7 @@
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" trim nbInput id="phone" name="phone"
-                      placeholder="เบอร์โทรศัพท์" formControlName="telephone">
+                      placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="telephone">
                   </nb-form-field>
 
                 </div>
@@ -275,7 +275,8 @@
                 <div class="col-sm-9">
                   <nb-form-field>
                     <input type="text" trim nbInput id="email" name="email" placeholder="อีเมลล์"
-                      formControlName="email">
+                      formControlName="email"
+                      [status]="(contactForm.get('communication.email').errors && contactForm.get('communication.email').touched) ? 'danger' : 'basic' ">
                   </nb-form-field>
                 </div>
               </div>

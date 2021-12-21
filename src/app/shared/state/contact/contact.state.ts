@@ -1,5 +1,5 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { map, tap } from "rxjs/operators";
+import { filter, map, tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -17,12 +17,18 @@ import { Navigate, RouterState } from "@ngxs/router-plugin";
 export interface ContactStateModel {
 	contactList: IContact[];
 	selectContact: any;
+	nextId: string;
 	isLoaded: boolean;
 }
 
 @State<ContactStateModel>({
 	name: "contact",
-	defaults: { contactList: [], selectContact: null, isLoaded: false },
+	defaults: {
+		contactList: [],
+		selectContact: null,
+		nextId: null,
+		isLoaded: false,
+	},
 })
 @Injectable()
 export class ContactState implements NgxsOnInit {
@@ -31,6 +37,11 @@ export class ContactState implements NgxsOnInit {
 	@Selector()
 	static selectContact(state: ContactStateModel): IContact {
 		return state.selectContact;
+	}
+
+	@Selector()
+	static generateId(state: ContactStateModel): string {
+		return state.nextId;
 	}
 
 	ngxsOnInit(ctx: StateContext<ContactStateModel>): void {
@@ -47,6 +58,7 @@ export class ContactState implements NgxsOnInit {
 				ctx.setState({
 					...state,
 					contactList: result,
+					nextId: this.generateId(result),
 					isLoaded: true,
 				});
 			})
@@ -73,19 +85,6 @@ export class ContactState implements NgxsOnInit {
 		);
 	}
 
-	@Action(ContactAction.GenerateID)
-	generateId(ctx: StateContext<ContactStateModel>): Observable<any> {
-		const state = ctx.getState();
-		return from(state.contactList).pipe(
-			map((contacts) => {
-				const code = contacts.code;
-				const num = code.slice(1);
-				console.log("========= Contacts ========");
-				console.log(num);
-			})
-		);
-	}
-
 	@Action(ContactAction.Add)
 	add(
 		ctx: StateContext<ContactStateModel>,
@@ -102,5 +101,68 @@ export class ContactState implements NgxsOnInit {
 				});
 			})
 		);
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func
+	// -----------------------------------------------------------------------------------------------------
+
+	generateId(contacts: IContact[]): string {
+		// const state = ctx.getState();
+		// เซ็ตระบบ
+		const prefixRequest = "C";
+		const rangeNumberRequest = 5;
+		// นับจำนวนทั้งหมด contact เพื่อคำนวณหาลำดับเลขล่าสุด
+		const count = contacts.length;
+		// คำนวณตัวอักษร ลำดับจำนวนต้องการ - ลำดับจำนวนเลขล่าสุด
+		const rangeNumber = rangeNumberRequest - count.toString().length;
+
+		let newCode = "";
+		// กรณี นับ code ย้อนหลัง <-
+		for (let c = count + 1; c > 0; c--) {
+			let checkCode = "";
+			// ใส่เลข 0 นำหน้า
+			for (let i = 0; i < rangeNumber; i++) {
+				checkCode += "0";
+			}
+			// แปลง code
+			checkCode = prefixRequest + checkCode + c.toString();
+			// เช็ค code
+			const duplicateContact = contacts.filter(
+				(contact) => contact.code === checkCode
+			).length;
+			// ถ้าซ้ำหยุด loop
+			if (duplicateContact > 0) {
+				break;
+			} else {
+				newCode = checkCode;
+			}
+			// console.log("newCode <-");
+			// console.log(newCode);
+		}
+		// กรณี user ใส่ข้อมูลล้วงหน้า นับ code ไปหน้า ->
+		if (newCode === "") {
+			for (let c = count + 2; count > 0; c++) {
+				let checkCode = "";
+				// ใส่เลข 0 นำหน้า
+				for (let i = 0; i < rangeNumber; i++) {
+					checkCode += "0";
+				}
+				// แปลง code
+				checkCode = prefixRequest + checkCode + c.toString();
+				// เช็ค code
+				const duplicateContact = contacts.filter(
+					(contact) => contact.code === checkCode
+				).length;
+				// ถ้าซ้ำหยุด loop
+				if (duplicateContact === 0) {
+					newCode = checkCode;
+					break;
+				}
+			}
+			// console.log("newCode ->");
+			// console.log(newCode);
+		}
+		return newCode;
 	}
 }

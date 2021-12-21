@@ -38,6 +38,7 @@ import { CommonModule } from "@angular/common";
 import { ContactFormComponent } from "./contact-form/contact-form.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { NgxTrimDirectiveModule } from "ngx-trim-directive";
+import { PhoneMaskDirective } from "src/app/shared/directives/phone-mask.directive";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -46,7 +47,7 @@ const COMPONENTS = [
 	ContactFormComponent,
 ];
 
-const DIRECTIVES = [];
+const DIRECTIVES = [PhoneMaskDirective];
 
 const MODULES = [
 	CommonModule,

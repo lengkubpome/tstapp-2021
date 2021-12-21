@@ -1,4 +1,5 @@
-import { IContact } from "./../../../shared/models/contact.model";
+import { IContact } from "src/app/shared/models/contact.model";
+import { ContactState } from "./../../../shared/state/contact/contact.state";
 import {
 	ProvinceState,
 	ProvinceStateModel,
@@ -24,6 +25,48 @@ import { Observable, Subject } from "rxjs";
 import { debounceTime, map, startWith, takeUntil } from "rxjs/operators";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
 
+const contactStart: IContact = {
+	code: "",
+	mainId: null,
+	general: {
+		name: "",
+		prefixName: "",
+		firstName: "",
+		lastName: "",
+		legalType: null,
+		taxId: "",
+		branch: "",
+		address: {
+			line: "",
+			subDistrict: "",
+			district: "",
+			province: "",
+			country: "",
+			postCode: "",
+		},
+	},
+	communication: {
+		phone: "",
+		telephone: "",
+		website: "",
+		email: "",
+		address: {
+			contactName: "",
+			line: "",
+			subDistrict: "",
+			district: "",
+			province: "",
+			country: "",
+			postCode: "",
+		},
+	},
+	attribute: {
+		vendor: false,
+		customer: false,
+		mainContact: false,
+	},
+};
+
 @Component({
 	selector: "app-contact-form",
 	templateUrl: "./contact-form.component.html",
@@ -33,7 +76,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	// Private
 	private unsubscribeAll: Subject<any> = new Subject();
 
-	newContact: IContact = { code: "" };
+	newContact: IContact = contactStart;
 	statusFormValid = {
 		taxId: true,
 		branchCode: true,
@@ -54,6 +97,10 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		private renderer: Renderer2,
 		private store: Store
 	) {
+		this.newContact = {
+			...this.newContact,
+			code: this.store.selectSnapshot<any>(ContactState.generateId),
+		};
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
 
@@ -64,42 +111,60 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		this.setupForm(this.newContact);
+		this.formBuilderAction();
+		this.filterControls();
+	}
+
+	onSubmitContactForm(): void {
+		this.store.dispatch(new ContactAction.GenerateID());
+
+		if (this.checkContactFormValid()) {
+			this.store.dispatch(new ContactAction.Add(this.newContact));
+		}
+	}
+
+	setupForm(contact: IContact): void {
 		this.contactForm = this.fb.group({
-			code: ["", Validators.required],
+			code: [contact.code, Validators.required],
 			general: this.fb.group({
-				taxId: [""],
-				legalType: ["", Validators.required],
-				branch: [""],
-				name: ["", Validators.required],
-				prefixName: [""],
-				firstName: [""],
-				lastName: [""],
+				taxId: [contact.general.taxId],
+				legalType: [contact.general.legalType, Validators.required],
+				branch: [
+					contact.general.branch === "" || contact.general.branch === "00000"
+						? contact.general.branch
+						: "-",
+				],
+				name: [contact.general.name, Validators.required],
+				prefixName: [contact.general.prefixName],
+				firstName: [contact.general.firstName],
+				lastName: [contact.general.lastName],
 				address: this.fb.group({
-					line: [""],
-					subDistrict: [""],
-					district: [""],
-					province: [""],
-					postCode: [""],
+					line: [contact.general.address.line],
+					subDistrict: [contact.general.address.subDistrict],
+					district: [contact.general.address.district],
+					province: [contact.general.address.province],
+					postCode: [contact.general.address.postCode],
 				}),
 			}),
 			communication: this.fb.group({
-				phone: [""],
-				telephone: [""],
-				email: [""],
-				website: [""],
+				phone: [contact.communication.phone],
+				telephone: [contact.communication.telephone],
+				email: [contact.communication.email, Validators.email],
+				website: [contact.communication.website],
 				address: this.fb.group({
-					contactName: [""],
-					line: [""],
-					subDistrict: [""],
-					district: [""],
-					province: [""],
-					postCode: [""],
+					contactName: [contact.communication.address.contactName],
+					line: [contact.communication.address.line],
+					subDistrict: [contact.communication.address.subDistrict],
+					district: [contact.communication.address.district],
+					province: [contact.communication.address.province],
+					postCode: [contact.communication.address.postCode],
 				}),
 			}),
 			attribute: this.fb.group({
-				vendor: [false],
-				customer: [false],
-				mainContact: [false],
+				vendor: [contact.attribute.vendor],
+				customer: [contact.attribute.customer],
+				mainContact: [contact.attribute.mainContact],
 			}),
 		});
 
@@ -127,22 +192,20 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			branchCode_5: ["", Validators.required],
 		});
 
-		this.formBuilderAction();
-		this.filterControls();
-		this.newContactID();
-	}
-
-	onSubmitContactForm(): void {
-		this.store.dispatch(new ContactAction.GenerateID());
-
-		if (this.checkContactFormValid()) {
-			this.store.dispatch(new ContactAction.Add(this.newContact));
+		if (contact.general.taxId) {
+			const textLength = contact.general.taxId.length;
+			for (let i = 0; i < textLength; i++) {
+				const taxChar = contact.general.taxId.slice(i, i + 1);
+				this.taxIdForm.get("tax_" + (i + 1)).setValue(taxChar);
+			}
 		}
-	}
-
-	newContactID(): void {
-		const id = "C0002";
-		this.contactForm.get("code").setValue(id);
+		if (contact.general.branch !== "" || "00000") {
+			const textLength = contact.general.branch.length;
+			for (let i = 0; i < textLength; i++) {
+				const taxChar = contact.general.branch.slice(i, i + 1);
+				this.branchCodeForm.get("branchCode_" + (i + 1)).setValue(taxChar);
+			}
+		}
 	}
 
 	checkContactFormValid(): boolean {
