@@ -23,6 +23,7 @@ import {
 	NbRadioModule,
 	NbSelectModule,
 	NbSidebarModule,
+	NbSpinnerModule,
 	NbTabsetModule,
 	NbTagModule,
 	NbToggleModule,
@@ -75,6 +76,7 @@ const MODULES = [
 	NbSelectModule,
 	NbAccordionModule,
 	NbToggleModule,
+	NbSpinnerModule,
 	NbDialogModule.forChild(),
 	NgxTrimDirectiveModule,
 	// Material

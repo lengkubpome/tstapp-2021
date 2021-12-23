@@ -75,7 +75,7 @@ const contactStart: IContact = {
 })
 export class ContactFormComponent implements OnInit, OnDestroy {
 	// Private
-	private unsubscribeAll: Subject<any> = new Subject();
+	private destroy$: Subject<any> = new Subject();
 
 	newContact: IContact = contactStart;
 	statusFormValid = {
@@ -107,8 +107,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		// Unsubscribe from all subscriptions
-		this.unsubscribeAll.next();
-		this.unsubscribeAll.complete();
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 
 	ngOnInit(): void {
@@ -282,7 +282,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	private formBuilderAction(): void {
 		this.contactForm
 			.get("general.legalType")
-			.valueChanges.pipe(takeUntil(this.unsubscribeAll))
+			.valueChanges.pipe(takeUntil(this.destroy$))
 			.subscribe((data) => {
 				if (data === "บุคคลธรรมดา") {
 					const name = this.contactForm.get("general.name").value;
@@ -295,7 +295,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		this.contactForm
 			.get("general.firstName")
-			.valueChanges.pipe(takeUntil(this.unsubscribeAll))
+			.valueChanges.pipe(takeUntil(this.destroy$))
 			.subscribe((data) => {
 				const prefix = this.contactForm.get("general.prefixName").value;
 				const lastName = this.contactForm.get("general.lastName").value;

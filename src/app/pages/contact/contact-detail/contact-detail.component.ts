@@ -17,6 +17,8 @@ import {
 export class ContactDetailComponent implements OnInit {
 	contacts: IContact;
 
+	@Select(ContactState) contact$: Observable<ContactStateModel>;
+
 	constructor(private store: Store) {
 		this.contacts = this.store.selectSnapshot<IContact>(
 			ContactState.selectContact

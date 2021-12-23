@@ -1,5 +1,12 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { filter, map, mergeMap, tap } from "rxjs/operators";
+import {
+	debounceTime,
+	filter,
+	flatMap,
+	map,
+	mergeMap,
+	tap,
+} from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -11,7 +18,7 @@ import {
 	Store,
 } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
-import { from, Observable, of } from "rxjs";
+import { from, interval, observable, Observable, of } from "rxjs";
 import { Navigate, RouterState } from "@ngxs/router-plugin";
 
 export interface ContactStateModel {
@@ -36,12 +43,20 @@ export class ContactState implements NgxsOnInit {
 
 	@Selector()
 	static selectContact(state: ContactStateModel): IContact {
-		return state.selectContact;
+		try {
+			return state.selectContact;
+		} catch (error) {
+			console.log("error", error);
+		}
 	}
 
 	@Selector()
 	static generateId(state: ContactStateModel): string {
-		return state.nextId;
+		try {
+			return state.nextId;
+		} catch (error) {
+			console.log("error", error);
+		}
 	}
 
 	ngxsOnInit(ctx: StateContext<ContactStateModel>): void {
@@ -55,11 +70,9 @@ export class ContactState implements NgxsOnInit {
 			tap((result) => {
 				// console.log(result);
 				const state = ctx.getState();
-				ctx.setState({
-					...state,
+				ctx.patchState({
 					contactList: result,
 					nextId: this.generateId(result),
-					isLoaded: true,
 				});
 			})
 		);
@@ -73,12 +86,16 @@ export class ContactState implements NgxsOnInit {
 		const state = ctx.getState();
 		return this.contactService.getContact(contactId).pipe(
 			tap((result) => {
-				ctx.setState({
-					...state,
+				ctx.patchState({
 					selectContact: result[0],
+					isLoaded: true,
 				});
 			}),
+			debounceTime(1200),
 			mergeMap((result) => {
+				ctx.patchState({
+					isLoaded: false,
+				});
 				const nextUrl = "/pages/contact/" + result[0].code;
 				return this.store.dispatch(new Navigate([nextUrl]));
 			})
@@ -89,21 +106,16 @@ export class ContactState implements NgxsOnInit {
 	add(
 		ctx: StateContext<ContactStateModel>,
 		{ payload }: ContactAction.Add
-	): void {
+	): Observable<any> {
 		const state = ctx.getState();
 		return this.contactService.addContact(payload).pipe(
 			tap((result: IContact) => {
-				console.log("===== ContactAction.Add =====");
-				console.log(result);
 				ctx.setState({
 					...state,
 					contactList: [...state.contactList, result],
 					nextId: this.generateId([...state.contactList, result]),
 				});
 			})
-			// mergeMap(() => {
-			// 	return this.store.dispatch(new Navigate(["/pages/contact/"]));
-			// })
 		);
 	}
 
