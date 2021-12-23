@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { from, Observable } from "rxjs";
+import { from, Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { IContact } from "../models/contact.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
@@ -38,10 +38,9 @@ export class ContactService {
 					return { ...data, id };
 				})
 			),
-
-			finalize(() => {
-				console.log("==============================");
-				console.log("getContact finalize");
+			catchError((err) => {
+				console.error(err);
+				return of(false);
 			})
 		);
 	}

@@ -1,12 +1,5 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import {
-	debounceTime,
-	filter,
-	flatMap,
-	map,
-	mergeMap,
-	tap,
-} from "rxjs/operators";
+import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -16,6 +9,11 @@ import {
 	StateContext,
 	Action,
 	Store,
+	Actions,
+	ofActionDispatched,
+	ofActionSuccessful,
+	ofActionErrored,
+	ofActionCompleted,
 } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
 import { from, interval, observable, Observable, of } from "rxjs";
@@ -25,7 +23,7 @@ export interface ContactStateModel {
 	contactList: IContact[];
 	selectContact: any;
 	nextId: string;
-	isLoaded: boolean;
+	loading: boolean;
 }
 
 @State<ContactStateModel>({
@@ -34,12 +32,53 @@ export interface ContactStateModel {
 		contactList: [],
 		selectContact: null,
 		nextId: null,
-		isLoaded: false,
+		loading: false,
 	},
 })
 @Injectable()
 export class ContactState implements NgxsOnInit {
-	constructor(private store: Store, private contactService: ContactService) {}
+	constructor(
+		private store: Store,
+		private actions$: Actions,
+		private contactService: ContactService
+	) {
+		this.actions$
+			.pipe(
+				ofActionErrored(
+					ContactAction.Add,
+					ContactAction.FetchAll,
+					ContactAction.SelectContact
+				)
+			)
+			.subscribe((result) => {
+				console.log("Action Errored");
+				console.log(result);
+			});
+		this.actions$
+			.pipe(
+				ofActionCompleted(
+					ContactAction.Add,
+					ContactAction.FetchAll,
+					ContactAction.SelectContact
+				)
+			)
+			.subscribe((result) => {
+				console.log("Action Successful");
+				console.log(result);
+			});
+		this.actions$
+			.pipe(
+				ofActionDispatched(
+					ContactAction.Add,
+					ContactAction.FetchAll,
+					ContactAction.SelectContact
+				)
+			)
+			.subscribe((result) => {
+				console.log("Action Dispatched");
+				console.log(result);
+			});
+	}
 
 	@Selector()
 	static selectContact(state: ContactStateModel): IContact {
@@ -65,15 +104,23 @@ export class ContactState implements NgxsOnInit {
 	}
 
 	@Action(ContactAction.FetchAll)
-	fetchAll(ctx: StateContext<ContactStateModel>): Observable<IContact[]> {
+	fetchAll(
+		ctx: StateContext<ContactStateModel>
+	): Observable<boolean | IContact[]> {
+		ctx.patchState({ loading: true });
 		return this.contactService.getContactList().pipe(
 			tap((result) => {
-				// console.log(result);
 				const state = ctx.getState();
 				ctx.patchState({
+					...state,
 					contactList: result,
 					nextId: this.generateId(result),
+					loading: false,
 				});
+			}),
+			catchError((err) => {
+				console.error(err);
+				return of(false);
 			})
 		);
 	}
@@ -81,20 +128,21 @@ export class ContactState implements NgxsOnInit {
 	@Action(ContactAction.SelectContact)
 	selectContact(
 		ctx: StateContext<ContactStateModel>,
-		{ contactId }: ContactAction.SelectContact
+		action: ContactAction.SelectContact
 	): Observable<any> {
 		const state = ctx.getState();
-		return this.contactService.getContact(contactId).pipe(
+		return this.contactService.getContact(action.contactId).pipe(
 			tap((result) => {
-				ctx.patchState({
+				ctx.setState({
+					...state,
 					selectContact: result[0],
-					isLoaded: true,
+					loading: true,
 				});
 			}),
-			debounceTime(1200),
-			mergeMap((result) => {
-				ctx.patchState({
-					isLoaded: false,
+			switchMap((result) => {
+				ctx.setState({
+					...state,
+					loading: false,
 				});
 				const nextUrl = "/pages/contact/" + result[0].code;
 				return this.store.dispatch(new Navigate([nextUrl]));
@@ -105,16 +153,25 @@ export class ContactState implements NgxsOnInit {
 	@Action(ContactAction.Add)
 	add(
 		ctx: StateContext<ContactStateModel>,
-		{ payload }: ContactAction.Add
+		action: ContactAction.Add
 	): Observable<any> {
 		const state = ctx.getState();
-		return this.contactService.addContact(payload).pipe(
-			tap((result: IContact) => {
+		ctx.patchState({ loading: true });
+		return this.contactService.addContact(action.payload).pipe(
+			tap((contact: IContact) => {
 				ctx.setState({
 					...state,
-					contactList: [...state.contactList, result],
-					nextId: this.generateId([...state.contactList, result]),
+					contactList: [...state.contactList, contact],
+					nextId: this.generateId([...state.contactList, contact]),
 				});
+				return contact;
+			}),
+			mergeMap((contact: IContact) => {
+				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
+			}),
+			catchError((err) => {
+				console.error(err);
+				return of(false);
 			})
 		);
 	}

@@ -57,7 +57,9 @@ import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 			developmentMode: !environment.production,
 		}),
 		NgxsRouterPluginModule.forRoot(),
-		NgxsLoggerPluginModule.forRoot(),
+		NgxsLoggerPluginModule.forRoot({
+			// collapsed: false, // Do not collapse log groups
+		}),
 		NgxsReduxDevtoolsPluginModule.forRoot(),
 		// Firebase
 		provideFirebaseApp(() => initializeApp(environment.firebase)),

@@ -6,6 +6,7 @@ import {
 } from "src/app/shared/state/province/province.state";
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import {
+	AfterViewInit,
 	Component,
 	HostListener,
 	OnDestroy,
@@ -20,7 +21,14 @@ import {
 	Validators,
 } from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
-import { Select, Store } from "@ngxs/store";
+import {
+	Actions,
+	ofActionDispatched,
+	ofActionErrored,
+	ofActionSuccessful,
+	Select,
+	Store,
+} from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { debounceTime, map, startWith, take, takeUntil } from "rxjs/operators";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
@@ -73,7 +81,7 @@ const contactStart: IContact = {
 	templateUrl: "./contact-form.component.html",
 	styleUrls: ["./contact-form.component.scss"],
 })
-export class ContactFormComponent implements OnInit, OnDestroy {
+export class ContactFormComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Private
 	private destroy$: Subject<any> = new Subject();
 
@@ -96,13 +104,30 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		protected ref: NbDialogRef<ContactFormComponent>,
 		private fb: FormBuilder,
 		private renderer: Renderer2,
-		private store: Store
+		private store: Store,
+		private actions$: Actions
 	) {
 		this.newContact = {
 			...this.newContact,
 			code: this.store.selectSnapshot<any>(ContactState.generateId),
 		};
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
+	}
+
+	ngAfterViewInit(): void {
+		// console.log("ngAfterViewInit");
+		// this.actions$
+		// 	.pipe(takeUntil(this.destroy$))
+		// 	.subscribe((payload) => console.log(payload));
+		// this.actions$
+		// 	.pipe(ofActionSuccessful(ContactAction.Add), takeUntil(this.destroy$))
+		// 	.subscribe(() => console.log("Successful"));
+		// this.actions$
+		// 	.pipe(ofActionDispatched(ContactAction.Add), takeUntil(this.destroy$))
+		// 	.subscribe(() => console.log("Dispatched"));
+		// this.actions$
+		// 	.pipe(ofActionErrored(ContactAction.Add), takeUntil(this.destroy$))
+		// 	.subscribe(() => console.log("Errored"));
 	}
 
 	ngOnDestroy(): void {
@@ -119,7 +144,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			this.store.dispatch(new ContactAction.Add(this.newContact));
+			this.store.dispatch(new ContactAction.Add(this.newContact)).subscribe();
 			this.ref.close();
 		}
 	}

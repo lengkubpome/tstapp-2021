@@ -11,10 +11,6 @@ export namespace ContactAction {
 		constructor(public readonly contactId: string) {}
 	}
 
-	export class GenerateID {
-		static readonly type = "[Contact] Generate Id ";
-	}
-
 	export class Add {
 		static readonly type = "[Contact] Add";
 

@@ -1,11 +1,17 @@
 import { IContact } from "src/app/shared/models/contact.model";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { SelectionModel } from "@angular/cdk/collections";
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import {
+	AfterViewInit,
+	Component,
+	OnDestroy,
+	OnInit,
+	ViewChild,
+} from "@angular/core";
 import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
 import { MatSort, Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import {
 	ContactState,
 	ContactStateModel,
@@ -15,7 +21,7 @@ import { CustomPaginator } from "src/app/configuration/customPaginatorConfigurat
 import { ActivatedRoute, Router } from "@angular/router";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
 import { Navigate } from "@ngxs/router-plugin";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { NbDialogService } from "@nebular/theme";
 import { ContactFormComponent } from "../contact-form/contact-form.component";
 
@@ -25,7 +31,7 @@ import { ContactFormComponent } from "../contact-form/contact-form.component";
 	styleUrls: ["./contact-list.component.scss"],
 	providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
-export class ContactListComponent implements OnInit, AfterViewInit {
+export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
 	displayedColumns: string[] = ["select", "code", "name", "phone", "action"];
@@ -33,6 +39,9 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 	selection = new SelectionModel<IContact>(true, []);
 
 	@Select(ContactState) contacts$: Observable<ContactStateModel>;
+
+	// Private
+	private destroy$: Subject<any> = new Subject();
 
 	// Make up
 	menuItems = [{ title: "Profile" }, { title: "Logout" }];
@@ -46,6 +55,12 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {}
 
+	ngOnDestroy(): void {
+		// Unsubscribe from all subscriptions
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
+
 	onCreateContact(): void {
 		this.dialogService.open(ContactFormComponent, {
 			context: {},
@@ -55,7 +70,13 @@ export class ContactListComponent implements OnInit, AfterViewInit {
 	}
 
 	onSelectContact(contact: any): void {
-		this.store.dispatch(new ContactAction.SelectContact(contact.code));
+		this.store
+			.dispatch(new ContactAction.SelectContact(contact.code))
+			.pipe(takeUntil(this.destroy$))
+			.subscribe({
+				next: () => console.log("Changes were successfully saved"),
+				error: () => console.log("Changes could not be saved"),
+			});
 	}
 
 	// -----------------------------------------------------------------------------------------------------
