@@ -7,7 +7,7 @@ import {
 	DocumentReference,
 	CollectionReference,
 } from "@angular/fire/compat/firestore";
-import { map, mergeMap, switchMap, tap } from "rxjs/operators";
+import { first, map, mergeMap, switchMap, tap } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -20,6 +20,14 @@ export class CarService {
 		return carCollection.valueChanges({ idField: "customID" });
 	}
 
+	// async getCars(): Promise<ICar[]> {
+	// 	const carCollection = this.afs.collection<any>("cars");
+	// 	return await carCollection
+	// 		.valueChanges({ idField: "customID" })
+	// 		.pipe(first())
+	// 		.toPromise();
+	// }
+
 	addCar(): void {
 		// this.cars = [
 		// 	...this.cars,
@@ -30,8 +38,7 @@ export class CarService {
 	getCarTypes(): Observable<ICarType[]> {
 		return this.http.get<any[]>("assets/data/car-type.json").pipe(
 			map((data) => {
-				const result = data.map((t) => ({ id: t.id, name: t.th_name }));
-				return result;
+				return data.map((t) => ({ id: t.id, name: t.th_name }));
 			})
 		);
 	}

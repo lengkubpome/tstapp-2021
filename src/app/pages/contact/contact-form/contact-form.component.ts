@@ -1,5 +1,8 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { ContactState } from "./../../../shared/state/contact/contact.state";
+import {
+	ContactState,
+	ContactStateModel,
+} from "./../../../shared/state/contact/contact.state";
 import {
 	ProvinceState,
 	ProvinceStateModel,
@@ -81,9 +84,11 @@ const contactStart: IContact = {
 	templateUrl: "./contact-form.component.html",
 	styleUrls: ["./contact-form.component.scss"],
 })
-export class ContactFormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ContactFormComponent implements OnInit, OnDestroy {
 	// Private
 	private destroy$: Subject<any> = new Subject();
+
+	@Select(ContactState.loading) loading$: Observable<ContactStateModel>;
 
 	newContact: IContact = contactStart;
 	statusFormValid = {
@@ -114,22 +119,6 @@ export class ContactFormComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
 
-	ngAfterViewInit(): void {
-		// console.log("ngAfterViewInit");
-		// this.actions$
-		// 	.pipe(takeUntil(this.destroy$))
-		// 	.subscribe((payload) => console.log(payload));
-		// this.actions$
-		// 	.pipe(ofActionSuccessful(ContactAction.Add), takeUntil(this.destroy$))
-		// 	.subscribe(() => console.log("Successful"));
-		// this.actions$
-		// 	.pipe(ofActionDispatched(ContactAction.Add), takeUntil(this.destroy$))
-		// 	.subscribe(() => console.log("Dispatched"));
-		// this.actions$
-		// 	.pipe(ofActionErrored(ContactAction.Add), takeUntil(this.destroy$))
-		// 	.subscribe(() => console.log("Errored"));
-	}
-
 	ngOnDestroy(): void {
 		// Unsubscribe from all subscriptions
 		this.destroy$.next();
@@ -144,8 +133,24 @@ export class ContactFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			this.store.dispatch(new ContactAction.Add(this.newContact)).subscribe();
-			this.ref.close();
+			this.store
+				.dispatch(new ContactAction.Add(this.newContact))
+				.pipe(takeUntil(this.destroy$))
+				.subscribe({
+					complete: () => {
+						this.ref.close();
+					},
+					next: () =>
+						console.log(
+							"%cOnSubmitContactForm next",
+							"color:white; font-size:20px"
+						),
+					error: () =>
+						console.log(
+							"%cOnSubmitContactForm error",
+							"color:red; font-size:20px"
+						),
+				});
 		}
 	}
 

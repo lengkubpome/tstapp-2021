@@ -1,5 +1,12 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
+import {
+	catchError,
+	first,
+	mergeMap,
+	switchMap,
+	take,
+	tap,
+} from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -21,7 +28,7 @@ import { Navigate, RouterState } from "@ngxs/router-plugin";
 
 export interface ContactStateModel {
 	contactList: IContact[];
-	selectContact: any;
+	selected: any;
 	nextId: string;
 	loading: boolean;
 }
@@ -30,7 +37,7 @@ export interface ContactStateModel {
 	name: "contact",
 	defaults: {
 		contactList: [],
-		selectContact: null,
+		selected: null,
 		nextId: null,
 		loading: false,
 	},
@@ -42,50 +49,77 @@ export class ContactState implements NgxsOnInit {
 		private actions$: Actions,
 		private contactService: ContactService
 	) {
-		this.actions$
-			.pipe(
-				ofActionErrored(
-					ContactAction.Add,
-					ContactAction.FetchAll,
-					ContactAction.SelectContact
-				)
-			)
-			.subscribe((result) => {
-				console.log("Action Errored");
-				console.log(result);
-			});
-		this.actions$
-			.pipe(
-				ofActionCompleted(
-					ContactAction.Add,
-					ContactAction.FetchAll,
-					ContactAction.SelectContact
-				)
-			)
-			.subscribe((result) => {
-				console.log("Action Successful");
-				console.log(result);
-			});
-		this.actions$
-			.pipe(
-				ofActionDispatched(
-					ContactAction.Add,
-					ContactAction.FetchAll,
-					ContactAction.SelectContact
-				)
-			)
-			.subscribe((result) => {
-				console.log("Action Dispatched");
-				console.log(result);
-			});
+		// this.actions$
+		// 	.pipe(
+		// 		ofActionErrored(
+		// 			ContactAction.Add,
+		// 			ContactAction.FetchAll,
+		// 			ContactAction.SelectContact
+		// 		)
+		// 	)
+		// 	.subscribe((result) => {
+		// 		console.log("%cContactAction Errored", "color:red; font-size:20px");
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(
+		// 		ofActionCompleted(
+		// 			ContactAction.Add,
+		// 			ContactAction.FetchAll,
+		// 			ContactAction.SelectContact
+		// 		)
+		// 	)
+		// 	.subscribe((result) => {
+		// 		console.log(
+		// 			"%cContactAction Successful",
+		// 			"color:white; font-size:20px"
+		// 		);
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(
+		// 		ofActionDispatched(
+		// 			ContactAction.Add,
+		// 			ContactAction.FetchAll,
+		// 			ContactAction.SelectContact
+		// 		)
+		// 	)
+		// 	.subscribe((result) => {
+		// 		console.log("%cContactAction Dispatched", "color:pink; font-size:20px");
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(
+		// 		ofActionCompleted(
+		// 			ContactAction.Add,
+		// 			ContactAction.FetchAll,
+		// 			ContactAction.SelectContact
+		// 		)
+		// 	)
+		// 	.subscribe((result) => {
+		// 		console.log("%cContactAction Completed", "color:pink; font-size:20px");
+		// 		console.log(result);
+		// 	});
 	}
 
 	@Selector()
-	static selectContact(state: ContactStateModel): IContact {
+	static loading(state: ContactStateModel): boolean {
 		try {
-			return state.selectContact;
+			return state.loading;
 		} catch (error) {
 			console.log("error", error);
+		}
+	}
+
+	@Selector()
+	static selectedContact(state: ContactStateModel): IContact {
+		try {
+			return state.selected;
+		} catch (error) {
+			console.error(
+				`%cContactState => @Selector:selectedContact ${error}`,
+				"color:white; background:red;"
+			);
 		}
 	}
 
@@ -94,7 +128,10 @@ export class ContactState implements NgxsOnInit {
 		try {
 			return state.nextId;
 		} catch (error) {
-			console.log("error", error);
+			console.error(
+				`%cContactState => @Selector:fetchAll ${error}`,
+				"color:white; background:red;"
+			);
 		}
 	}
 
@@ -110,17 +147,18 @@ export class ContactState implements NgxsOnInit {
 		ctx.patchState({ loading: true });
 		return this.contactService.getContactList().pipe(
 			tap((result) => {
-				const state = ctx.getState();
 				ctx.patchState({
-					...state,
 					contactList: result,
 					nextId: this.generateId(result),
 					loading: false,
 				});
 			}),
-			catchError((err) => {
-				console.error(err);
-				return of(false);
+			catchError((error) => {
+				console.error(
+					`%cContactState => @Action:fetchAll ${error}`,
+					"color:white; background:red;"
+				);
+				return of(error);
 			})
 		);
 	}
@@ -130,22 +168,28 @@ export class ContactState implements NgxsOnInit {
 		ctx: StateContext<ContactStateModel>,
 		action: ContactAction.SelectContact
 	): Observable<any> {
-		const state = ctx.getState();
 		return this.contactService.getContact(action.contactId).pipe(
+			first(), // ระบบมันทำงาน 2 รอบ แก้ไขให้ทำงานครั้งเดียว
 			tap((result) => {
-				ctx.setState({
-					...state,
-					selectContact: result[0],
+				ctx.patchState({
+					selected: result[0],
 					loading: true,
 				});
+				return result[0];
 			}),
 			switchMap((result) => {
-				ctx.setState({
-					...state,
+				ctx.patchState({
 					loading: false,
 				});
 				const nextUrl = "/pages/contact/" + result[0].code;
 				return this.store.dispatch(new Navigate([nextUrl]));
+			}),
+			catchError((error) => {
+				console.error(
+					`%cContactState => @Action:selectContact ${error}`,
+					"color:white; background:red;"
+				);
+				return of(error);
 			})
 		);
 	}
@@ -158,20 +202,24 @@ export class ContactState implements NgxsOnInit {
 		const state = ctx.getState();
 		ctx.patchState({ loading: true });
 		return this.contactService.addContact(action.payload).pipe(
+			first(),
 			tap((contact: IContact) => {
-				ctx.setState({
-					...state,
+				ctx.patchState({
 					contactList: [...state.contactList, contact],
 					nextId: this.generateId([...state.contactList, contact]),
+					loading: false,
 				});
 				return contact;
 			}),
-			mergeMap((contact: IContact) => {
+			switchMap((contact: IContact) => {
 				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
 			}),
-			catchError((err) => {
-				console.error(err);
-				return of(false);
+			catchError((error) => {
+				console.error(
+					`%cContactState => @Action:add ${error}`,
+					"color:white; background:red;"
+				);
+				return of(error);
 			})
 		);
 	}

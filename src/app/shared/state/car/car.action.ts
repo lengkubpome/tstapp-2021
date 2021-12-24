@@ -3,7 +3,7 @@ import { ICar } from "./../../models/car.model";
 // tslint:disable-next-line:no-namespace
 export namespace CarAction {
 	export class FetchCars {
-		static readonly type = "[Car] Fetch Cars";
+		static readonly type = "[Car] Get Cars";
 	}
 
 	export class Add {

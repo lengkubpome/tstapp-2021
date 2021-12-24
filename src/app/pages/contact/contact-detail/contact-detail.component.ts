@@ -17,12 +17,14 @@ import {
 export class ContactDetailComponent implements OnInit {
 	contacts: IContact;
 
-	@Select(ContactState) contact$: Observable<ContactStateModel>;
+	// @Select(ContactState.selectContact) contact$: Observable<ContactStateModel>;
 
 	constructor(private store: Store) {
 		this.contacts = this.store.selectSnapshot<IContact>(
-			ContactState.selectContact
+			ContactState.selectedContact
 		);
+
+		console.log("%cCheck", "color:pink; font-size:50px");
 
 		if (this.contacts === null) {
 			this.store.dispatch(new Navigate(["/pages/contact/"]));

@@ -60,7 +60,7 @@ import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 		NgxsLoggerPluginModule.forRoot({
 			// collapsed: false, // Do not collapse log groups
 		}),
-		NgxsReduxDevtoolsPluginModule.forRoot(),
+		NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
 		// Firebase
 		provideFirebaseApp(() => initializeApp(environment.firebase)),
 		provideAuth(() => getAuth()),

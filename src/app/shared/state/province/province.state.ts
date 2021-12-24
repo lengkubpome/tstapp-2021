@@ -1,23 +1,59 @@
-import { tap } from "rxjs/operators";
-import { Action, NgxsOnInit, Selector, State, StateContext } from "@ngxs/store";
+import { catchError, tap } from "rxjs/operators";
+import {
+	Action,
+	Actions,
+	NgxsOnInit,
+	ofActionCanceled,
+	ofActionCompleted,
+	ofActionDispatched,
+	ofActionErrored,
+	Selector,
+	State,
+	StateContext,
+} from "@ngxs/store";
 import { Injectable } from "@angular/core";
 import { IProvince } from "../../models/province.model";
 import { ProvinceAction } from "./province.action";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
 export interface ProvinceStateModel {
 	province: IProvince[];
-	isLoaded: boolean;
+	loading: boolean;
 }
 
 @State<ProvinceStateModel>({
 	name: "province",
-	defaults: { province: [], isLoaded: false },
+	defaults: { province: [], loading: false },
 })
 @Injectable()
 export class ProvinceState implements NgxsOnInit {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private actions$: Actions) {
+		// this.actions$
+		// 	.pipe(ofActionErrored(ProvinceAction.FetchProvinces))
+		// 	.subscribe((result) => {
+		// 		console.log("Province Action Errored");
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(ofActionCompleted(ProvinceAction.FetchProvinces))
+		// 	.subscribe((result) => {
+		// 		console.log("Province Action Successful");
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(ofActionDispatched(ProvinceAction.FetchProvinces))
+		// 	.subscribe((result) => {
+		// 		console.log("Province Action Dispatched");
+		// 		console.log(result);
+		// 	});
+		// this.actions$
+		// 	.pipe(ofActionCompleted(ProvinceAction.FetchProvinces))
+		// 	.subscribe((result) => {
+		// 		console.log("Province Action Completed");
+		// 		console.log(result);
+		// 	});
+	}
 
 	@Selector()
 	static province(state: ProvinceStateModel): string[] {
@@ -56,15 +92,20 @@ export class ProvinceState implements NgxsOnInit {
 	@Action(ProvinceAction.FetchProvinces)
 	fetchProvinces(
 		ctx: StateContext<ProvinceStateModel>
-	): Observable<IProvince[]> {
+	): Observable<boolean | IProvince[]> {
+		ctx.patchState({ loading: true });
 		return this.http.get<IProvince[]>("assets/data/province.json").pipe(
 			tap((result) => {
 				const state = ctx.getState();
 				ctx.setState({
 					...state,
 					province: result,
-					isLoaded: true,
+					loading: false,
 				});
+			}),
+			catchError((err) => {
+				console.error(err);
+				return of(false);
 			})
 		);
 	}

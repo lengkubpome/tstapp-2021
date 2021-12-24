@@ -74,8 +74,13 @@ export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 			.dispatch(new ContactAction.SelectContact(contact.code))
 			.pipe(takeUntil(this.destroy$))
 			.subscribe({
-				next: () => console.log("Changes were successfully saved"),
-				error: () => console.log("Changes could not be saved"),
+				complete: () => {
+					console.log("%cDispatch successfully", "color:white; font-size:20px");
+				},
+				next: () =>
+					console.log("%cDispatch next", "color:white; font-size:20px"),
+				error: () =>
+					console.log("%cDispatch error", "color:red; font-size:20px"),
 			});
 	}
 

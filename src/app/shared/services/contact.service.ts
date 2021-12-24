@@ -14,7 +14,16 @@ export class ContactService {
 
 	getContactList(): Observable<IContact[]> {
 		const contactCollection = this.afs.collection<any>("contacts");
-		return contactCollection.valueChanges({ idField: "id" });
+		return contactCollection.valueChanges({ idField: "id" }).pipe(
+			catchError((error) => {
+				console.error(
+					`%cContactService => getContactList ${error}`,
+					"color:white; background:red; font-size:20px"
+				);
+				return of(error);
+			})
+		);
+
 		// return contactCollection.snapshotChanges().pipe(
 		// 	map((actions) =>
 		// 		actions.map((a) => {
@@ -38,19 +47,31 @@ export class ContactService {
 					return { ...data, id };
 				})
 			),
-			catchError((err) => {
-				console.error(err);
-				return of(false);
+			catchError((error) => {
+				console.error(
+					`%cContactService => getContact ${error}`,
+					"color:white; background:red; font-size:20px"
+				);
+				return of(error);
 			})
 		);
 	}
 
 	addContact(contact: IContact): any {
 		const contactCollection = this.afs.collection<any>("contacts");
+		throw new Error("Check error");
+
 		return from(contactCollection.add(contact)).pipe(
-			switchMap((docRef) =>
-				contactCollection.doc<IContact>(docRef.id).valueChanges()
-			)
+			switchMap((docRef) => {
+				return contactCollection.doc<IContact>(docRef.id).valueChanges();
+			}),
+			catchError((error) => {
+				console.error(
+					`%cContactService => addContact ${error}`,
+					"color:white; background:red; font-size:20px"
+				);
+				return of(error);
+			})
 		);
 	}
 }
