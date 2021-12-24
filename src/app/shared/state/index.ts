@@ -1,3 +1,4 @@
+import { BankState } from "./bank/bank.state";
 import { SystemState } from "./system/system.state";
 import { ProvinceState } from "./province/province.state";
 import { ContactState } from "./contact/contact.state";
@@ -7,6 +8,7 @@ import { SettingState } from "./setting/setting.state";
 
 export const stateList = [
 	SystemState,
+	BankState,
 	CarState,
 	ProductState,
 	ContactState,

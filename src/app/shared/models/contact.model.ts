@@ -81,7 +81,7 @@ export interface IContact {
 
 export interface IBankAccount {
 	type?: "ออมทรัพย์" | "กระแสรายวัน";
-	name: string;
+	ownerName: string;
 	number: string;
 	bankName: string;
 }

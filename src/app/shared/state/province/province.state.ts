@@ -17,6 +17,10 @@ import { ProvinceAction } from "./province.action";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 
+export class FetchProvinces {
+	static readonly type = "[Province] Fetch Provinces";
+}
+
 export interface ProvinceStateModel {
 	province: IProvince[];
 	loading: boolean;
@@ -30,25 +34,25 @@ export interface ProvinceStateModel {
 export class ProvinceState implements NgxsOnInit {
 	constructor(private http: HttpClient, private actions$: Actions) {
 		// this.actions$
-		// 	.pipe(ofActionErrored(ProvinceAction.FetchProvinces))
+		// 	.pipe(ofActionErrored(FetchProvinces))
 		// 	.subscribe((result) => {
 		// 		console.log("Province Action Errored");
 		// 		console.log(result);
 		// 	});
 		// this.actions$
-		// 	.pipe(ofActionCompleted(ProvinceAction.FetchProvinces))
+		// 	.pipe(ofActionCompleted(FetchProvinces))
 		// 	.subscribe((result) => {
 		// 		console.log("Province Action Successful");
 		// 		console.log(result);
 		// 	});
 		// this.actions$
-		// 	.pipe(ofActionDispatched(ProvinceAction.FetchProvinces))
+		// 	.pipe(ofActionDispatched(FetchProvinces))
 		// 	.subscribe((result) => {
 		// 		console.log("Province Action Dispatched");
 		// 		console.log(result);
 		// 	});
 		// this.actions$
-		// 	.pipe(ofActionCompleted(ProvinceAction.FetchProvinces))
+		// 	.pipe(ofActionCompleted(FetchProvinces))
 		// 	.subscribe((result) => {
 		// 		console.log("Province Action Completed");
 		// 		console.log(result);
@@ -86,19 +90,17 @@ export class ProvinceState implements NgxsOnInit {
 
 	ngxsOnInit(ctx: StateContext<ProvinceStateModel>): void {
 		console.log("State initialized, now getting province");
-		ctx.dispatch(new ProvinceAction.FetchProvinces());
+		ctx.dispatch(new FetchProvinces());
 	}
 
-	@Action(ProvinceAction.FetchProvinces)
+	@Action(FetchProvinces)
 	fetchProvinces(
 		ctx: StateContext<ProvinceStateModel>
 	): Observable<boolean | IProvince[]> {
 		ctx.patchState({ loading: true });
 		return this.http.get<IProvince[]>("assets/data/province.json").pipe(
 			tap((result) => {
-				const state = ctx.getState();
-				ctx.setState({
-					...state,
+				ctx.patchState({
 					province: result,
 					loading: false,
 				});

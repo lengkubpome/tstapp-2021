@@ -1,3 +1,7 @@
+import {
+	BankState,
+	BankStateModel,
+} from "./../../../shared/state/bank/bank.state";
 import { IContact } from "src/app/shared/models/contact.model";
 import {
 	ContactState,
@@ -89,6 +93,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	private destroy$: Subject<any> = new Subject();
 
 	@Select(ContactState.loading) loading$: Observable<ContactStateModel>;
+	@Select(BankState) banks$: Observable<BankStateModel>;
 
 	newContact: IContact = contactStart;
 	statusFormValid = {

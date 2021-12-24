@@ -71,7 +71,7 @@ i.bank.bank-bbl {
 }
 i.bank.bank-kbank {
 	background-color: #138f2d;
-	background-image: url("../../../assets/images/thai_bank/kbank.svg");
+	background-image: url("../../../assets/images/thai_bank/kbank.png");
 }
 i.bank.bank-rbs {
 	background-color: #032952;
@@ -95,7 +95,7 @@ i.bank.bank-tmb {
 }
 i.bank.bank-scb {
 	background-color: #4e2e7f;
-	background-image: url("../../../assets/images/thai_bank/scb.svg");
+	background-image: url("../../../assets/images/thai_bank/scb.png");
 }
 i.bank.bank-citi {
 	background-color: #1583c7;

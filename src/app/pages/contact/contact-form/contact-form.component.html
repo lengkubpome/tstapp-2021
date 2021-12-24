@@ -403,32 +403,25 @@
           <nb-accordion-item-body>
             <div class="info-item-detail">
 
-              <!-- <div class="form-group">
+              <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">บัญชีธนาคาร (หลัก)</label>
                 <div class="col-sm-9">
                   <div class="bank-detail ">
-                    <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร">
-                      <nb-option value="0" class="d-flex align-items-center">
-                        <i class="bank xxxl bank-kbank mr-2"></i>
-                        <span>กสิกรไทย</span>
-                      </nb-option>
-                      <nb-option value="1">
-                        <i class="bank xxxl bank-bbl"></i>
-                        กรุงเทพ
-                      </nb-option>
-                      <nb-option value="2">
-                        <i class="bank xxxl bank-scb"></i>
-                        ไทยพาณิชย์
+                    <nb-select class="" id="bankName" name="bankName" placeholder="ธนาคาร">
+                      <nb-option *ngFor="let bank of (banks$|async).banks" [value]="bank.symbol"
+                        class="d-flex align-items-center">
+                        <i class="bank xxxl mr-2" [class]="'bank-' + bank.symbol"></i>
+                        <span>{{bank.name_th}}</span>
                       </nb-option>
                     </nb-select>
 
                     <nb-form-field class="">
-                      <input type="text" trim nbInput id="firstName" name="firstName"
+                      <input type="text" trim nbInput id="bankNumber" name="bankNumber"
                         placeholder="เลขบัญชี">
                     </nb-form-field>
 
                     <nb-form-field class="">
-                      <input type="text" trim nbInput id="lastName" name="lastName"
+                      <input type="text" trim nbInput id="bankOwner" name="bankOwner"
                         placeholder="ชื่อเจ้าของบัญชี">
                     </nb-form-field>
 
@@ -439,7 +432,7 @@
 
                   </div>
                 </div>
-              </div> -->
+              </div>
 
               <!-- <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">บัญชีธนาคาร</label>
