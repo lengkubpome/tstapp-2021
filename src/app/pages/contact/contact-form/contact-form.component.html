@@ -92,9 +92,11 @@
               <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">ประเภท</label>
                 <div class="col-sm-9">
-                  <div class="d-flex align-items-baseline">
+                  <!-- <div class="d-flex align-items-baseline"> -->
+                  <div class="row">
 
-                    <nb-select placeholder="ประเภท" formControlName="legalType"
+                    <nb-select class="col-sm-6 pr-sm-1" placeholder="ประเภท"
+                      formControlName="legalType"
                       [status]="(contactForm.get('general.legalType').errors && contactForm.get('general.legalType').touched) ? 'danger' : 'basic' ">
                       <nb-option-group title="บุคคลธรรมดา">
                         <nb-option value="บุคคลธรรมดา">บุคคลธรรมดา</nb-option>
@@ -117,14 +119,14 @@
               <div class="form-group">
                 <label for="branch" class="label col-sm-2 col-form-label">สาขา</label>
                 <div class="col-sm-9 ">
-                  <div class="d-flex  flex-sm-row flex-column align-items-sm-end">
-                    <nb-radio-group class="d-flex mr-3" formControlName="branch">
+                  <div class="row align-items-center ">
+                    <nb-radio-group class="d-flex p-1" formControlName="branch">
                       <nb-radio value="">ไม่ระบุ</nb-radio>
                       <nb-radio value="00000">สำนักงานใหญ่</nb-radio>
                       <nb-radio value="-">สาขา</nb-radio>
                     </nb-radio-group>
 
-                    <form [formGroup]="branchCodeForm" class="branch-code row align-self-end"
+                    <form [formGroup]="branchCodeForm" class="branch-code  p-1 align-self-end"
                       *ngIf="contactForm.get('general.branch').value ==='-'">
                       <input type="number" trim nbInput name="branchCode" id="branchCode_1"
                         formControlName="branchCode_1" placeholder="0"
@@ -143,6 +145,13 @@
                         [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                     </form>
                   </div>
+                  <!-- <div class="d-flex  flex-sm-row flex-column align-items-sm-end">
+
+
+
+
+                  </div> -->
+
 
 
                 </div>
@@ -152,18 +161,19 @@
               <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">ชื่อ</label>
                 <div class="col-sm-9">
-                  <div class="d-flex align-items-baseline  justify-content-between">
+                  <!-- <div class="d-flex align-items-baseline  justify-content-between"> -->
+                  <div class="row">
 
-                    <nb-form-field
+                    <nb-form-field class="col-sm-6 p-1"
                       *ngIf="contactForm.get('general.legalType').value !=='บุคคลธรรมดา'">
                       <input type="text" trim nbInput id="name" name="name"
-                        [placeholder]="'ชื่อ'+contactForm.get('general.legalType').value"
+                        [placeholder]="'ชื่อ'+ contactForm.get('general.legalType').value"
                         formControlName="name"
                         [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
                     </nb-form-field>
 
-                    <nb-select class="prefix-name mr-1" id="prefixName" name="prefixName"
-                      placeholder="คำนำหน้า" formControlName="prefixName"
+                    <nb-select class="prefix-name p-1 col-12 col-sm-1" id="prefixName"
+                      name="prefixName" placeholder="คำนำหน้า" formControlName="prefixName"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <nb-option>ไม่ระบุ</nb-option>
                       <nb-option value="นาย">นาย</nb-option>
@@ -171,18 +181,19 @@
                       <nb-option value="นางสาว">นางสาว</nb-option>
                     </nb-select>
 
-                    <nb-form-field class="mr-1"
+                    <nb-form-field class="p-1 col-12 col-sm"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" trim nbInput id="firstName" name="firstName"
                         placeholder="ชื่อ" formControlName="firstName"
                         [status]="(contactForm.get('general.firstName').errors && contactForm.get('general.firstName').touched) ? 'danger' : 'basic' ">
                     </nb-form-field>
-                    <nb-form-field class=""
+                    <nb-form-field class="p-1 col-12 col-sm"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" trim nbInput id="lastName" name="lastName"
                         placeholder="นามสกุล" formControlName="lastName">
                     </nb-form-field>
                   </div>
+
 
                 </div>
               </div>
@@ -192,7 +203,7 @@
                 <div class="col-sm-9">
                   <div class="row">
 
-                    <nb-form-field class="col-12">
+                    <nb-form-field class="col-12 p-1">
                       <!-- <nb-form-field class="col-12 prefix-text-input">
                       <span nbPrefix>เลขที่</span> -->
                       <input type="text" trim="blur" fullWidth nbInput id="line" name="line"
@@ -200,18 +211,18 @@
                         placeholder="เลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>แขวง /<br>ตำบล </span> -->
                       <input type="text" trim nbInput id="subDistrict" name="subDistrict"
                         formControlName="subDistrict" placeholder="แขวง หรือตำบล">
                     </nb-form-field>
-                    <nb-form-field class="col-6 mt-2 ">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>เขต /<br>อำเภอ </span> -->
                       <input type="text" trim nbInput id="district" name="district"
                         formControlName="district" placeholder="เขต หรืออำเภอ">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2 ">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>จังหวัด</span> -->
                       <input type="text" trim nbInput id="province" name="province"
                         placeholder="จังหวัด" formControlName="province"
@@ -225,7 +236,7 @@
                       </mat-autocomplete>
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix class="text-break fs-6">ปณ.</span> -->
                       <input type="text" trim nbInput id="postCode" name="postCode"
                         formControlName="postCode" placeholder="รหัสไปรษณีย์">
@@ -251,58 +262,65 @@
               <div class="form-group">
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (หลัก)</label>
                 <div class="col-sm-9">
-                  <nb-form-field>
-                    <input type="text" trim nbInput id="phone" name="phone"
-                      placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="phone">
-                  </nb-form-field>
-
+                  <div class="row">
+                    <nb-form-field class="col-sm-6 p-1">
+                      <input type="text" trim nbInput id="phone" name="phone"
+                        placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="phone">
+                    </nb-form-field>
+                  </div>
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (สำรอง)</label>
                 <div class="col-sm-9">
-                  <nb-form-field>
-                    <input type="text" trim nbInput id="phone" name="phone"
-                      placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="telephone">
-                  </nb-form-field>
-
+                  <div class="row">
+                    <nb-form-field class="col-sm-6 p-1">
+                      <input type="text" trim nbInput id="phone" name="phone"
+                        placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="telephone">
+                    </nb-form-field>
+                  </div>
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="email" class="label col-sm-2 col-form-label">อีเมลล์</label>
                 <div class="col-sm-9">
-                  <nb-form-field>
-                    <input type="text" trim nbInput id="email" name="email" placeholder="อีเมลล์"
-                      formControlName="email"
-                      [status]="(contactForm.get('communication.email').errors && contactForm.get('communication.email').touched) ? 'danger' : 'basic' ">
-                  </nb-form-field>
+                  <div class="row">
+                    <nb-form-field class="col-sm-6 p-1">
+                      <input type="text" trim nbInput id="email" name="email" placeholder="อีเมลล์"
+                        formControlName="email"
+                        [status]="(contactForm.get('communication.email').errors && contactForm.get('communication.email').touched) ? 'danger' : 'basic' ">
+                    </nb-form-field>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="website" class="label col-sm-2 col-form-label">เว็บไซต์</label>
                 <div class="col-sm-9">
-                  <nb-form-field>
-                    <input type="text" trim nbInput id="website" name="website"
-                      placeholder="เว็บไซต์" formControlName="website">
-                  </nb-form-field>
+                  <div class="row">
+                    <nb-form-field class="col-sm-6 p-1">
+                      <input type="text" trim nbInput id="website" name="website"
+                        placeholder="เว็บไซต์" formControlName="website">
+                    </nb-form-field>
+                  </div>
                 </div>
               </div>
 
-              <div class="form-group" formGroupName="address">
+              <div class="form-group row" formGroupName="address">
                 <label for="type" class="label col-sm-2 col-form-label">ที่อยู่ส่งเอกสาร</label>
                 <div class="col-sm-9">
-                  <div class="row">
+                  <div class="row ">
 
-                    <nb-form-field class="col-12 mt-2">
+                    <nb-form-field class="col-sm-6 p-1">
                       <!-- <nb-form-field class="col-12 prefix-text-input">
                       <span nbPrefix>เลขที่</span> -->
-                      <input type="text" trim nbInput id="contactName" name="contactName"
-                        formControlName="contactName" placeholder="ชื่อผู้ติดต่อ">
+                      <input type="text" trim nbInput class="w-100" id="contactName"
+                        name="contactName" formControlName="contactName"
+                        placeholder="ชื่อผู้ติดต่อ">
                     </nb-form-field>
 
-                    <nb-form-field class="col-12 mt-2">
+                    <nb-form-field class="col-12 p-1">
                       <!-- <nb-form-field class="col-12 prefix-text-input">
                       <span nbPrefix>เลขที่</span> -->
                       <input type="text" trim="blur" fullWidth nbInput id="line" name="line"
@@ -310,18 +328,18 @@
                         placeholder="เลขที่ ซอย ถนน อาคาร ห้องเลขที่ หรือหมู่บ้าน">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>แขวง /<br>ตำบล </span> -->
                       <input type="text" trim nbInput id="subDistrict" name="subDistrict"
                         formControlName="subDistrict" placeholder="แขวง หรือตำบล">
                     </nb-form-field>
-                    <nb-form-field class="col-6 mt-2 ">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>เขต /<br>อำเภอ </span> -->
                       <input type="text" trim nbInput id="district" name="district"
                         formControlName="district" placeholder="เขต หรืออำเภอ">
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2 ">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix>จังหวัด</span> -->
                       <input type="text" trim nbInput id="province" name="province"
                         placeholder="จังหวัด" formControlName="province"
@@ -335,7 +353,7 @@
                       </mat-autocomplete>
                     </nb-form-field>
 
-                    <nb-form-field class="col-6 mt-2">
+                    <nb-form-field class="col-6 p-1">
                       <!-- <span nbPrefix class="text-break fs-6">ปณ.</span> -->
                       <input type="text" trim nbInput id="postCode" name="postCode"
                         formControlName="postCode" placeholder="รหัสไปรษณีย์">
@@ -406,31 +424,38 @@
               <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">บัญชีธนาคาร (หลัก)</label>
                 <div class="col-sm-9">
-                  <div class="bank-detail ">
-                    <nb-select class="" id="bankName" name="bankName" placeholder="ธนาคาร">
-                      <nb-option *ngFor="let bank of (banks$|async).banks" [value]="bank.symbol"
-                        class="d-flex align-items-center">
-                        <i class="bank xxxl mr-2" [class]="'bank-' + bank.symbol"></i>
-                        <span>{{bank.name_th}}</span>
-                      </nb-option>
-                    </nb-select>
+                  <div class="row">
 
-                    <nb-form-field class="">
-                      <input type="text" trim nbInput id="bankNumber" name="bankNumber"
-                        placeholder="เลขบัญชี">
-                    </nb-form-field>
+                    <div class="col-11 bank-detail ">
+                      <nb-select class="" id="bankName" name="bankName" placeholder="ธนาคาร">
+                        <nb-option *ngFor="let bank of (banks$|async).banks" [value]="bank.symbol"
+                          class="d-flex align-items-center">
+                          <i class="bank xxxl mr-2" [class]="'bank-' + bank.symbol"></i>
+                          <span>{{bank.name_th}}</span>
+                        </nb-option>
+                      </nb-select>
 
-                    <nb-form-field class="">
-                      <input type="text" trim nbInput id="bankOwner" name="bankOwner"
-                        placeholder="ชื่อเจ้าของบัญชี">
-                    </nb-form-field>
+                      <nb-form-field class="">
+                        <input type="text" trim nbInput id="bankNumber" name="bankNumber"
+                          placeholder="เลขบัญชี">
+                      </nb-form-field>
 
-                    <button mat-icon-button [matMenuTriggerFor]="bankMenu"
-                      [matMenuTriggerData]="{order: 1}">
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
+                      <nb-form-field class="">
+                        <input type="text" trim nbInput id="bankOwner" name="bankOwner"
+                          placeholder="ชื่อเจ้าของบัญชี">
+                      </nb-form-field>
 
+
+
+                    </div>
+                    <div class="col-1">
+                      <button mat-icon-button [matMenuTriggerFor]="bankMenu"
+                        [matMenuTriggerData]="{order: 1}">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                    </div>
                   </div>
+
                 </div>
               </div>
 
