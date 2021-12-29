@@ -4,7 +4,6 @@
     ผู้ติดต่อ
   </span>
 </div> -->
-{{(contacts$ | async).loading }}
 <nb-card [nbSpinner]="(contacts$ | async).isLoaded">
   <nb-card-header>
     <div class="d-flex flex-row justify-content-between">

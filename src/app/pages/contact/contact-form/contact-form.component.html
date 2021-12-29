@@ -1,4 +1,4 @@
-<form [formGroup]="contactForm" (ngSubmit)="onSubmitContactForm()">
+<form [formGroup]="contactForm">
   <nb-card [nbSpinner]="loading$|async">
     <nb-card-header>
       <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
@@ -33,53 +33,57 @@
 
               <div class="form-group">
                 <label for="taxId" class="label col-sm-2 col-form-label">เลขทะเบียน 13 หลัก</label>
-                <div class="col-sm-9">
-                  <div class="d-flex flex-sm-row flex-column align-items-sm-end">
-                    <nb-form-field class="tax-id mr-3">
-                      <form [formGroup]="taxIdForm">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_1"
-                          placeholder="0" formControlName="tax_1" class="mr-2"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_2"
-                          placeholder="0" formControlName="tax_2"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_3"
-                          placeholder="0" formControlName="tax_3"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_4"
-                          placeholder="0" formControlName="tax_4"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_5"
-                          placeholder="0" formControlName="tax_5" class="mr-2"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_6"
-                          placeholder="0" formControlName="tax_6"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_7"
-                          placeholder="0" formControlName="tax_7"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_8"
-                          placeholder="0" formControlName="tax_8"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_9"
-                          placeholder="0" formControlName="tax_9"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_10"
-                          placeholder="0" formControlName="tax_10" class="mr-2"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_11"
-                          placeholder="0" formControlName="tax_11"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_12"
-                          placeholder="0" formControlName="tax_12"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                        <input type="number" trim nbInput name="taxIdChar" id="tax_13"
-                          placeholder="0" formControlName="tax_13"
-                          [status]="!statusFormValid.taxId ? 'danger':'basic' ">
-                      </form>
-                    </nb-form-field>
+                <div class="col-sm-10">
+                  <!-- <div class="d-flex flex-sm-row flex-column align-items-sm-end"> -->
+                  <div class="row ">
+                    <div class="col-sm-6 p-1">
+                      <nb-form-field class="tax-id">
+                        <form [formGroup]="taxIdForm">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_1"
+                            placeholder="0" formControlName="tax_1" class="mr-2"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_2"
+                            placeholder="0" formControlName="tax_2"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_3"
+                            placeholder="0" formControlName="tax_3"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_4"
+                            placeholder="0" formControlName="tax_4"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_5"
+                            placeholder="0" formControlName="tax_5" class="mr-2"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_6"
+                            placeholder="0" formControlName="tax_6"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_7"
+                            placeholder="0" formControlName="tax_7"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_8"
+                            placeholder="0" formControlName="tax_8"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_9"
+                            placeholder="0" formControlName="tax_9"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_10"
+                            placeholder="0" formControlName="tax_10" class="mr-2"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_11"
+                            placeholder="0" formControlName="tax_11"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_12"
+                            placeholder="0" formControlName="tax_12"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                          <input type="number" trim nbInput name="taxIdChar" id="tax_13"
+                            placeholder="0" formControlName="tax_13"
+                            [status]="!statusFormValid.taxId ? 'danger':'basic' ">
+                        </form>
+                      </nb-form-field>
+                    </div>
 
-                    <div class="d-inline-flex mt-2">
+                    <!-- <div class="d-inline-flex mt-2"> -->
+                    <div class="col-sm-2 p-1">
                       <button nbButton shape="round" size="small" status="info" [disabled]="true">
                         <nb-icon [icon]="'search'" pack="eva">
                         </nb-icon> ค้นหา
@@ -91,12 +95,11 @@
 
               <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">ประเภท</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <!-- <div class="d-flex align-items-baseline"> -->
                   <div class="row">
 
-                    <nb-select class="col-sm-6 pr-sm-1" placeholder="ประเภท"
-                      formControlName="legalType"
+                    <nb-select class="col-sm-6 p-1" placeholder="ประเภท" formControlName="legalType"
                       [status]="(contactForm.get('general.legalType').errors && contactForm.get('general.legalType').touched) ? 'danger' : 'basic' ">
                       <nb-option-group title="บุคคลธรรมดา">
                         <nb-option value="บุคคลธรรมดา">บุคคลธรรมดา</nb-option>
@@ -118,9 +121,10 @@
 
               <div class="form-group">
                 <label for="branch" class="label col-sm-2 col-form-label">สาขา</label>
-                <div class="col-sm-9 ">
-                  <div class="row align-items-center ">
-                    <nb-radio-group class="d-flex p-1" formControlName="branch">
+                <div class="col-sm-10 ">
+                  <div class="row align-items-center">
+                    <nb-radio-group class="d-flex flex-sm-row flex-column  p-1"
+                      formControlName="branch">
                       <nb-radio value="">ไม่ระบุ</nb-radio>
                       <nb-radio value="00000">สำนักงานใหญ่</nb-radio>
                       <nb-radio value="-">สาขา</nb-radio>
@@ -145,13 +149,6 @@
                         [status]="!statusFormValid.branchCode ? 'danger':'basic' ">
                     </form>
                   </div>
-                  <!-- <div class="d-flex  flex-sm-row flex-column align-items-sm-end">
-
-
-
-
-                  </div> -->
-
 
 
                 </div>
@@ -160,16 +157,18 @@
 
               <div class="form-group">
                 <label for="type" class="label col-sm-2 col-form-label">ชื่อ</label>
-                <div class="col-sm-9">
-                  <!-- <div class="d-flex align-items-baseline  justify-content-between"> -->
+                <div class="col-sm-10">
                   <div class="row">
 
                     <nb-form-field class="col-sm-6 p-1"
                       *ngIf="contactForm.get('general.legalType').value !=='บุคคลธรรมดา'">
-                      <input type="text" trim nbInput id="name" name="name"
+                      <input type="text" trim="blur" nbInput id="name" name="name"
                         [placeholder]="'ชื่อ'+ contactForm.get('general.legalType').value"
                         formControlName="name"
                         [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
+                      <nb-icon nbSuffix [icon]="'info-outline'"
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
+                      </nb-icon>
                     </nb-form-field>
 
                     <nb-select class="prefix-name p-1 col-12 col-sm-1" id="prefixName"
@@ -185,7 +184,10 @@
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" trim nbInput id="firstName" name="firstName"
                         placeholder="ชื่อ" formControlName="firstName"
-                        [status]="(contactForm.get('general.firstName').errors && contactForm.get('general.firstName').touched) ? 'danger' : 'basic' ">
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
+                      <nb-icon nbSuffix [icon]="'info-outline'"
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
+                      </nb-icon>
                     </nb-form-field>
                     <nb-form-field class="p-1 col-12 col-sm"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
@@ -200,7 +202,7 @@
 
               <div class="form-group" formGroupName="address">
                 <label for="type" class="label col-sm-2 col-form-label">ที่อยู่</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row">
 
                     <nb-form-field class="col-12 p-1">
@@ -261,11 +263,11 @@
 
               <div class="form-group">
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (หลัก)</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row">
                     <nb-form-field class="col-sm-6 p-1">
-                      <input type="text" trim nbInput id="phone" name="phone"
-                        placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="phone">
+                      <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์"
+                        mask="(000) 000-0000" formControlName="phone">
                     </nb-form-field>
                   </div>
                 </div>
@@ -273,11 +275,11 @@
 
               <div class="form-group">
                 <label for="phone" class="label col-sm-2 col-form-label">โทรศัพท์ (สำรอง)</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row">
                     <nb-form-field class="col-sm-6 p-1">
-                      <input type="text" trim nbInput id="phone" name="phone"
-                        placeholder="เบอร์โทรศัพท์" appPhoneMask formControlName="telephone">
+                      <input type="text" nbInput id="phone" name="phone" placeholder="เบอร์โทรศัพท์"
+                        mask="(000) 000-0000" formControlName="telephone">
                     </nb-form-field>
                   </div>
                 </div>
@@ -285,7 +287,7 @@
 
               <div class="form-group">
                 <label for="email" class="label col-sm-2 col-form-label">อีเมลล์</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row">
                     <nb-form-field class="col-sm-6 p-1">
                       <input type="text" trim nbInput id="email" name="email" placeholder="อีเมลล์"
@@ -297,7 +299,7 @@
               </div>
               <div class="form-group">
                 <label for="website" class="label col-sm-2 col-form-label">เว็บไซต์</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row">
                     <nb-form-field class="col-sm-6 p-1">
                       <input type="text" trim nbInput id="website" name="website"
@@ -307,9 +309,9 @@
                 </div>
               </div>
 
-              <div class="form-group row" formGroupName="address">
+              <div class="form-group" formGroupName="address">
                 <label for="type" class="label col-sm-2 col-form-label">ที่อยู่ส่งเอกสาร</label>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                   <div class="row ">
 
                     <nb-form-field class="col-sm-6 p-1">
@@ -379,7 +381,7 @@
 
               <div class="form-group-toggle">
                 <label for="type" class="label col-sm-2 col-3 col-form-label">ประเภท</label>
-                <div class="col-9 col-sm-10">
+                <div class="col-sm-10">
                   <nb-toggle status="success" labelPosition="end" formControlName="vendor">
                     ผู้ขายสินค้า</nb-toggle>
                 </div>
@@ -387,7 +389,7 @@
 
               <div class="form-group-toggle">
                 <label for="type" class="label col-sm-2 col-3 col-form-label"></label>
-                <div class="col-9 col-sm-10">
+                <div class="col-sm-10">
                   <nb-toggle status="info" labelPosition="end" formControlName="customer">
                     ผู้ซื้อสินค้า</nb-toggle>
                 </div>
@@ -399,7 +401,7 @@
               <div class="form-group-toggle">
                 <label for="type"
                   class="label col-sm-2 col-3 col-form-label">เชื่อมโยงผู้ติดต่อ</label>
-                <div class="col-9 col-sm-10">
+                <div class="col-sm-10">
                   <nb-toggle status="warning" labelPosition="end" formControlName="mainContact">
                     บัญชีหลัก
                   </nb-toggle>
@@ -419,98 +421,67 @@
             <span>ข้อมูลธนาคาร</span>
           </nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="info-item-detail">
+            <div class="info-item-detail" formArrayName="bankAccounts"
+              *ngFor="let account of contactForm.get('bankAccounts')['controls']; let i =index">
+              <div class="form-group" [formGroupName]="i">
+                <label for="type" class="label col-sm-2 col-form-label">
+                  {{ account.get('main').value? 'บัญชีธนาคาร (หลัก)': 'บัญชีธนาคาร' }}
+                </label>
+                <div class="col-sm-10">
+                  <div class="row ">
+                    <div class="col-sm-6 col-11">
+                      <div class="row">
+                        <nb-select class="col-12 p-1" id="bankName" name="bankName"
+                          [status]="(account.get('bankName').errors && account.get('bankName').touched) ? 'danger' : 'basic' "
+                          formControlName="bankName" placeholder="ธนาคาร">
+                          <nb-option *ngFor="let bank of (banks$|async).banks" [value]="bank.symbol"
+                            class="d-flex align-items-center">
+                            <i class="bank xxxl mr-2" [class]="'bank-' + bank.symbol"></i>
+                            <span>{{bank.name_th}}</span>
+                          </nb-option>
+                        </nb-select>
 
-              <div class="form-group">
-                <label for="type" class="label col-sm-2 col-form-label">บัญชีธนาคาร (หลัก)</label>
-                <div class="col-sm-9">
-                  <div class="row">
+                        <nb-form-field class="col-12 p-1">
+                          <input type="text" nbInput id="bankNumber" name="bankNumber"
+                            mask="000-0-00000-0 || 000-000-0-00000-0 || 00000000000000000000"
+                            [status]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'basic' "
+                            formControlName="bankNumber" placeholder="เลขบัญชี">
+                          <nb-icon nbSuffix [icon]="'info-outline'"
+                            [status]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'primary' ">
+                          </nb-icon>
+                        </nb-form-field>
 
-                    <div class="col-11 bank-detail ">
-                      <nb-select class="" id="bankName" name="bankName" placeholder="ธนาคาร">
-                        <nb-option *ngFor="let bank of (banks$|async).banks" [value]="bank.symbol"
-                          class="d-flex align-items-center">
-                          <i class="bank xxxl mr-2" [class]="'bank-' + bank.symbol"></i>
-                          <span>{{bank.name_th}}</span>
-                        </nb-option>
-                      </nb-select>
-
-                      <nb-form-field class="">
-                        <input type="text" trim nbInput id="bankNumber" name="bankNumber"
-                          placeholder="เลขบัญชี">
-                      </nb-form-field>
-
-                      <nb-form-field class="">
-                        <input type="text" trim nbInput id="bankOwner" name="bankOwner"
-                          placeholder="ชื่อเจ้าของบัญชี">
-                      </nb-form-field>
-
-
-
+                        <nb-form-field class="col-12 p-1">
+                          <input type="text" trim="blur" nbInput id="ownerName" name="ownerName"
+                            [status]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'basic' "
+                            formControlName="ownerName" placeholder="ชื่อเจ้าของบัญชี">
+                          <nb-icon nbSuffix [icon]="'info-outline'"
+                            [status]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'primary' ">
+                          </nb-icon>
+                        </nb-form-field>
+                      </div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-sm-6 col-1 px-0">
                       <button mat-icon-button [matMenuTriggerFor]="bankMenu"
-                        [matMenuTriggerData]="{order: 1}">
+                        [matMenuTriggerData]="{isMain: account.get('main').value, index:i}">
                         <mat-icon>more_vert</mat-icon>
                       </button>
                     </div>
                   </div>
 
                 </div>
+                <input type="hidden" formControlName="main">
               </div>
-
-              <!-- <div class="form-group">
-                <label for="type" class="label col-sm-2 col-form-label">บัญชีธนาคาร</label>
-                <div class="col-sm-9">
-                  <div class="bank-detail ">
-                    <nb-select class="" id="prefixName" name="prefixName" placeholder="ธนาคาร">
-                      <nb-option value="0" class="d-flex align-items-center">
-                        <i class="bank xxxl bank-kbank mr-2"></i>
-                        <span>กสิกรไทย</span>
-                      </nb-option>
-                      <nb-option value="1">
-                        <i class="bank xxxl bank-bbl"></i>
-                        กรุงเทพ
-                      </nb-option>
-                      <nb-option value="2">
-                        <i class="bank xxxl bank-scb"></i>
-                        ไทยพาณิชย์
-                      </nb-option>
-                    </nb-select>
-
-                    <nb-form-field class="">
-                      <input type="text" trim nbInput id="firstName" name="firstName"
-                        placeholder="เลขบัญชี">
-                    </nb-form-field>
-
-                    <nb-form-field class="">
-                      <input type="text" trim nbInput id="lastName" name="lastName"
-                        placeholder="ชื่อเจ้าของบัญชี">
-                    </nb-form-field>
-
-                    <button mat-icon-button [matMenuTriggerFor]="bankMenu"
-                      [matMenuTriggerData]="{order: 2}">
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-
-                  </div>
-                </div>
-              </div> -->
-
 
             </div>
 
             <mat-menu #bankMenu="matMenu">
-              <ng-template matMenuContent let-order="order">
-                <button mat-menu-item [disabled]="order == 1">
-                  <mat-icon>vertical_align_top</mat-icon>
-                  <span>เลื่อนขึ้น</span>
+              <ng-template matMenuContent let-main="isMain" let-index="index">
+                <button mat-menu-item [disabled]="index===0" (click)="setMainBankAccount(index)">
+                  <mat-icon [style.color]="main? 'red' : null">flag</mat-icon>
+                  <span>ตั้งบัญชีหลัก</span>
                 </button>
-                <button mat-menu-item [disabled]="order !== 1">
-                  <mat-icon>vertical_align_bottom</mat-icon>
-                  <span>เลื่อนลง</span>
-                </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="removeBankAccount(index)">
                   <mat-icon>delete</mat-icon>
                   <span>ลบข้อมูล</span>
                 </button>
@@ -519,7 +490,7 @@
             </mat-menu>
 
             <div class="d-flex mt-2 justify-content-center">
-              <button nbButton size="large" status="info">
+              <button nbButton size="large" status="info" (click)="addBankAccount()">
                 <nb-icon [icon]="'plus'" pack="eva"></nb-icon>
                 <span>เพิ่มบัญชีธนาคาร</span>
               </button>
@@ -538,7 +509,8 @@
         </div>
         <div>
 
-          <button type="submit" class="ml-2" nbButton status="primary">
+          <button type="button" class="ml-2" nbButton status="primary"
+            (click)="onSubmitContactForm()">
             <nb-icon [icon]="'save'" pack="eva"></nb-icon>
             <span>บันทึก</span>
           </button>

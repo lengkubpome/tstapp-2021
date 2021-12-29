@@ -20,7 +20,7 @@ export class ContactInfoComponent implements OnInit {
 
 	carInfoForm: FormGroup;
 	// Private
-	private unsubscribeAll: Subject<any>;
+	private destroy$: Subject<any>;
 
 	constructor(
 		protected ref: NbDialogRef<ContactInfoComponent>,
@@ -34,7 +34,7 @@ export class ContactInfoComponent implements OnInit {
 			name: [""],
 		});
 
-		this.unsubscribeAll = new Subject();
+		this.destroy$ = new Subject();
 
 		this.matIconRegistry.addSvgIcon(
 			`icon_line`,

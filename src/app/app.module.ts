@@ -30,6 +30,9 @@ import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFireModule } from "@angular/fire/compat";
 import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
+import { IConfig, NgxMaskModule } from "ngx-mask";
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
 	declarations: [AppComponent],
@@ -51,7 +54,7 @@ import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 		CoreModule.forRoot(),
 		ThemeModule.forRoot(),
 		// Directives
-
+		NgxMaskModule.forRoot(),
 		// NGXS
 		NgxsModule.forRoot([...stateList], {
 			developmentMode: !environment.production,

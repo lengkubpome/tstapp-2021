@@ -40,6 +40,8 @@ import { ContactFormComponent } from "./contact-form/contact-form.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { NgxTrimDirectiveModule } from "ngx-trim-directive";
 import { PhoneMaskDirective } from "src/app/shared/directives/phone-mask.directive";
+import { BankNumberMaskDirective } from "src/app/shared/directives/bank-number-mask.directive";
+import { NgxMaskModule } from "ngx-mask";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -48,7 +50,7 @@ const COMPONENTS = [
 	ContactFormComponent,
 ];
 
-const DIRECTIVES = [PhoneMaskDirective];
+const DIRECTIVES = [PhoneMaskDirective, BankNumberMaskDirective];
 
 const MODULES = [
 	CommonModule,
@@ -86,6 +88,8 @@ const MODULES = [
 	DragDropModule,
 	// Avatar
 	AvatarModule,
+	// Mask
+	NgxMaskModule.forChild(),
 ];
 const SERVICES = [];
 

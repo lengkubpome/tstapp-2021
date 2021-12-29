@@ -1,3 +1,4 @@
+import { IBankAccount } from "./../../../shared/models/contact.model";
 import {
 	BankState,
 	BankStateModel,
@@ -22,6 +23,7 @@ import {
 } from "@angular/core";
 import {
 	AbstractControl,
+	FormArray,
 	FormBuilder,
 	FormControl,
 	FormGroup,
@@ -105,6 +107,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	taxIdForm: FormGroup;
 	branchCodeForm: FormGroup;
 
+	bankAccounts: FormArray;
+
 	provinces: string[];
 	filteredProvinces: Observable<string[]>;
 
@@ -138,24 +142,25 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			this.store
-				.dispatch(new ContactAction.Add(this.newContact))
-				.pipe(takeUntil(this.destroy$))
-				.subscribe({
-					complete: () => {
-						this.ref.close();
-					},
-					next: () =>
-						console.log(
-							"%cOnSubmitContactForm next",
-							"color:white; font-size:20px"
-						),
-					error: () =>
-						console.log(
-							"%cOnSubmitContactForm error",
-							"color:red; font-size:20px"
-						),
-				});
+			// this.store
+			// 	.dispatch(new ContactAction.Add(this.newContact))
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe({
+			// 		complete: () => {
+			// 			this.ref.close();
+			// 		},
+			// 		next: () =>
+			// 			console.log(
+			// 				"%cOnSubmitContactForm next",
+			// 				"color:white; font-size:20px"
+			// 			),
+			// 		error: () =>
+			// 			console.log(
+			// 				"%cOnSubmitContactForm error",
+			// 				"color:red; font-size:20px"
+			// 			),
+			// 	});
+			console.log(this.contactForm.value);
 		}
 	}
 
@@ -205,6 +210,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 				customer: [contact.attribute.customer],
 				mainContact: [contact.attribute.mainContact],
 			}),
+			bankAccounts: this.fb.array([]),
 		});
 
 		this.taxIdForm = this.fb.group({
@@ -248,22 +254,37 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	checkContactFormValid(): boolean {
+		let result = true;
 		// check contactForm valid
 		if (this.contactForm.invalid) {
+			// ทำการแจ้งเตือน request value ให้แสดงผล
 			const controls = this.contactForm.controls;
 			for (const key1 of Object.keys(controls)) {
 				if (key1 === "code") {
 					this.contactForm.get(key1).markAsTouched();
-				} else {
+				} else if (
+					key1 === "general" ||
+					key1 === "communication" ||
+					key1 === "attribute"
+				) {
 					// เช็ค Sub-controls
 					const subControls = (this.contactForm.get(key1) as FormGroup)
 						.controls;
+
 					for (const key2 of Object.keys(subControls)) {
 						this.contactForm.get(key1 + "." + key2).markAsTouched();
 					}
+				} else if (key1 === "bankAccounts") {
+					const subControlArray = this.contactForm.get(key1) as FormArray;
+					subControlArray.controls.forEach((control: FormGroup) => {
+						const subControl = control.controls;
+						for (const key2 of Object.keys(subControl)) {
+							control.get(key2).markAsTouched();
+						}
+					});
 				}
 			}
-			return false;
+			result = false;
 		}
 
 		// check taxIdForm valid
@@ -277,7 +298,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			console.log("taxIdForm is invalid");
 			delete this.newContact.general.taxId;
 			this.statusFormValid.taxId = false;
-			return false;
+			result = false;
 		} else {
 			this.statusFormValid.taxId = true;
 		}
@@ -286,6 +307,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		let branch = this.contactForm.get("general.branch").value;
 		if (branch === "-") {
 			const branchCodeForm = this.branchCodeForm.value;
+			branch = "";
 			for (const key of Object.keys(branchCodeForm)) {
 				branch += branchCodeForm[key];
 			}
@@ -293,7 +315,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 				console.log("branchCodeForm is invalid");
 				delete this.newContact.general.branch;
 				this.statusFormValid.branchCode = false;
-				return false;
+				result = false;
 			} else {
 				this.statusFormValid.branchCode = true;
 			}
@@ -306,9 +328,57 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			general: { ...this.contactForm.value.general, taxId, branch },
 		};
 
-		// console.log(this.newContact);
+		console.log(this.newContact);
 
-		return true;
+		return result;
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func BankAccount Action
+	// -----------------------------------------------------------------------------------------------------
+
+	createBankAccount(account?: IBankAccount): FormGroup {
+		return this.fb.group({
+			main: [account.main],
+			bankName: [account.bankName, Validators.required],
+			ownerName: [account.ownerName, Validators.required],
+			bankNumber: [account.bankNumber, Validators.required],
+		});
+	}
+
+	addBankAccount(): void {
+		const accountForm = this.contactForm.get("bankAccounts") as FormArray;
+		const arrayAccount = accountForm.length;
+		const account = { main: false };
+		if (arrayAccount === 0) {
+			account.main = true;
+		}
+		accountForm.push(this.createBankAccount(account));
+	}
+
+	removeBankAccount(index: number): void {
+		const accountForm = this.contactForm.get("bankAccounts") as FormArray;
+		accountForm.removeAt(index);
+		const checkMain = accountForm.controls.filter(
+			(a) => a.get("main").value === true
+		);
+		// เช็คกรณีมีข้อมูล แต่ไม่มี main account
+		if (accountForm.length > 0 && checkMain.length === 0) {
+			accountForm.controls[0].get("main").setValue(true);
+		}
+		console.log("Remove BankAccount");
+	}
+
+	setMainBankAccount(index: number): void {
+		const accountForm = this.contactForm.get("bankAccounts") as FormArray;
+		const firstAccount = accountForm.controls[index];
+		accountForm.controls.splice(index, 1);
+		accountForm.controls.unshift(firstAccount);
+
+		for (let i = 0; i <= index; i++) {
+			accountForm.controls[i].get("main").setValue(false);
+		}
+		accountForm.controls[0].get("main").setValue(true);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
@@ -332,8 +402,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			.get("general.firstName")
 			.valueChanges.pipe(takeUntil(this.destroy$))
 			.subscribe((data) => {
-				const prefix = this.contactForm.get("general.prefixName").value;
-				const lastName = this.contactForm.get("general.lastName").value;
 				this.contactForm.get("general.name").setValue(data.trim());
 			});
 	}
@@ -421,7 +489,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			// case -> left arrow
 			if (event.keyCode === 37) {
 				const nextIndex = ctrls.indexOf(event.target.id) - 1;
-				if (nextIndex < ctrls.length) {
+				if (nextIndex > -1 && nextIndex < ctrls.length) {
 					const prevId = "#" + ctrls[nextIndex];
 					this.renderer.selectRootElement(prevId).focus();
 				}

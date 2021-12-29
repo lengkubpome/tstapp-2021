@@ -67,10 +67,7 @@ export interface IContact {
 		linkContactId?: IContact;
 	}[];
 
-	bankAccounts?: {
-		order: number;
-		account: IBankAccount;
-	}[];
+	bankAccounts?: IBankAccount[];
 
 	memberClassId?: string;
 
@@ -80,10 +77,10 @@ export interface IContact {
 }
 
 export interface IBankAccount {
-	type?: "ออมทรัพย์" | "กระแสรายวัน";
-	ownerName: string;
-	number: string;
-	bankName: string;
+	main: boolean;
+	ownerName?: string;
+	bankNumber?: string;
+	bankName?: string;
 }
 
 interface IAddress {

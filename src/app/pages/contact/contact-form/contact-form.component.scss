@@ -136,34 +136,18 @@ $screen-xl-min: 1200px;
       display: flex;
       flex-wrap: wrap;
       padding: 0.5rem 0;
-      margin: 0.3rem -15px;
     }
     >.form-group{
       align-items: baseline;
+      margin-bottom: 0;
+      >label{
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
     }
 
-    // >.form-group:hover{
-    //     background: whitesmoke;
-    // }
   }
 
-  .bank-detail {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      align-items: center;
-
-      > nb-select, nb-form-field{
-        margin-right: 0.5rem ;
-        margin-bottom: 0.3rem ;
-      }
-      >nb-select::ng-deep {
-        .select-button {
-          min-width:180px;
-        }
-      }
-
-  }
 
   // prefix input
   .prefix-text-input{

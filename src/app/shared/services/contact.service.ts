@@ -59,8 +59,6 @@ export class ContactService {
 
 	addContact(contact: IContact): any {
 		const contactCollection = this.afs.collection<any>("contacts");
-		throw new Error("Check error");
-
 		return from(contactCollection.add(contact)).pipe(
 			switchMap((docRef) => {
 				return contactCollection.doc<IContact>(docRef.id).valueChanges();
