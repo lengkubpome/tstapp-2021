@@ -167,7 +167,9 @@
                         formControlName="name"
                         [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
                       <nb-icon nbSuffix [icon]="'info-outline'"
-                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' "
+                        nbTooltip="กรุณาใส่ข้อมูล" nbTooltipPlacement="right"
+                        [nbTooltipStatus]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
                       </nb-icon>
                     </nb-form-field>
 
@@ -186,10 +188,12 @@
                         placeholder="ชื่อ" formControlName="firstName"
                         [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'basic' ">
                       <nb-icon nbSuffix [icon]="'info-outline'"
-                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
+                        [status]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' "
+                        nbTooltip="กรุณาใส่ข้อมูล" nbTooltipPlacement="right"
+                        [nbTooltipStatus]="(contactForm.get('general.name').errors && contactForm.get('general.name').touched) ? 'danger' : 'primary' ">
                       </nb-icon>
                     </nb-form-field>
-                    <nb-form-field class="p-1 col-12 col-sm"
+                    <nb-form-field class=" p-1 col-12 col-sm"
                       *ngIf="contactForm.get('general.legalType').value ==='บุคคลธรรมดา'">
                       <input type="text" trim nbInput id="lastName" name="lastName"
                         placeholder="นามสกุล" formControlName="lastName">
@@ -447,7 +451,9 @@
                             [status]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'basic' "
                             formControlName="bankNumber" placeholder="เลขบัญชี">
                           <nb-icon nbSuffix [icon]="'info-outline'"
-                            [status]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'primary' ">
+                            [status]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'primary' "
+                            nbTooltip="กรุณาใส่ข้อมูล" nbTooltipPlacement="right"
+                            [nbTooltipStatus]="(account.get('bankNumber').errors && account.get('bankNumber').touched) ? 'danger' : 'primary' ">
                           </nb-icon>
                         </nb-form-field>
 
@@ -456,7 +462,9 @@
                             [status]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'basic' "
                             formControlName="ownerName" placeholder="ชื่อเจ้าของบัญชี">
                           <nb-icon nbSuffix [icon]="'info-outline'"
-                            [status]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'primary' ">
+                            [status]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'primary' "
+                            nbTooltip="กรุณาใส่ข้อมูล" nbTooltipPlacement="right"
+                            [nbTooltipStatus]="(account.get('ownerName').errors && account.get('ownerName').touched) ? 'danger' : 'primary' ">
                           </nb-icon>
                         </nb-form-field>
                       </div>

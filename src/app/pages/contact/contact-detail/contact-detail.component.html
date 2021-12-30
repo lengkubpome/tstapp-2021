@@ -11,7 +11,14 @@
         <div class="main-info-detail">
           <div>
             <p>
-              <strong>{{contacts.code + " - " + contacts.general.name}}</strong>
+              <strong>
+                {{
+                  contacts.general.legalType === "บุคคลธรรมดา"?
+                  (contacts.code + " - " + (contacts.general.prefixName? contacts.general.prefixName + " " : null)  +
+                  contacts.general.firstName + " " +
+                  contacts.general.lastName) :
+                  (contacts.code + " - " + contacts.general.name)
+                }}</strong>
               <span>
                 {{contacts.general.taxId ? "( เลขภาษีประจำตัว : "+ contacts.general.taxId +" )" :"" }}
               </span>
@@ -79,7 +86,7 @@
                     เลขทะเบียนนิติบุคคล :
                   </div>
                   <div class="col-8">
-                    {{ contacts.general.taxId }}
+                    {{ contacts.general.taxId ? contacts.general.taxId : '-' }}
                   </div>
                 </div>
                 <div class="row">
@@ -88,7 +95,7 @@
                   </div>
                   <div class="col-8">
                     {{
-                      !contacts.general.branch ? null :
+                      !contacts.general.branch ? "-" :
                       contacts.general.branch ===  "00000" ? "สำนักงานใหญ่ ( 00000 )" : contacts.general.branch
 
                     }}
@@ -121,7 +128,8 @@
                     เบอร์โทรศัพท์ :
                   </div>
                   <div class="col-8">
-                    {{contacts.communication.phone ? contacts.communication.phone : "-"}}
+                    {{contacts.communication.phone | mask: '(000) 000-0000'}}
+                    {{contacts.communication.phone?"":"-" }}
                   </div>
                 </div>
                 <div class="row">
@@ -129,7 +137,8 @@
                     เบอร์โทรศัพท์ (สำรอง) :
                   </div>
                   <div class="col-8">
-                    {{contacts.communication.telephone ? contacts.communication.telephone : "-"}}
+                    {{contacts.communication.telephone | mask: '(000) 000-0000'}}
+                    {{contacts.communication.telephone?"":"-" }}
                   </div>
                 </div>
                 <div class="row">
@@ -176,25 +185,25 @@
               </div>
             </div>
             <!-- ข้อมูลธนาคาร -->
-            <div class="info-item">
+            <div class="info-item" *ngIf="contacts.bankAccounts">
               <div class="info-item-header ">
                 <mat-icon>account_balance</mat-icon>
                 <span>ข้อมูลธนาคาร</span>
               </div>
-              <div class="info-item-detail" *ngIf="contacts.bankAccounts">
+              <div class="info-item-detail">
                 <div class="row info-item-detail-bank"
                   *ngFor="let account of contacts.bankAccounts">
-                  <ng-container *ngIf="account.order === 1">
+                  <ng-container *ngIf="account.main">
                     <div class="col-4">
                       บัญชีหลัก :
                     </div>
                     <div class="col-8">
-                      <i class="bank xxxxl " [class]="'bank-' + account.account.bankName"></i>
+                      <i class="bank xxxxl " [class]="'bank-' + account.bankName"></i>
                       <div>
-                        <span>{{ account.account.name }}</span>
                         <span>
-                          {{ account.account.bankName + " " + account.account.number  }}
+                          {{ account.bankName + " " + account.bankNumber  }}
                         </span>
+                        <span>{{ account.ownerName }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -202,18 +211,18 @@
 
                 <ng-container *ngIf="contacts.bankAccounts.length > 1">
                   <div class="row info-item-detail-bank"
-                    *ngFor="let account of contacts.bankAccounts">
-                    <ng-container *ngIf="account.order !== 1">
+                    *ngFor="let account of contacts.bankAccounts; let i = index">
+                    <ng-container *ngIf="!account.main">
                       <div class="col-4">
-                        {{ "บัญชีสำรอง " + (account.order - 1) +" :"}}
+                        {{ "บัญชีสำรอง " + (i) +" :"}}
                       </div>
                       <div class="col-8">
-                        <i class="bank xxxxl " [class]="'bank-' + account.bank.bankName"></i>
+                        <i class="bank xxxxl " [class]="'bank-' + account.bankName"></i>
                         <div>
-                          <span>{{ account.account.name }}</span>
                           <span>
-                            {{ account.account.bankName + " " + account.account.number  }}
+                            {{ account.bankName + " " + account.bankNumber  }}
                           </span>
+                          <span>{{ account.ownerName }}</span>
                         </div>
                       </div>
                     </ng-container>

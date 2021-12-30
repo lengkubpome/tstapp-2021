@@ -142,24 +142,24 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			// this.store
-			// 	.dispatch(new ContactAction.Add(this.newContact))
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe({
-			// 		complete: () => {
-			// 			this.ref.close();
-			// 		},
-			// 		next: () =>
-			// 			console.log(
-			// 				"%cOnSubmitContactForm next",
-			// 				"color:white; font-size:20px"
-			// 			),
-			// 		error: () =>
-			// 			console.log(
-			// 				"%cOnSubmitContactForm error",
-			// 				"color:red; font-size:20px"
-			// 			),
-			// 	});
+			this.store
+				.dispatch(new ContactAction.Add(this.newContact))
+				.pipe(takeUntil(this.destroy$))
+				.subscribe({
+					complete: () => {
+						this.ref.close();
+					},
+					next: () =>
+						console.log(
+							"%cOnSubmitContactForm next",
+							"color:white; font-size:20px"
+						),
+					error: () =>
+						console.log(
+							"%cOnSubmitContactForm error",
+							"color:red; font-size:20px"
+						),
+				});
 			console.log(this.contactForm.value);
 		}
 	}
