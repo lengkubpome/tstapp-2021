@@ -25,6 +25,11 @@ import {
 import { ContactAction } from "./contact.action";
 import { from, interval, observable, Observable, of } from "rxjs";
 import { Navigate, RouterState } from "@ngxs/router-plugin";
+import {
+	NbGlobalLogicalPosition,
+	NbGlobalPhysicalPosition,
+	NbToastrService,
+} from "@nebular/theme";
 
 export interface ContactStateModel {
 	contactList: IContact[];
@@ -46,61 +51,9 @@ export interface ContactStateModel {
 export class ContactState implements NgxsOnInit {
 	constructor(
 		private store: Store,
-		private actions$: Actions,
+		private toastrService: NbToastrService,
 		private contactService: ContactService
-	) {
-		// this.actions$
-		// 	.pipe(
-		// 		ofActionErrored(
-		// 			ContactAction.Add,
-		// 			ContactAction.FetchAll,
-		// 			ContactAction.SelectContact
-		// 		)
-		// 	)
-		// 	.subscribe((result) => {
-		// 		console.log("%cContactAction Errored", "color:red; font-size:20px");
-		// 		console.log(result);
-		// 	});
-		// this.actions$
-		// 	.pipe(
-		// 		ofActionCompleted(
-		// 			ContactAction.Add,
-		// 			ContactAction.FetchAll,
-		// 			ContactAction.SelectContact
-		// 		)
-		// 	)
-		// 	.subscribe((result) => {
-		// 		console.log(
-		// 			"%cContactAction Successful",
-		// 			"color:white; font-size:20px"
-		// 		);
-		// 		console.log(result);
-		// 	});
-		// this.actions$
-		// 	.pipe(
-		// 		ofActionDispatched(
-		// 			ContactAction.Add,
-		// 			ContactAction.FetchAll,
-		// 			ContactAction.SelectContact
-		// 		)
-		// 	)
-		// 	.subscribe((result) => {
-		// 		console.log("%cContactAction Dispatched", "color:pink; font-size:20px");
-		// 		console.log(result);
-		// 	});
-		// this.actions$
-		// 	.pipe(
-		// 		ofActionCompleted(
-		// 			ContactAction.Add,
-		// 			ContactAction.FetchAll,
-		// 			ContactAction.SelectContact
-		// 		)
-		// 	)
-		// 	.subscribe((result) => {
-		// 		console.log("%cContactAction Completed", "color:pink; font-size:20px");
-		// 		console.log(result);
-		// 	});
-	}
+	) {}
 
 	@Selector()
 	static loading(state: ContactStateModel): boolean {
@@ -212,9 +165,19 @@ export class ContactState implements NgxsOnInit {
 				return contact;
 			}),
 			switchMap((contact: IContact) => {
+				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
+					position: NbGlobalLogicalPosition.BOTTOM_END,
+				});
 				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
 			}),
 			catchError((error) => {
+				this.toastrService.danger(
+					"บันทึกข้อมูลไม่สำเร็จ : " + error,
+					"สร้างผู้ติดต่อ",
+					{
+						position: NbGlobalLogicalPosition.BOTTOM_END,
+					}
+				);
 				console.error(
 					`%cContactState => @Action:add ${error}`,
 					"color:white; background:red;"
