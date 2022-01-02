@@ -43,6 +43,8 @@ import { NgxTrimDirectiveModule } from "ngx-trim-directive";
 import { PhoneMaskDirective } from "src/app/shared/directives/phone-mask.directive";
 import { BankNumberMaskDirective } from "src/app/shared/directives/bank-number-mask.directive";
 import { NgxMaskModule } from "ngx-mask";
+import { NgxFileDropModule } from "ngx-file-drop";
+import { UploadProfileComponent } from './upload-profile/upload-profile.component';
 
 const COMPONENTS = [
 	ContactComponent,
@@ -92,13 +94,15 @@ const MODULES = [
 	AvatarModule,
 	// Mask
 	NgxMaskModule.forChild(),
+	// File Drop
+	NgxFileDropModule,
 ];
 const SERVICES = [];
 
 @NgModule({
 	imports: [...MODULES],
 	exports: [RouterModule],
-	declarations: [...COMPONENTS, ...DIRECTIVES],
+	declarations: [...COMPONENTS, ...DIRECTIVES, UploadProfileComponent],
 	providers: [...SERVICES],
 })
 export class ContactModule {}

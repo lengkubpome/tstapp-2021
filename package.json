@@ -48,6 +48,8 @@
     "husky": "^7.0.4",
     "ionicons": "^5.5.4",
     "ngx-avatar": "^4.1.0",
+    "ngx-file-drop": "^13.0.0",
+    "ngx-image-cropper": "^5.0.1",
     "ngx-mask": "^13.0.1",
     "ngx-trim-directive": "^1.1.0",
     "pretty-quick": "^3.1.1",

@@ -176,5 +176,19 @@ $screen-xl-min: 1200px;
     }
   }
 
+  ngx-file-drop ::ng-deep > div {
+    padding: 0.25rem;
+    border-radius: 5px;
+    height: auto;
+    > div {
+      flex-direction: column;
+      // justify-content: space-around;
+      // >:nth-child(2){
+      //   color: nb-theme(text-basic-color)
+      // }
+    }
+  }
+
+
 
 }

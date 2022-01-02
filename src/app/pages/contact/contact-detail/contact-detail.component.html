@@ -55,9 +55,23 @@
         </div>
       </div>
       <div class="main-action">
-        <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_horiz</mat-icon>
         </button>
+
+        <mat-menu #menu="matMenu">
+          <ng-template matMenuContent let-main="isMain" let-index="index">
+            <button mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>แก้ไขข้อมูล</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>ลบข้อมูล</span>
+            </button>
+          </ng-template>
+
+        </mat-menu>
       </div>
     </div>
   </nb-card-header>

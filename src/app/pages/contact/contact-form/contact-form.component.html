@@ -31,6 +31,44 @@
             <div class="info-item-detail" formGroupName="general">
 
 
+
+              <div class="form-group">
+                <label for="type" class="label col-sm-2 col-form-label">โปรไฟล์</label>
+                <div class="col-sm-10">
+                  <!-- <div class="d-flex align-items-baseline"> -->
+                  <div class="row">
+                    <div class="col-6">
+                      <ngx-file-drop dropZoneLabel="Drop files here" accept=".png,.jpg"
+                        (onFileDrop)="onSelectFile($event)" (onFileOver)="fileOver($event)"
+                        (onFileLeave)="fileLeave($event)">
+                        <ng-template ngx-file-drop-content-tmp
+                          let-openFileSelector="openFileSelector">
+                          <span class="my-2">
+                            ลากไฟล์รูปภาพ (.png, .jpg)
+                          </span>
+                          <button type="button" nbButton outline status="info" size="small"
+                            shape="round" class="my-2"
+                            (click)="openFileSelector()">เลือกรูปภาพ</button>
+                        </ng-template>
+                      </ngx-file-drop>
+                      <div class="upload-table">
+                        <div *ngFor="let item of files; let i=index">
+                          <ngx-avatar class="" [src]="profileUrl" size="100" [round]="false"
+                            cornerRadius="5">
+                          </ngx-avatar>
+                          <strong>{{ item.relativePath }}</strong>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+                  </div>
+
+                </div>
+              </div>
+
+
               <div class="form-group">
                 <label for="taxId" class="label col-sm-2 col-form-label">เลขทะเบียน 13 หลัก</label>
                 <div class="col-sm-10">
