@@ -66,6 +66,7 @@ export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 			context: {},
 			closeOnBackdropClick: false,
 			hasScroll: true,
+			closeOnEsc: false,
 		});
 	}
 

@@ -78,6 +78,10 @@ const contactStart: IContact = {
 		customer: false,
 		mainContact: false,
 	},
+	profileImage: {
+		downloadURL: "",
+		path: "",
+	},
 };
 
 @Component({
@@ -124,71 +128,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		};
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
-
-	// -----------------------------------------------------------------------------------------------------
-	// @ Test
-	// -----------------------------------------------------------------------------------------------------
-
-	onUploadProfile(file?: File): void {
-		this.dialogService.open(UploadProfileComponent, {
-			context: {},
-			closeOnBackdropClick: false,
-			hasScroll: true,
-		});
-	}
-
-	public onSelectFile(files: NgxFileDropEntry[]): void {
-		const reader = new FileReader();
-		this.files = files;
-		for (const droppedFile of files) {
-			// Is it a file?
-			if (droppedFile.fileEntry.isFile) {
-				const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-				fileEntry.file((file: File) => {
-					// Here you can access the real file
-					console.log(droppedFile.relativePath, file);
-
-					this.onUploadProfile(file);
-
-					// อ่านไฟล์
-					reader.readAsDataURL(file); // read file as data url
-					reader.onload = (event) => {
-						this.profileUrl = event.target.result;
-					};
-
-					// // You could upload it like this:
-					// const formData = new FormData()
-					// formData.append('logo', file, relativePath)
-
-					// // Headers
-					// const headers = new HttpHeaders({
-					//   'security-token': 'mytoken'
-					// })
-
-					// this.http.post('https://mybackend.com/api/upload/sanitize-and-save-logo', formData, { headers: headers, responseType: 'blob' })
-					// .subscribe(data => {
-					//   // Sanitized logo returned from backend
-					// })
-				});
-			} else {
-				// It was a directory (empty directories are added, otherwise only files)
-				const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-				console.log(droppedFile.relativePath, fileEntry);
-			}
-		}
-	}
-
-	public fileOver(event): void {
-		console.log(event);
-	}
-
-	public fileLeave(event): void {
-		console.log(event);
-	}
-
-	// -----------------------------------------------------------------------------------------------------
-	// @ Test
-	// -----------------------------------------------------------------------------------------------------
 
 	ngOnDestroy(): void {
 		// Unsubscribe from all subscriptions
@@ -393,6 +332,54 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		console.log(this.newContact);
 
 		return result;
+	}
+
+	// -----------------------------------------------------------------------------------------------------
+	// @ Func Image Profile
+	// -----------------------------------------------------------------------------------------------------
+
+	onUploadImageProfile(file: File): void {
+		this.dialogService
+			.open(UploadProfileComponent, {
+				context: {
+					file,
+				},
+				closeOnBackdropClick: false,
+				hasScroll: true,
+				closeOnEsc: false,
+			})
+			.onClose.subscribe((result) => {
+				if (result) {
+					this.profileUrl = result;
+					console.log(result);
+				}
+			});
+	}
+
+	onDeleteImageProfile(): void {
+		this.profileUrl = "";
+		this.newContact.profileImage.path = "";
+	}
+
+	onSelectFile(files: NgxFileDropEntry[]): void {
+		// const reader = new FileReader();
+		this.files = files;
+		for (const droppedFile of files) {
+			// Is it a file?
+			if (droppedFile.fileEntry.isFile) {
+				const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+				fileEntry.file((file: File) => {
+					// Here you can access the real file
+					console.log(droppedFile.relativePath, file);
+
+					this.onUploadImageProfile(file);
+				});
+			} else {
+				// It was a directory (empty directories are added, otherwise only files)
+				const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+				console.log(droppedFile.relativePath, fileEntry);
+			}
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------

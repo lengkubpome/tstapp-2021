@@ -44,7 +44,8 @@ import { PhoneMaskDirective } from "src/app/shared/directives/phone-mask.directi
 import { BankNumberMaskDirective } from "src/app/shared/directives/bank-number-mask.directive";
 import { NgxMaskModule } from "ngx-mask";
 import { NgxFileDropModule } from "ngx-file-drop";
-import { UploadProfileComponent } from './upload-profile/upload-profile.component';
+import { UploadProfileComponent } from "./upload-profile/upload-profile.component";
+import { ImageCropperModule } from "ngx-image-cropper";
 
 const COMPONENTS = [
 	ContactComponent,
@@ -96,6 +97,8 @@ const MODULES = [
 	NgxMaskModule.forChild(),
 	// File Drop
 	NgxFileDropModule,
+	// ImageCropper
+	ImageCropperModule,
 ];
 const SERVICES = [];
 

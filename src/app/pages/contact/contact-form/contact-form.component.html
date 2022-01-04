@@ -38,30 +38,39 @@
                   <!-- <div class="d-flex align-items-baseline"> -->
                   <div class="row">
                     <div class="col-6">
-                      <ngx-file-drop dropZoneLabel="Drop files here" accept=".png,.jpg"
-                        (onFileDrop)="onSelectFile($event)" (onFileOver)="fileOver($event)"
-                        (onFileLeave)="fileLeave($event)">
-                        <ng-template ngx-file-drop-content-tmp
-                          let-openFileSelector="openFileSelector">
-                          <span class="my-2">
-                            ลากไฟล์รูปภาพ (.png, .jpg)
-                          </span>
-                          <button type="button" nbButton outline status="info" size="small"
-                            shape="round" class="my-2"
-                            (click)="openFileSelector()">เลือกรูปภาพ</button>
-                        </ng-template>
-                      </ngx-file-drop>
-                      <div class="upload-table">
-                        <div *ngFor="let item of files; let i=index">
-                          <ngx-avatar class="" [src]="profileUrl" size="100" [round]="false"
+
+                      <div class="upload-zone" *ngIf="profileUrl===''">
+                        <ngx-file-drop dropZoneLabel="Drop files here" accept=".png,.jpg"
+                          (onFileDrop)="onSelectFile($event)">
+                          <ng-template ngx-file-drop-content-tmp
+                            let-openFileSelector="openFileSelector">
+                            <span class="my-2">
+                              ลากไฟล์รูปภาพ (.png, .jpg)
+                            </span>
+                            <button type="button" nbButton outline status="info" size="small"
+                              shape="round" class="my-2" (click)="openFileSelector()">
+                              <nb-icon icon="camera-outline" status="info"></nb-icon>
+                              เลือกรูปภาพ
+                            </button>
+                          </ng-template>
+                        </ngx-file-drop>
+                      </div>
+
+                      <div class="upload-image-profile" *ngIf="profileUrl !==''">
+                        <div>
+                          <ngx-avatar class="" [src]="profileUrl" size="120" [round]="false"
                             cornerRadius="5">
                           </ngx-avatar>
-                          <strong>{{ item.relativePath }}</strong>
                         </div>
 
+                        <div class="upload-image-profile-action">
+
+                          <button mat-icon-button (click)="onDeleteImageProfile()">
+                            <nb-icon icon="trash-2-outline"></nb-icon>
+                          </button>
+                        </div>
                       </div>
                     </div>
-
 
                   </div>
 

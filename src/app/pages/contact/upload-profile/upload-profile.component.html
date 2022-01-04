@@ -1,25 +1,45 @@
-<nb-card>
+<nb-card [nbSpinner]="!showCropper && !imageFailed">
   <nb-card-header>
     <div class="pb-lg-0 pb-2 d-flex align-items-baseline ">
       <h5>อัพเดตรูปโปรไฟล์</h5>
     </div>
     <div>
-      <nb-icon icon="close" pack="eva"></nb-icon>
+      <!-- <nb-icon icon="close" pack="eva"></nb-icon> -->
     </div>
   </nb-card-header>
 
   <nb-card-body>
+    <div class="image-editor">
+      <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+        [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="1/1"
+        [resizeToWidth]="256" [cropperMinWidth]="256" [onlyScaleDown]="true" [roundCropper]="false"
+        [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+        [style.display]="showCropper ? null : 'none'" format="png" [imageFile]="file"
+        (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
+    </div>
+
+    <div class="upload-error" *ngIf="imageFailed">
+      <div>
+        <mat-icon>error</mat-icon>
+      </div>
+      <div>
+        ไฟล์ไม่ถูกต้อง
+      </div>
+    </div>
+
   </nb-card-body>
 
   <nb-card-footer>
     <div class="d-flex justify-content-between">
       <div>
-        <button type="button" nbButton>ปิด</button>
+        <button type="button" nbButton (click)="onClose()">ปิด</button>
       </div>
       <div>
 
-        <button type="button" class="ml-2" nbButton status="primary">
-          <nb-icon [icon]="'save'" pack="eva"></nb-icon>
+        <button type="button" class="ml-2" nbButton status="primary" [hidden]="imageFailed"
+          (click)="onSave()">
+          <nb-icon [icon]="'checkmark'" pack="eva"></nb-icon>
           <span>บันทึก</span>
         </button>
       </div>
