@@ -78,10 +78,7 @@ const contactStart: IContact = {
 		customer: false,
 		mainContact: false,
 	},
-	profileImage: {
-		downloadURL: "",
-		path: "",
-	},
+	profileImageURL: "",
 };
 
 @Component({
@@ -100,6 +97,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	statusFormValid = {
 		taxId: true,
 		branchCode: true,
+		isNewImagegProfile: false,
 	};
 
 	contactForm: FormGroup;
@@ -107,13 +105,11 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	branchCodeForm: FormGroup;
 	bankAccounts: FormArray;
 
-	public files: NgxFileDropEntry[] = [];
-	public profileUrl: any = "";
+	files: NgxFileDropEntry[] = [];
+	profileImage: any = "";
 
 	provinces: string[];
 	filteredProvinces: Observable<string[]>;
-
-	bankOrder = 1;
 
 	constructor(
 		protected ref: NbDialogRef<ContactFormComponent>,
@@ -124,7 +120,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	) {
 		this.newContact = {
 			...this.newContact,
-			code: this.store.selectSnapshot<any>(ContactState.generateId),
+			code: this.store.selectSnapshot<any>(ContactState.generateId), //สร้าง ID อัตโนมัติ
 		};
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
@@ -144,7 +140,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
 			this.store
-				.dispatch(new ContactAction.Add(this.newContact))
+				.dispatch(new ContactAction.Add(this.newContact, this.profileImage))
 				.pipe(takeUntil(this.destroy$))
 				.subscribe({
 					complete: () => {
@@ -350,15 +346,16 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			})
 			.onClose.subscribe((result) => {
 				if (result) {
-					this.profileUrl = result;
-					console.log(result);
+					const imageBase64 = result;
+
+					this.profileImage = imageBase64;
 				}
 			});
 	}
 
 	onDeleteImageProfile(): void {
-		this.profileUrl = "";
-		this.newContact.profileImage.path = "";
+		this.profileImage = "";
+		this.newContact.profileImageURL = "";
 	}
 
 	onSelectFile(files: NgxFileDropEntry[]): void {

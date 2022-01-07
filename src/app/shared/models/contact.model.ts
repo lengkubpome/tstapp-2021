@@ -72,10 +72,7 @@ export interface IContact {
 	memberClassId?: string;
 
 	locationGoogle?: { lat: number; lng: number };
-	profileImage?: {
-		downloadURL: string;
-		path: string;
-	};
+	profileImageURL?: string;
 	carList?: ICar[];
 }
 

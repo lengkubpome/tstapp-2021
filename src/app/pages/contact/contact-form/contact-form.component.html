@@ -39,7 +39,7 @@
                   <div class="row">
                     <div class="col-6">
 
-                      <div class="upload-zone" *ngIf="profileUrl===''">
+                      <div class="upload-zone" *ngIf="profileImage===''">
                         <ngx-file-drop dropZoneLabel="Drop files here" accept=".png,.jpg"
                           (onFileDrop)="onSelectFile($event)">
                           <ng-template ngx-file-drop-content-tmp
@@ -56,9 +56,9 @@
                         </ngx-file-drop>
                       </div>
 
-                      <div class="upload-image-profile" *ngIf="profileUrl !==''">
+                      <div class="upload-image-profile" *ngIf="profileImage !==''">
                         <div>
-                          <ngx-avatar class="" [src]="profileUrl" size="120" [round]="false"
+                          <ngx-avatar class="" [src]="profileImage" size="120" [round]="false"
                             cornerRadius="5">
                           </ngx-avatar>
                         </div>

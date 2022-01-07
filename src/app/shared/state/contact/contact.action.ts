@@ -14,7 +14,7 @@ export namespace ContactAction {
 	export class Add {
 		static readonly type = "[Contact] Add";
 
-		constructor(public payload: IContact) {}
+		constructor(public contact: IContact, public profileImage?: any) {}
 	}
 
 	export class Edit {

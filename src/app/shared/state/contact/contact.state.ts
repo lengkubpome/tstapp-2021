@@ -154,37 +154,41 @@ export class ContactState implements NgxsOnInit {
 	): Observable<any> {
 		const state = ctx.getState();
 		ctx.patchState({ loading: true });
-		return this.contactService.addContact(action.payload).pipe(
-			first(),
-			tap((contact: IContact) => {
-				ctx.patchState({
-					contactList: [...state.contactList, contact],
-					nextId: this.generateId([...state.contactList, contact]),
-					loading: false,
-				});
-				return contact;
-			}),
-			switchMap((contact: IContact) => {
-				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
-					position: NbGlobalLogicalPosition.BOTTOM_END,
-				});
-				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
-			}),
-			catchError((error) => {
-				this.toastrService.danger(
-					"บันทึกข้อมูลไม่สำเร็จ : " + error,
-					"สร้างผู้ติดต่อ",
-					{
-						position: NbGlobalLogicalPosition.BOTTOM_END,
-					}
-				);
-				console.error(
-					`%cContactState => @Action:add ${error}`,
-					"color:white; background:red;"
-				);
-				return of(error);
-			})
-		);
+		return this.contactService
+			.addContact(action.contact, action.profileImage)
+			.pipe(
+				first(),
+				tap((contact: IContact) => {
+					console.log(contact);
+
+					ctx.patchState({
+						contactList: [...state.contactList, contact],
+						nextId: this.generateId([...state.contactList, contact]),
+						loading: false,
+					});
+					return contact;
+				}),
+				// switchMap((contact: IContact) => {
+				// 	this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
+				// 		position: NbGlobalLogicalPosition.BOTTOM_END,
+				// 	});
+				// 	return ctx.dispatch(new ContactAction.SelectContact(contact.code));
+				// }),
+				catchError((error) => {
+					this.toastrService.danger(
+						"บันทึกข้อมูลไม่สำเร็จ : " + error,
+						"สร้างผู้ติดต่อ",
+						{
+							position: NbGlobalLogicalPosition.BOTTOM_END,
+						}
+					);
+					console.error(
+						`%cContactState => @Action:add ${error}`,
+						"color:white; background:red;"
+					);
+					return of(error);
+				})
+			);
 	}
 
 	// -----------------------------------------------------------------------------------------------------
