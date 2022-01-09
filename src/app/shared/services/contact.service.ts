@@ -4,7 +4,14 @@ import { Injectable } from "@angular/core";
 import { IContact } from "../models/contact.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
-import { catchError, finalize, map, switchMap } from "rxjs/operators";
+import {
+	catchError,
+	finalize,
+	flatMap,
+	map,
+	switchMap,
+	tap,
+} from "rxjs/operators";
 import { Select, Store } from "@ngxs/store";
 
 @Injectable({
@@ -62,7 +69,6 @@ export class ContactService {
 	}
 
 	// addContact(contact: IContact, profileImage?: any): any {
-
 	// 	const contactCollection = this.db.collection<any>("contacts");
 	// 	return from(contactCollection.add(contact)).pipe(
 	// 		switchMap((docRef) => {
@@ -77,29 +83,18 @@ export class ContactService {
 	// 		})
 	// 	);
 	// }
+
 	addContact(contact: IContact, profileImage?: any): any {
-		let profileImageURL: string;
-		// upload profile
-		const profileFile = this.base64ToFile(profileImage, contact.code);
-		const filePath = `${"/contacts"}/${profileFile.name}`;
-		const storageRef = this.storage.ref(filePath);
-		const uploadTask = this.storage.upload(filePath, profileFile);
-
-		return uploadTask.snapshotChanges().pipe(
+		const contactCollection = this.db.collection<any>("contacts");
+		return from(contactCollection.add(contact)).pipe(
+			switchMap((docRef) => {
+				return contactCollection.doc<IContact>(docRef.id).valueChanges();
+			}),
 			finalize(() => {
-				return storageRef.getDownloadURL().subscribe((downloadURL) => {
-					profileImageURL = downloadURL;
-					console.log(
-						`%cContactService => addContact ${downloadURL}`,
-						"color:white; background:pink; font-size:20px"
-					);
-
-					const contactCollection = this.db.collection<any>("contacts");
-					const newContact = { ...contact, profileImageURL };
-					contactCollection.add(newContact);
-
-					return newContact;
-				});
+				// upload profile
+				if (profileImage) {
+					this.uploadProfileImage(profileImage, contact.code);
+				}
 			}),
 			catchError((error) => {
 				console.error(
@@ -109,39 +104,27 @@ export class ContactService {
 				return of(error);
 			})
 		);
-		// save contact
-		// const newContact = { ...contact, profileImageURL };
-		// const contactCollection = this.db.collection<any>("contacts");
-		// const contactCollection$ = contactCollection.add(newContact);
-
-		// return combineLatest([uploadProfile$, contactCollection$]).pipe(
-		// 	switchMap(([, docRef]) => {
-		// 		return contactCollection.doc<IContact>(docRef.id).valueChanges();
-		// 	}),
-		// 	catchError((error) => {
-		// 		console.error(
-		// 			`%cContactService => addContact ${error}`,
-		// 			"color:white; background:red; font-size:20px"
-		// 		);
-		// 		return of(error);
-		// 	})
-		// );
-
-		// return from(contactCollection.add(contact)).pipe(
-		// 	switchMap((docRef) => {
-		// 		return contactCollection.doc<IContact>(docRef.id).valueChanges();
-		// 	}),
-		// 	catchError((error) => {
-		// 		console.error(
-		// 			`%cContactService => addContact ${error}`,
-		// 			"color:white; background:red; font-size:20px"
-		// 		);
-		// 		return of(error);
-		// 	})
-		// );
 	}
 
-	base64ToFile(data, filename): File {
+	uploadProfileImage(fileImage: any, fileName: string): Observable<number> {
+		const file = this.base64ToFile(fileImage, fileName);
+		const path = `${"/contacts"}/${file.name}`;
+		const fileRef = this.storage.ref(path);
+		return this.storage
+			.upload(path, file)
+			.percentageChanges()
+			.pipe(
+				catchError((error) => {
+					console.error(
+						`%cContactService => uploadProfileImage ${error}`,
+						"color:white; background:red; font-size:20px"
+					);
+					return of(error);
+				})
+			);
+	}
+
+	private base64ToFile(data: any, filename: string): File {
 		const arr = data.split(",");
 		const mime = arr[0].match(/:(.*?);/)[1];
 		const bstr = atob(arr[1]);
