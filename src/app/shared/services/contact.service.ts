@@ -86,6 +86,11 @@ export class ContactService {
 
 	addContact(contact: IContact, profileImage?: any): any {
 		const contactCollection = this.db.collection<any>("contacts");
+		if (profileImage) {
+			const path = `${"/contacts"}/${contact.code}`;
+			contact.profileUrl = path;
+		}
+
 		return from(contactCollection.add(contact)).pipe(
 			switchMap((docRef) => {
 				return contactCollection.doc<IContact>(docRef.id).valueChanges();

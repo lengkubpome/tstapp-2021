@@ -78,7 +78,7 @@ const contactStart: IContact = {
 		customer: false,
 		mainContact: false,
 	},
-	profileImageURL: "",
+	profileUrl: "",
 };
 
 @Component({
@@ -355,7 +355,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onDeleteImageProfile(): void {
 		this.profileImage = "";
-		this.newContact.profileImageURL = "";
+		this.newContact.profileUrl = "";
 	}
 
 	onSelectFile(files: NgxFileDropEntry[]): void {

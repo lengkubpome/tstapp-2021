@@ -2,6 +2,7 @@ import { ICar } from "./car.model";
 
 export interface IContact {
 	code: string;
+	profileUrl?: string;
 	mainId?: IContact; // เชื่อมกับร้านค้า
 
 	general?: {
@@ -72,7 +73,7 @@ export interface IContact {
 	memberClassId?: string;
 
 	locationGoogle?: { lat: number; lng: number };
-	profileImageURL?: string;
+
 	carList?: ICar[];
 }
 
