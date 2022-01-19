@@ -157,7 +157,25 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 							"color:red; font-size:20px"
 						),
 				});
-			console.log(this.contactForm.value);
+
+			// .pipe(takeUntil(this.destroy$))
+			// .subscribe({
+			// 	complete: () => {
+			// 		this.ref.close();
+			// 	},
+			// 	next: () =>
+			// 		console.log(
+			// 			"%cOnSubmitContactForm next",
+			// 			"color:white; font-size:20px"
+			// 		),
+			// 	error: () =>
+			// 		console.log(
+			// 			"%cOnSubmitContactForm error",
+			// 			"color:red; font-size:20px"
+			// 		),
+			// });
+
+			// console.log(this.contactForm.value);
 		}
 	}
 

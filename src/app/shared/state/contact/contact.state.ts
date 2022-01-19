@@ -1,7 +1,9 @@
 import { IContact } from "src/app/shared/models/contact.model";
 import {
 	catchError,
+	finalize,
 	first,
+	map,
 	mergeMap,
 	switchMap,
 	take,
@@ -23,7 +25,7 @@ import {
 	ofActionCompleted,
 } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
-import { from, interval, observable, Observable, of } from "rxjs";
+import { from, interval, merge, observable, Observable, of } from "rxjs";
 import { Navigate, RouterState } from "@ngxs/router-plugin";
 import {
 	NbGlobalLogicalPosition,
@@ -147,6 +149,50 @@ export class ContactState implements NgxsOnInit {
 		);
 	}
 
+	// @Action(ContactAction.Add)
+	// add(
+	// 	ctx: StateContext<ContactStateModel>,
+	// 	action: ContactAction.Add
+	// ): Observable<any> {
+	// 	const state = ctx.getState();
+	// 	ctx.patchState({ loading: true });
+
+	// 	// save contact data
+	// 	return this.contactService
+	// 		.addContact(action.contact, action.profileImage)
+	// 		.pipe(
+	// 			take(1),
+	// 			map((contact: IContact) => {
+	// 				ctx.patchState({
+	// 					contactList: [...state.contactList, contact],
+	// 					nextId: this.generateId([...state.contactList, contact]),
+	// 					loading: false,
+	// 				});
+	// 				return contact;
+	// 			}),
+	// 			switchMap((contact: IContact) => {
+	// 				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
+	// 					position: NbGlobalLogicalPosition.BOTTOM_END,
+	// 				});
+	// 				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
+	// 			}),
+	// 			catchError((error) => {
+	// 				this.toastrService.danger(
+	// 					"บันทึกข้อมูลไม่สำเร็จ : " + error,
+	// 					"สร้างผู้ติดต่อ",
+	// 					{
+	// 						position: NbGlobalLogicalPosition.BOTTOM_END,
+	// 					}
+	// 				);
+	// 				console.error(
+	// 					`%cContactState => @Action:add ${error}`,
+	// 					"color:white; background:red;"
+	// 				);
+	// 				return of(error);
+	// 			})
+	// 		);
+	// }
+
 	@Action(ContactAction.Add)
 	add(
 		ctx: StateContext<ContactStateModel>,
@@ -156,39 +202,67 @@ export class ContactState implements NgxsOnInit {
 		ctx.patchState({ loading: true });
 
 		// save contact data
-		return this.contactService
-			.addContact(action.contact, action.profileImage)
-			.pipe(
-				first(),
-				tap((contact: IContact) => {
-					ctx.patchState({
-						contactList: [...state.contactList, contact],
-						nextId: this.generateId([...state.contactList, contact]),
-						loading: false,
-					});
-					return contact;
-				}),
-				switchMap((contact: IContact) => {
-					this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
+		const addContact$ = this.contactService.addContact(
+			action.contact,
+			action.profileImage
+		);
+
+		return addContact$.pipe(
+			take(1),
+			map((contact: IContact) => {
+				console.log(
+					`%c ContactAction.Add => tap`,
+					"color:white; background:red; font-size:20px"
+				);
+				ctx.patchState({
+					contactList: [...state.contactList, contact],
+					nextId: this.generateId([...state.contactList, contact]),
+					loading: false,
+				});
+				return contact;
+			}),
+			switchMap((contact) => {
+				return this.contactService
+					.uploadProfileImage(action.profileImage, action.contact.code)
+					.pipe(
+						map((url) => {
+							console.log(
+								`%c ContactAction.Add => uploadProfileImage`,
+								"color:white; background:red; font-size:20px"
+							);
+							console.log(url);
+
+							return url;
+						})
+						// updateContact url here!!
+					);
+			}),
+			finalize(() => {
+				console.log(
+					`%c ContactAction.Add => finalize`,
+					"color:white; background:red; font-size:20px"
+				);
+
+				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
+					position: NbGlobalLogicalPosition.BOTTOM_END,
+				});
+				ctx.dispatch(new ContactAction.SelectContact(action.contact.code));
+			}),
+			catchError((error) => {
+				this.toastrService.danger(
+					"บันทึกข้อมูลไม่สำเร็จ : " + error,
+					"สร้างผู้ติดต่อ",
+					{
 						position: NbGlobalLogicalPosition.BOTTOM_END,
-					});
-					return ctx.dispatch(new ContactAction.SelectContact(contact.code));
-				}),
-				catchError((error) => {
-					this.toastrService.danger(
-						"บันทึกข้อมูลไม่สำเร็จ : " + error,
-						"สร้างผู้ติดต่อ",
-						{
-							position: NbGlobalLogicalPosition.BOTTOM_END,
-						}
-					);
-					console.error(
-						`%cContactState => @Action:add ${error}`,
-						"color:white; background:red;"
-					);
-					return of(error);
-				})
-			);
+					}
+				);
+				console.error(
+					`%cContactState => @Action:add ${error}`,
+					"color:white; background:red;"
+				);
+				return of(error);
+			})
+		);
 	}
 
 	// -----------------------------------------------------------------------------------------------------

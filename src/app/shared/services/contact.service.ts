@@ -8,6 +8,7 @@ import {
 	catchError,
 	finalize,
 	flatMap,
+	last,
 	map,
 	switchMap,
 	tap,
@@ -19,12 +20,12 @@ import { Select, Store } from "@ngxs/store";
 })
 export class ContactService {
 	constructor(
-		private db: AngularFirestore,
+		private afs: AngularFirestore,
 		private storage: AngularFireStorage
 	) {}
 
 	getContactList(): Observable<IContact[]> {
-		const contactCollection = this.db.collection<any>("contacts");
+		const contactCollection = this.afs.collection<any>("contacts");
 		return contactCollection.valueChanges({ idField: "id" }).pipe(
 			catchError((error) => {
 				console.error(
@@ -47,7 +48,7 @@ export class ContactService {
 	}
 
 	getContact(code: string): Observable<any> {
-		const contactCollection = this.db.collection<any>("contacts", (ref) =>
+		const contactCollection = this.afs.collection<any>("contacts", (ref) =>
 			ref.where("code", "==", code)
 		);
 		return contactCollection.snapshotChanges().pipe(
@@ -68,6 +69,8 @@ export class ContactService {
 		);
 	}
 
+	updateContact(contact: IContact): any {}
+
 	// addContact(contact: IContact, profileImage?: any): any {
 	// 	const contactCollection = this.db.collection<any>("contacts");
 	// 	return from(contactCollection.add(contact)).pipe(
@@ -84,22 +87,30 @@ export class ContactService {
 	// 	);
 	// }
 
-	addContact(contact: IContact, profileImage?: any): any {
-		const contactCollection = this.db.collection<any>("contacts");
-		if (profileImage) {
-			const path = `${"/contacts"}/${contact.code}`;
-			contact.profileUrl = path;
-		}
+	addContact(contact: IContact, profileImage?: any): Observable<IContact> {
+		const contactCollection = this.afs.collection<any>("contacts");
 
 		return from(contactCollection.add(contact)).pipe(
 			switchMap((docRef) => {
-				return contactCollection.doc<IContact>(docRef.id).valueChanges();
-			}),
-			finalize(() => {
 				// upload profile
-				if (profileImage) {
-					this.uploadProfileImage(profileImage, contact.code);
-				}
+				// if (profileImage) {
+				// 	const file = this.base64ToFile(profileImage, contact.code);
+				// 	const filePath = `${"/contacts"}/${file.name}`;
+				// 	const fileRef = this.storage.ref(filePath);
+				// 	const task = this.storage.upload(filePath, file);
+				// 	task
+				// 		.snapshotChanges()
+				// 		.pipe(
+				// 			finalize(() =>
+				// 				contactCollection
+				// 					.doc(docRef.id)
+				// 					.update({ profileUrl: fileRef.getDownloadURL() })
+				// 			)
+				// 		)
+				// 		.subscribe();
+				// }
+
+				return contactCollection.doc<IContact>(docRef.id).valueChanges();
 			}),
 			catchError((error) => {
 				console.error(
@@ -111,22 +122,58 @@ export class ContactService {
 		);
 	}
 
-	uploadProfileImage(fileImage: any, fileName: string): Observable<number> {
-		const file = this.base64ToFile(fileImage, fileName);
-		const path = `${"/contacts"}/${file.name}`;
-		const fileRef = this.storage.ref(path);
-		return this.storage
-			.upload(path, file)
-			.percentageChanges()
-			.pipe(
-				catchError((error) => {
-					console.error(
-						`%cContactService => uploadProfileImage ${error}`,
-						"color:white; background:red; font-size:20px"
-					);
-					return of(error);
-				})
-			);
+	uploadProfileImage(fileImage?: any, contactCode?: string): Observable<any> {
+		if (fileImage) {
+			const file = this.base64ToFile(fileImage, contactCode);
+			const path = `${"/contacts"}/${file.name}`;
+			const fileRef = this.storage.ref(path);
+
+			return this.storage
+				.upload(path, file)
+				.percentageChanges()
+				.pipe(
+					last(),
+					map(() => {
+						return fileRef.getDownloadURL();
+					}),
+					finalize(() => {
+						console.log(
+							`%cContactService => uploadProfileImage`,
+							"color:white; background:red; font-size:20px"
+						);
+
+						// TODO: Call updateContact
+
+						// this.getContact(contactCode).pipe(
+						// 	switchMap((res) => {
+						// 		const contactDoc = this.afs
+						// 			.collection<any>("contacts")
+						// 			.doc(`${res.id}`);
+
+						// 		return contactDoc.update({
+						// 			profileUrl: fileRef.getDownloadURL(),
+						// 		});
+						// 	})
+						// );
+
+						return fileRef.getDownloadURL();
+						// const contactDoc = this.afs
+						// 	.collection<any>("contacts")
+						// 	.doc(`${contactCode}`);
+
+						// contactDoc.update({ profileUrl: path });
+					}),
+					catchError((error) => {
+						console.error(
+							`%cContactService => uploadProfileImage ${error}`,
+							"color:red; background:yellow; font-size:20px"
+						);
+						return of(error);
+					})
+				);
+		} else {
+			return of(null);
+		}
 	}
 
 	private base64ToFile(data: any, filename: string): File {
