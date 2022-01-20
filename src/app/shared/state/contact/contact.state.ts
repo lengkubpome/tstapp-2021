@@ -1,14 +1,5 @@
 import { IContact } from "src/app/shared/models/contact.model";
-import {
-	catchError,
-	finalize,
-	first,
-	map,
-	mergeMap,
-	switchMap,
-	take,
-	tap,
-} from "rxjs/operators";
+import { catchError, first, map, switchMap, take, tap } from "rxjs/operators";
 import { ContactService } from "./../../services/contact.service";
 import { Injectable } from "@angular/core";
 import {
@@ -18,20 +9,11 @@ import {
 	StateContext,
 	Action,
 	Store,
-	Actions,
-	ofActionDispatched,
-	ofActionSuccessful,
-	ofActionErrored,
-	ofActionCompleted,
 } from "@ngxs/store";
 import { ContactAction } from "./contact.action";
-import { from, interval, merge, observable, Observable, of } from "rxjs";
-import { Navigate, RouterState } from "@ngxs/router-plugin";
-import {
-	NbGlobalLogicalPosition,
-	NbGlobalPhysicalPosition,
-	NbToastrService,
-} from "@nebular/theme";
+import { Observable, of } from "rxjs";
+import { Navigate } from "@ngxs/router-plugin";
+import { NbGlobalLogicalPosition, NbToastrService } from "@nebular/theme";
 
 export interface ContactStateModel {
 	contactList: IContact[];
@@ -59,11 +41,12 @@ export class ContactState implements NgxsOnInit {
 
 	@Selector()
 	static loading(state: ContactStateModel): boolean {
-		try {
-			return state.loading;
-		} catch (error) {
-			console.log("error", error);
-		}
+		console.log(
+			`%cContactState => @Selector:loading`,
+			"color:white; background:red;"
+		);
+
+		return state.loading;
 	}
 
 	@Selector()
@@ -91,7 +74,10 @@ export class ContactState implements NgxsOnInit {
 	}
 
 	ngxsOnInit(ctx: StateContext<ContactStateModel>): void {
-		console.log("State initialized, now getting contact");
+		console.log(
+			`%cState initialized, now getting contact`,
+			"color:white; background:pink;"
+		);
 		ctx.dispatch(new ContactAction.FetchAll());
 	}
 
@@ -101,10 +87,10 @@ export class ContactState implements NgxsOnInit {
 	): Observable<boolean | IContact[]> {
 		ctx.patchState({ loading: true });
 		return this.contactService.getContactList().pipe(
-			tap((result) => {
+			map((list) => {
 				ctx.patchState({
-					contactList: result,
-					nextId: this.generateId(result),
+					contactList: list,
+					nextId: this.generateId(list),
 					loading: false,
 				});
 			}),
@@ -125,7 +111,7 @@ export class ContactState implements NgxsOnInit {
 	): Observable<any> {
 		return this.contactService.getContact(action.contactId).pipe(
 			first(), // ระบบมันทำงาน 2 รอบ แก้ไขให้ทำงานครั้งเดียว
-			tap((result) => {
+			map((result) => {
 				ctx.patchState({
 					selected: result[0],
 					loading: true,
@@ -136,7 +122,7 @@ export class ContactState implements NgxsOnInit {
 				ctx.patchState({
 					loading: false,
 				});
-				const nextUrl = "/pages/contact/" + result[0].code;
+				const nextUrl = "/pages/contact/" + result.code;
 				return this.store.dispatch(new Navigate([nextUrl]));
 			}),
 			catchError((error) => {
@@ -148,50 +134,6 @@ export class ContactState implements NgxsOnInit {
 			})
 		);
 	}
-
-	// @Action(ContactAction.Add)
-	// add(
-	// 	ctx: StateContext<ContactStateModel>,
-	// 	action: ContactAction.Add
-	// ): Observable<any> {
-	// 	const state = ctx.getState();
-	// 	ctx.patchState({ loading: true });
-
-	// 	// save contact data
-	// 	return this.contactService
-	// 		.addContact(action.contact, action.profileImage)
-	// 		.pipe(
-	// 			take(1),
-	// 			map((contact: IContact) => {
-	// 				ctx.patchState({
-	// 					contactList: [...state.contactList, contact],
-	// 					nextId: this.generateId([...state.contactList, contact]),
-	// 					loading: false,
-	// 				});
-	// 				return contact;
-	// 			}),
-	// 			switchMap((contact: IContact) => {
-	// 				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
-	// 					position: NbGlobalLogicalPosition.BOTTOM_END,
-	// 				});
-	// 				return ctx.dispatch(new ContactAction.SelectContact(contact.code));
-	// 			}),
-	// 			catchError((error) => {
-	// 				this.toastrService.danger(
-	// 					"บันทึกข้อมูลไม่สำเร็จ : " + error,
-	// 					"สร้างผู้ติดต่อ",
-	// 					{
-	// 						position: NbGlobalLogicalPosition.BOTTOM_END,
-	// 					}
-	// 				);
-	// 				console.error(
-	// 					`%cContactState => @Action:add ${error}`,
-	// 					"color:white; background:red;"
-	// 				);
-	// 				return of(error);
-	// 			})
-	// 		);
-	// }
 
 	@Action(ContactAction.Add)
 	add(
@@ -209,44 +151,20 @@ export class ContactState implements NgxsOnInit {
 
 		return addContact$.pipe(
 			take(1),
-			map((contact: IContact) => {
-				console.log(
-					`%c ContactAction.Add => tap`,
-					"color:white; background:red; font-size:20px"
-				);
+			tap((contact) => {
 				ctx.patchState({
 					contactList: [...state.contactList, contact],
 					nextId: this.generateId([...state.contactList, contact]),
-					loading: false,
+					loading: true,
 				});
-				return contact;
 			}),
-			switchMap((contact) => {
-				return this.contactService
-					.uploadProfileImage(action.profileImage, action.contact.code)
-					.pipe(
-						map((url) => {
-							console.log(
-								`%c ContactAction.Add => uploadProfileImage`,
-								"color:white; background:red; font-size:20px"
-							);
-							console.log(url);
-
-							return url;
-						})
-						// updateContact url here!!
-					);
-			}),
-			finalize(() => {
-				console.log(
-					`%c ContactAction.Add => finalize`,
-					"color:white; background:red; font-size:20px"
-				);
-
+			switchMap(() => {
 				this.toastrService.success("บันทึกข้อมูลสำเร็จ", "สร้างผู้ติดต่อ", {
 					position: NbGlobalLogicalPosition.BOTTOM_END,
 				});
-				ctx.dispatch(new ContactAction.SelectContact(action.contact.code));
+				return ctx.dispatch(
+					new ContactAction.SelectContact(action.contact.code)
+				);
 			}),
 			catchError((error) => {
 				this.toastrService.danger(

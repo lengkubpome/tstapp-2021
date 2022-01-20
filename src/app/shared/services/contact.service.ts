@@ -1,8 +1,11 @@
+import { IContact } from "src/app/shared/models/contact.model";
 import { HttpClient } from "@angular/common/http";
 import { combineLatest, from, Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
-import { IContact } from "../models/contact.model";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import {
+	AngularFirestore,
+	AngularFirestoreCollection,
+} from "@angular/fire/compat/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import {
 	catchError,
@@ -19,14 +22,19 @@ import { Select, Store } from "@ngxs/store";
 	providedIn: "root",
 })
 export class ContactService {
+	private dbPath = "/contacts";
+
+	contactRef: AngularFirestoreCollection<IContact>;
+
 	constructor(
 		private afs: AngularFirestore,
 		private storage: AngularFireStorage
-	) {}
+	) {
+		this.contactRef = afs.collection(this.dbPath);
+	}
 
 	getContactList(): Observable<IContact[]> {
-		const contactCollection = this.afs.collection<any>("contacts");
-		return contactCollection.valueChanges({ idField: "id" }).pipe(
+		return this.contactRef.valueChanges({ idField: "id" }).pipe(
 			catchError((error) => {
 				console.error(
 					`%cContactService => getContactList ${error}`,
@@ -36,7 +44,7 @@ export class ContactService {
 			})
 		);
 
-		// return contactCollection.snapshotChanges().pipe(
+		// return  this.contactRef.snapshotChanges().pipe(
 		// 	map((actions) =>
 		// 		actions.map((a) => {
 		// 			const data = a.payload.doc.data() as IContact;
@@ -47,7 +55,7 @@ export class ContactService {
 		// );
 	}
 
-	getContact(code: string): Observable<any> {
+	getContact(code: string): Observable<{ id: string; contact: IContact }> {
 		const contactCollection = this.afs.collection<any>("contacts", (ref) =>
 			ref.where("code", "==", code)
 		);
@@ -69,48 +77,19 @@ export class ContactService {
 		);
 	}
 
-	updateContact(contact: IContact): any {}
-
-	// addContact(contact: IContact, profileImage?: any): any {
-	// 	const contactCollection = this.db.collection<any>("contacts");
-	// 	return from(contactCollection.add(contact)).pipe(
-	// 		switchMap((docRef) => {
-	// 			return contactCollection.doc<IContact>(docRef.id).valueChanges();
-	// 		}),
-	// 		catchError((error) => {
-	// 			console.error(
-	// 				`%cContactService => addContact ${error}`,
-	// 				"color:white; background:red; font-size:20px"
-	// 			);
-	// 			return of(error);
-	// 		})
-	// 	);
-	// }
-
 	addContact(contact: IContact, profileImage?: any): Observable<IContact> {
-		const contactCollection = this.afs.collection<any>("contacts");
-
-		return from(contactCollection.add(contact)).pipe(
+		return from(this.contactRef.add(contact)).pipe(
 			switchMap((docRef) => {
+				const id = docRef.id;
 				// upload profile
-				// if (profileImage) {
-				// 	const file = this.base64ToFile(profileImage, contact.code);
-				// 	const filePath = `${"/contacts"}/${file.name}`;
-				// 	const fileRef = this.storage.ref(filePath);
-				// 	const task = this.storage.upload(filePath, file);
-				// 	task
-				// 		.snapshotChanges()
-				// 		.pipe(
-				// 			finalize(() =>
-				// 				contactCollection
-				// 					.doc(docRef.id)
-				// 					.update({ profileUrl: fileRef.getDownloadURL() })
-				// 			)
-				// 		)
-				// 		.subscribe();
-				// }
-
-				return contactCollection.doc<IContact>(docRef.id).valueChanges();
+				if (profileImage) {
+					return this.uploadProfileImage(id, profileImage, contact.code);
+				} else {
+					return of(id);
+				}
+			}),
+			switchMap((id) => {
+				return this.contactRef.doc<IContact>(id).valueChanges();
 			}),
 			catchError((error) => {
 				console.error(
@@ -122,58 +101,48 @@ export class ContactService {
 		);
 	}
 
-	uploadProfileImage(fileImage?: any, contactCode?: string): Observable<any> {
-		if (fileImage) {
-			const file = this.base64ToFile(fileImage, contactCode);
-			const path = `${"/contacts"}/${file.name}`;
-			const fileRef = this.storage.ref(path);
-
-			return this.storage
-				.upload(path, file)
-				.percentageChanges()
-				.pipe(
-					last(),
-					map(() => {
-						return fileRef.getDownloadURL();
-					}),
-					finalize(() => {
-						console.log(
-							`%cContactService => uploadProfileImage`,
-							"color:white; background:red; font-size:20px"
-						);
-
-						// TODO: Call updateContact
-
-						// this.getContact(contactCode).pipe(
-						// 	switchMap((res) => {
-						// 		const contactDoc = this.afs
-						// 			.collection<any>("contacts")
-						// 			.doc(`${res.id}`);
-
-						// 		return contactDoc.update({
-						// 			profileUrl: fileRef.getDownloadURL(),
-						// 		});
-						// 	})
-						// );
-
-						return fileRef.getDownloadURL();
-						// const contactDoc = this.afs
-						// 	.collection<any>("contacts")
-						// 	.doc(`${contactCode}`);
-
-						// contactDoc.update({ profileUrl: path });
-					}),
-					catchError((error) => {
-						console.error(
-							`%cContactService => uploadProfileImage ${error}`,
-							"color:red; background:yellow; font-size:20px"
-						);
-						return of(error);
-					})
+	updateContact(id: string, data: any): Observable<IContact> {
+		return from(this.contactRef.doc(id).update(data)).pipe(
+			switchMap(() => {
+				return this.contactRef.doc<IContact>(id).valueChanges();
+			}),
+			catchError((error) => {
+				console.error(
+					`%cContactService => update ${error}`,
+					"color:white; background:red; font-size:20px"
 				);
-		} else {
-			return of(null);
-		}
+				return of(error);
+			})
+		);
+	}
+
+	deleteContact(id: string): Promise<void> {
+		return this.contactRef.doc(id).delete();
+	}
+
+	uploadProfileImage(
+		id: string,
+		fileImage: any,
+		fileName: string
+	): Observable<string> {
+		const file = this.base64ToFile(fileImage, fileName);
+		const filePath = `${"/contacts"}/${file.name}`;
+		const task = this.storage.upload(filePath, file);
+
+		return task.snapshotChanges().pipe(
+			last(),
+			switchMap(() => {
+				this.updateContact(id, { profileUrl: filePath });
+				return of(id);
+			}),
+			catchError((error) => {
+				console.error(
+					`%cContactService => uploadProfileImage ${error}`,
+					"color:red; background:yellow; font-size:20px"
+				);
+				return of(error);
+			})
+		);
 	}
 
 	private base64ToFile(data: any, filename: string): File {
