@@ -15,9 +15,9 @@ import {
 } from "src/app/shared/state/province/province.state";
 import { InteractivityChecker } from "@angular/cdk/a11y";
 import {
-	AfterViewInit,
 	Component,
 	HostListener,
+	Input,
 	OnDestroy,
 	OnInit,
 	Renderer2,
@@ -37,8 +37,9 @@ import { debounceTime, map, startWith, take, takeUntil } from "rxjs/operators";
 import { ContactAction } from "src/app/shared/state/contact/contact.action";
 import { Navigate } from "@ngxs/router-plugin";
 import { NgxFileDropEntry } from "ngx-file-drop";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 
-const contactStart: IContact = {
+const emptyContact: IContact = {
 	code: "",
 	mainId: null,
 	general: {
@@ -93,11 +94,12 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	@Select(ContactState.loading) loading$: Observable<ContactStateModel>;
 	@Select(BankState) banks$: Observable<BankStateModel>;
 
-	newContact: IContact = contactStart;
+	@Input() contact: IContact;
+	contactValue: IContact;
+	isEdit = false;
 	statusFormValid = {
 		taxId: true,
 		branchCode: true,
-		isNewImagegProfile: false,
 	};
 
 	contactForm: FormGroup;
@@ -116,12 +118,9 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private renderer: Renderer2,
 		private store: Store,
-		private dialogService: NbDialogService
+		private dialogService: NbDialogService,
+		private storage: AngularFireStorage
 	) {
-		this.newContact = {
-			...this.newContact,
-			code: this.store.selectSnapshot<any>(ContactState.generateId), //สร้าง ID อัตโนมัติ
-		};
 		this.provinces = this.store.selectSnapshot<any>(ProvinceState.province);
 	}
 
@@ -132,31 +131,36 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.setupForm(this.newContact);
+		this.contactValue = { ...this.contact };
+		if (!this.contactValue) {
+			this.contactValue = {
+				...emptyContact,
+				code: this.store.selectSnapshot<any>(ContactState.generateId), //สร้าง ID อัตโนมัติ
+			};
+		} else {
+			this.isEdit = true;
+		}
+
+		this.setupForm(this.contactValue);
 		this.formBuilderAction();
 		this.filterControls();
 	}
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			this.store
-				.dispatch(new ContactAction.Add(this.newContact, this.profileImage))
-				.pipe(takeUntil(this.destroy$))
-				.subscribe({
-					complete: () => {
+			if (!this.isEdit) {
+				this.store
+					.dispatch(new ContactAction.Add(this.contactValue, this.profileImage))
+					.pipe(takeUntil(this.destroy$))
+					.subscribe(() => {
 						this.ref.close();
-					},
-					next: () =>
-						console.log(
-							"%cOnSubmitContactForm next",
-							"color:white; font-size:20px"
-						),
-					error: () =>
-						console.log(
-							"%cOnSubmitContactForm error",
-							"color:red; font-size:20px"
-						),
-				});
+					});
+			} else {
+				console.log("Same Value ?");
+				if (this.contact === this.contactValue) {
+					console.log("Same Value");
+				}
+			}
 		}
 	}
 
@@ -247,6 +251,25 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 				this.branchCodeForm.get("branchCode_" + (i + 1)).setValue(taxChar);
 			}
 		}
+
+		// ตั้งค่ากรณีแก้ไขข้อมูล
+		if (this.isEdit) {
+			// ปิดกั้นการเปลี่ยน code
+			this.contactForm.get("code").disable();
+			// เพิ่มเลขบัญชี
+			this.contactValue.bankAccounts.forEach((account) => {
+				const accountForm = this.contactForm.get("bankAccounts") as FormArray;
+				accountForm.push(this.createBankAccount(account));
+			});
+			// แสดงรูปโปรไฟล์
+			if (this.contactValue.profileUrl !== "") {
+				const ref = this.storage.ref(this.contactValue.profileUrl);
+				ref
+					.getDownloadURL()
+					.pipe(takeUntil(this.destroy$))
+					.subscribe((image) => (this.profileImage = image));
+			}
+		}
 	}
 
 	checkContactFormValid(): boolean {
@@ -292,7 +315,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		if (taxId !== "" && this.taxIdForm.invalid) {
 			console.log("taxIdForm is invalid");
-			delete this.newContact.general.taxId;
+			delete this.contactValue.general.taxId;
 			this.statusFormValid.taxId = false;
 			result = false;
 		} else {
@@ -309,7 +332,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			}
 			if (this.branchCodeForm.invalid) {
 				console.log("branchCodeForm is invalid");
-				delete this.newContact.general.branch;
+				delete this.contactValue.general.branch;
 				this.statusFormValid.branchCode = false;
 				result = false;
 			} else {
@@ -318,13 +341,13 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		}
 
 		// Set Contact Value
-		this.newContact = {
-			...this.newContact,
+		this.contactValue = {
+			...this.contactValue,
 			...this.contactForm.value,
 			general: { ...this.contactForm.value.general, taxId, branch },
 		};
 
-		console.log(this.newContact);
+		console.log(this.contactValue);
 
 		return result;
 	}
@@ -354,7 +377,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onDeleteImageProfile(): void {
 		this.profileImage = "";
-		this.newContact.profileUrl = "";
+		this.contactValue.profileUrl = "";
 	}
 
 	onSelectFile(files: NgxFileDropEntry[]): void {

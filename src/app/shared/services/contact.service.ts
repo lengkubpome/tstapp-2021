@@ -7,16 +7,7 @@ import {
 	AngularFirestoreCollection,
 } from "@angular/fire/compat/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
-import {
-	catchError,
-	finalize,
-	flatMap,
-	last,
-	map,
-	switchMap,
-	tap,
-} from "rxjs/operators";
-import { Select, Store } from "@ngxs/store";
+import { catchError, last, map, switchMap } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -43,16 +34,6 @@ export class ContactService {
 				return of(error);
 			})
 		);
-
-		// return  this.contactRef.snapshotChanges().pipe(
-		// 	map((actions) =>
-		// 		actions.map((a) => {
-		// 			const data = a.payload.doc.data() as IContact;
-		// 			const id = a.payload.doc.id;
-		// 			return { ...data, id };
-		// 		})
-		// 	)
-		// );
 	}
 
 	getContact(code: string): Observable<{ id: string; contact: IContact }> {
@@ -101,8 +82,18 @@ export class ContactService {
 		);
 	}
 
-	updateContact(id: string, data: any): Observable<IContact> {
-		return from(this.contactRef.doc(id).update(data)).pipe(
+	updateContact(
+		id: string,
+		contact: any,
+		profileImage?: any
+	): Observable<IContact> {
+		return from(this.contactRef.doc(id).update(contact)).pipe(
+			switchMap(() => {
+				// upload profile
+				if (profileImage) {
+					return this.uploadProfileImage(id, profileImage, contact.code);
+				}
+			}),
 			switchMap(() => {
 				return this.contactRef.doc<IContact>(id).valueChanges();
 			}),
@@ -116,8 +107,8 @@ export class ContactService {
 		);
 	}
 
-	deleteContact(id: string): Promise<void> {
-		return this.contactRef.doc(id).delete();
+	deleteContact(id: string): Observable<any> {
+		return from(this.contactRef.doc(id).delete());
 	}
 
 	uploadProfileImage(

@@ -41,11 +41,6 @@ export class ContactState implements NgxsOnInit {
 
 	@Selector()
 	static loading(state: ContactStateModel): boolean {
-		console.log(
-			`%cContactState => @Selector:loading`,
-			"color:white; background:red;"
-		);
-
 		return state.loading;
 	}
 
@@ -155,7 +150,6 @@ export class ContactState implements NgxsOnInit {
 				ctx.patchState({
 					contactList: [...state.contactList, contact],
 					nextId: this.generateId([...state.contactList, contact]),
-					loading: true,
 				});
 			}),
 			switchMap(() => {
@@ -176,6 +170,41 @@ export class ContactState implements NgxsOnInit {
 				);
 				console.error(
 					`%cContactState => @Action:add ${error}`,
+					"color:white; background:red;"
+				);
+				return of(error);
+			})
+		);
+	}
+
+	@Action(ContactAction.Delete)
+	delete(
+		ctx: StateContext<ContactStateModel>,
+		action: ContactAction.Delete
+	): Observable<any> {
+		ctx.patchState({ loading: true });
+
+		return this.contactService.deleteContact(action.id).pipe(
+			tap(() => {
+				this.toastrService.success(
+					"ลบข้อมูลผู้ติดต่อสำเร็จ",
+					"ลบข้อมูลผู้ติดต่อ",
+					{
+						position: NbGlobalLogicalPosition.BOTTOM_END,
+					}
+				);
+				ctx.dispatch(new Navigate(["/pages/contact/"]));
+			}),
+			catchError((error) => {
+				this.toastrService.danger(
+					"ลบข้อมูลไม่สำเร็จ : " + error,
+					"เกิดข้อผิดพลาด : " + error,
+					{
+						position: NbGlobalLogicalPosition.BOTTOM_END,
+					}
+				);
+				console.error(
+					`%cContactState => @Action:delete ${error}`,
 					"color:white; background:red;"
 				);
 				return of(error);

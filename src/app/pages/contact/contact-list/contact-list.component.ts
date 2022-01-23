@@ -63,7 +63,7 @@ export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onCreateContact(): void {
 		this.dialogService.open(ContactFormComponent, {
-			context: {},
+			context: { contactValue: null },
 			closeOnBackdropClick: false,
 			hasScroll: true,
 			closeOnEsc: false,
@@ -73,16 +73,16 @@ export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 	onSelectContact(contact: any): void {
 		this.store
 			.dispatch(new ContactAction.SelectContact(contact.code))
-			.pipe(takeUntil(this.destroy$))
-			.subscribe({
-				complete: () => {
-					console.log("%cDispatch successfully", "color:white; font-size:20px");
-				},
-				next: () =>
-					console.log("%cDispatch next", "color:white; font-size:20px"),
-				error: () =>
-					console.log("%cDispatch error", "color:red; font-size:20px"),
-			});
+			.pipe(takeUntil(this.destroy$));
+		// .subscribe({
+		// 	complete: () => {
+		// 		console.log("%cDispatch successfully", "color:white; font-size:20px");
+		// 	},
+		// 	next: () =>
+		// 		console.log("%cDispatch next", "color:white; font-size:20px"),
+		// 	error: () =>
+		// 		console.log("%cDispatch error", "color:red; font-size:20px"),
+		// });
 	}
 
 	// -----------------------------------------------------------------------------------------------------

@@ -1,12 +1,13 @@
 import { ICar } from "./car.model";
 
 export interface IContact {
+	id?: string;
 	code: string;
 	profileUrl?: string;
 	mainId?: IContact; // เชื่อมกับร้านค้า
 
 	general?: {
-		code?: string;
+		// code?: string;
 		name?: string;
 		prefixName?: string;
 		firstName?: string;

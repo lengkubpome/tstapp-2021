@@ -4,7 +4,7 @@
       <div class="main-info">
         <div class="main-info-profile-image">
           <ngx-avatar class=""
-            [src]="contacts.profileUrl === '' ? 'assets/images/alan.png' : (profileUrl | async)"
+            [src]="contacts.profileUrl === '' ? 'assets/images/blank_profile.png' : (profileUrl | async)"
             size="80" [round]="true" cornerRadius="5">
           </ngx-avatar>
         </div>
@@ -62,11 +62,11 @@
 
         <mat-menu #menu="matMenu">
           <ng-template matMenuContent let-main="isMain" let-index="index">
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onEditContact()">
               <mat-icon>edit</mat-icon>
               <span>แก้ไขข้อมูล</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="showDeleteConfirm(dialogDeleteConfirm)">
               <mat-icon>delete</mat-icon>
               <span>ลบข้อมูล</span>
             </button>
@@ -307,3 +307,17 @@
     </nb-tabset>
   </nb-card-body>
 </nb-card>
+
+
+<ng-template #dialogDeleteConfirm let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>ยืนยันลบข้อมูล</nb-card-header>
+    <nb-card-body>คุณต้องการลบ {{ data.code }} หรือไม่</nb-card-body>
+    <nb-card-footer>
+      <div class="d-flex justify-content-between">
+        <button nbButton (click)="ref.close()">ยกเลิก</button>
+        <button nbButton status="danger" (click)="onDeleteContact(ref)">ยืนยัน</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
