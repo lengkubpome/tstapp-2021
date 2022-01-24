@@ -96,7 +96,12 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	@Input() contact: IContact;
 	contactValue: IContact;
-	isEdit = false;
+
+	editFormStatut = {
+		editMode: false,
+		valueChange: false,
+	};
+
 	statusFormValid = {
 		taxId: true,
 		branchCode: true,
@@ -131,14 +136,14 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.contactValue = { ...this.contact };
-		if (!this.contactValue) {
+		if (!this.contact) {
 			this.contactValue = {
 				...emptyContact,
 				code: this.store.selectSnapshot<any>(ContactState.generateId), //สร้าง ID อัตโนมัติ
 			};
 		} else {
-			this.isEdit = true;
+			this.contactValue = { ...this.contact };
+			this.editFormStatut.editMode = true;
 		}
 
 		this.setupForm(this.contactValue);
@@ -148,7 +153,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 	onSubmitContactForm(): void {
 		if (this.checkContactFormValid()) {
-			if (!this.isEdit) {
+			if (!this.editFormStatut.editMode) {
 				this.store
 					.dispatch(new ContactAction.Add(this.contactValue, this.profileImage))
 					.pipe(takeUntil(this.destroy$))
@@ -157,7 +162,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 					});
 			} else {
 				console.log("Same Value ?");
-				if (this.contact === this.contactValue) {
+				if (this.compareObjects(this.contact, this.contactValue)) {
 					console.log("Same Value");
 				}
 			}
@@ -253,7 +258,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 		}
 
 		// ตั้งค่ากรณีแก้ไขข้อมูล
-		if (this.isEdit) {
+		if (this.editFormStatut.editMode) {
 			// ปิดกั้นการเปลี่ยน code
 			this.contactForm.get("code").disable();
 			// เพิ่มเลขบัญชี
@@ -389,7 +394,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 				const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
 				fileEntry.file((file: File) => {
 					// Here you can access the real file
-					console.log(droppedFile.relativePath, file);
+					// console.log(droppedFile.relativePath, file);
 
 					this.onUploadImageProfile(file);
 				});
@@ -472,6 +477,36 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			.subscribe((data) => {
 				this.contactForm.get("general.name").setValue(data.trim());
 			});
+
+		this.contactForm.valueChanges
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(() => {
+				console.log("NNNNN");
+				// TODO: แก้ไขในส่วนนี้ต่อ
+				if (!this.compareObjects(this.contact, this.contactValue)) {
+					console.log("xxxx");
+
+					this.editFormStatut.valueChange = true;
+				} else {
+					console.log("YYYYY");
+					this.editFormStatut.valueChange = false;
+				}
+			});
+	}
+
+	private compareObjects(a: any, b: any): boolean {
+		let res = true;
+		Object.keys(a).forEach((prop) => {
+			if (a[prop] !== b[prop]) {
+				if (typeof a[prop] === "object") {
+					res = res && this.compareObjects(a[prop], b[prop]);
+				} else {
+					// console.log(false);
+					res = res && false;
+				}
+			}
+		});
+		return res;
 	}
 
 	// -----------------------------------------------------------------------------------------------------

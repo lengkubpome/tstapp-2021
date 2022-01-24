@@ -63,7 +63,7 @@ export class ContactListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onCreateContact(): void {
 		this.dialogService.open(ContactFormComponent, {
-			context: { contactValue: null },
+			context: { contact: null },
 			closeOnBackdropClick: false,
 			hasScroll: true,
 			closeOnEsc: false,

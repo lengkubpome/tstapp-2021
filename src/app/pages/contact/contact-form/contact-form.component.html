@@ -564,8 +564,8 @@
         </div>
         <div>
 
-          <button type="button" class="ml-2" nbButton status="primary" [disabled]="loading$|async"
-            (click)="onSubmitContactForm()">
+          <button type="button" class="ml-2" nbButton status="primary"
+            [disabled]="editFormStatut.valueChange" (click)="onSubmitContactForm()">
             <nb-icon [icon]="'save'" pack="eva"></nb-icon>
             <span>บันทึก</span>
           </button>
