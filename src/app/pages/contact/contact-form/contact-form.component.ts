@@ -480,15 +480,11 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		this.contactForm.valueChanges
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(() => {
-				console.log("NNNNN");
-				// TODO: แก้ไขในส่วนนี้ต่อ
+			.subscribe((value) => {
+				this.checkContactFormValid();
 				if (!this.compareObjects(this.contact, this.contactValue)) {
-					console.log("xxxx");
-
 					this.editFormStatut.valueChange = true;
 				} else {
-					console.log("YYYYY");
 					this.editFormStatut.valueChange = false;
 				}
 			});
@@ -501,7 +497,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 				if (typeof a[prop] === "object") {
 					res = res && this.compareObjects(a[prop], b[prop]);
 				} else {
-					// console.log(false);
 					res = res && false;
 				}
 			}
