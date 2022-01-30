@@ -320,7 +320,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		if (taxId !== "" && this.taxIdForm.invalid) {
 			console.log("taxIdForm is invalid");
-			delete this.contactValue.general.taxId;
+			// delete this.contactValue.general.taxId;
 			this.statusFormValid.taxId = false;
 			result = false;
 		} else {
@@ -329,6 +329,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
 		// check branchCodeForm valid
 		let branch = this.contactForm.get("general.branch").value;
+
 		if (branch === "-") {
 			const branchCodeForm = this.branchCodeForm.value;
 			branch = "";
@@ -337,7 +338,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			}
 			if (this.branchCodeForm.invalid) {
 				console.log("branchCodeForm is invalid");
-				delete this.contactValue.general.branch;
+				// delete this.contactValue.general.branch;
 				this.statusFormValid.branchCode = false;
 				result = false;
 			} else {
@@ -352,7 +353,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			general: { ...this.contactForm.value.general, taxId, branch },
 		};
 
-		console.log(this.contactValue);
+		// console.log("ContactValue Change");
+		// console.log(this.contactValue);
 
 		return result;
 	}
@@ -464,23 +466,23 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 			.subscribe((data) => {
 				if (data === "บุคคลธรรมดา") {
 					const name = this.contactForm.get("general.name").value;
+
+					this.contactForm.get("general.name").setValue("");
 					this.contactForm.get("general.firstName").setValue(name);
 				} else {
-					const name = this.contactForm.get("general.firstName").value;
-					this.contactForm.get("general.name").setValue(name);
-				}
-			});
+					const fname = this.contactForm.get("general.firstName").value;
+					const name = this.contactForm.get("general.name").value;
 
-		this.contactForm
-			.get("general.firstName")
-			.valueChanges.pipe(takeUntil(this.destroy$))
-			.subscribe((data) => {
-				this.contactForm.get("general.name").setValue(data.trim());
+					this.contactForm.get("general.prefixName").setValue("");
+					this.contactForm.get("general.firstName").setValue("");
+					this.contactForm.get("general.lastName").setValue("");
+					this.contactForm.get("general.name").setValue(fname ? fname : name);
+				}
 			});
 
 		this.contactForm.valueChanges
 			.pipe(takeUntil(this.destroy$))
-			.subscribe((value) => {
+			.subscribe(() => {
 				this.checkContactFormValid();
 				if (!this.compareObjects(this.contact, this.contactValue)) {
 					this.editFormStatut.valueChange = true;
@@ -488,6 +490,27 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 					this.editFormStatut.valueChange = false;
 				}
 			});
+
+		this.branchCodeForm.valueChanges
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(() => {
+				this.checkContactFormValid();
+
+				if (!this.compareObjects(this.contact, this.contactValue)) {
+					this.editFormStatut.valueChange = true;
+				} else {
+					this.editFormStatut.valueChange = false;
+				}
+			});
+
+		this.taxIdForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+			this.checkContactFormValid();
+			if (!this.compareObjects(this.contact, this.contactValue)) {
+				this.editFormStatut.valueChange = true;
+			} else {
+				this.editFormStatut.valueChange = false;
+			}
+		});
 	}
 
 	private compareObjects(a: any, b: any): boolean {
